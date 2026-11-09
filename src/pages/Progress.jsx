@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { lessons, QUESTION_VERSION } from '../data/chemData.js';
 import { Icon } from '../components/Visuals.jsx';
 import { AttemptReview } from './Quiz.jsx';
+import { AssessmentHistory } from '../components/AssessmentResults.jsx';
 
 export const formatDate = (date) =>
   new Intl.DateTimeFormat('id-ID', {
@@ -144,6 +145,7 @@ export default function Progress({ progress, requestReset, storageOk }) {
           </section>
         ))
       )}
+      <AssessmentHistory assessment={progress.assessment} />
       <section className="local-data-note">
         <div>
           <Icon name="help" size={22} />

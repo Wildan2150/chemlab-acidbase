@@ -1,5 +1,11 @@
 # Log bantuan AI
 
+## 9 November 2026 WIB — feat/chapter-assessment
+
+Arahan pengajar: menambahkan branch asesmen akhir bab dengan baseline `feat/material-updates`. Branch dibuat dari `834ee59`, tanpa mengambil fitur akun/interaktif atau mengubah induk.
+
+Agent menyusun 15 soal baru yang dipetakan ke bacaan lengkap, penilaian pilihan/angka dengan toleransi, penguncian sebelum pembahasan, UUID/versi serta snapshot instrumen, riwayat/ekspor, dan pemulihan kompatibel data lama. Enam acuan numerik diperiksa secara independen. Build, 15 uji logika, dan 13 skenario browser lulus. Validasi formal isi dan penggunaan untuk nilai tetap memerlukan peninjauan pengajar. Rincian ada di `docs/CHAPTER_ASSESSMENT.md`.
+
 ## 7 November 2026 WIB — pembuatan demo
 
 **Permintaan:** membuat web demo kuliah di `ProyekContoh` dan meminta beberapa keputusan pengajar.

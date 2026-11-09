@@ -10,12 +10,15 @@ import Laboratory from './pages/Laboratory.jsx';
 import Quiz from './pages/Quiz.jsx';
 import Progress from './pages/Progress.jsx';
 import Teacher from './pages/Teacher.jsx';
+import ChapterAssessment from './pages/ChapterAssessment.jsx';
+import { createAssessmentDraft, submitChapterAssessment } from './lib/chapterAssessment.js';
 
 const navigation = [
   { id: 'beranda', label: 'Beranda', icon: 'home' },
   { id: 'materi', label: 'Materi belajar', icon: 'book' },
   { id: 'laboratorium', label: 'Laboratorium pH', icon: 'flask' },
   { id: 'kuis', label: 'Kuis diagnostik', icon: 'quiz' },
+  { id: 'asesmen', label: 'Asesmen akhir bab', icon: 'chart' },
   { id: 'progres', label: 'Progres saya', icon: 'chart' },
 ];
 const getRoute = () => window.location.hash.slice(1) || 'beranda';
@@ -122,7 +125,40 @@ export default function App() {
         : { ...p, attempts: [...p.attempts, makeAttempt(p.draft)] },
     );
   }
+  function startAssessment() {
+    setProgress((p) => ({ ...p, assessment: { ...p.assessment, draft: createAssessmentDraft() } }));
+  }
+  function updateAssessmentAnswer(id, value) {
+    setProgress((p) => {
+      const assessment = p.assessment;
+      if (!assessment.draft || assessment.attempts.some((a) => a.id === assessment.draft.id))
+        return p;
+      return {
+        ...p,
+        assessment: {
+          ...assessment,
+          draft: { ...assessment.draft, answers: { ...assessment.draft.answers, [id]: value } },
+        },
+      };
+    });
+  }
+  function updateAssessmentPosition(position) {
+    setProgress((p) => ({
+      ...p,
+      assessment: { ...p.assessment, draft: { ...p.assessment.draft, position } },
+    }));
+  }
+  function submitAssessment() {
+    setProgress((p) => ({ ...p, assessment: submitChapterAssessment(p.assessment) }));
+  }
   const results = [
+    {
+      title: 'Asesmen akhir bab',
+      description:
+        'Lima belas soal teori, hitungan pH, buffer, hidrolisis, dan titrasi dengan hasil per konsep.',
+      href: '#asesmen',
+      icon: 'chart',
+    },
     ...lessons.map((l) => ({
       title: l.title,
       description: `${l.description} ${l.objective}`,
@@ -310,6 +346,17 @@ export default function App() {
             />
           ) : page === 'guru' ? (
             <Teacher />
+          ) : page === 'asesmen' ? (
+            <ChapterAssessment
+              key={lessonId || 'current'}
+              progress={progress}
+              resultId={lessonId}
+              startAttempt={startAssessment}
+              updateAnswer={updateAssessmentAnswer}
+              updatePosition={updateAssessmentPosition}
+              submitAttempt={submitAssessment}
+              storageOk={storageOk}
+            />
           ) : (
             <section className="empty-state">
               <Icon name="search" size={40} />
@@ -398,8 +445,8 @@ export default function App() {
             <li>
               <strong>Tentukan langkah belajar berikutnya.</strong>
               <p>
-                Baca pembahasan setiap soal, kembali ke konsep yang perlu ditinjau, lalu coba
-                latihan baru saat kamu siap.
+                Selesaikan asesmen akhir bab setelah membaca materi. Tinjau hasil per konsep, baca
+                pembahasan, dan mulai percobaan baru saat siap.
               </p>
             </li>
           </ol>
@@ -419,8 +466,8 @@ export default function App() {
       {dialog === 'reset' && (
         <Dialog title="Mulai perjalanan baru?" onClose={() => setDialog(null)}>
           <p className="dialog-description">
-            Seluruh progres materi, draf jawaban, eksplorasi, dan riwayat kuismu di browser ini akan
-            dihapus.
+            Seluruh progres materi, draf jawaban, eksplorasi, riwayat kuis, dan asesmen akhir bab di
+            browser ini akan dihapus.
           </p>
           <p className="dialog-description">
             Ekspor progres terlebih dahulu jika ingin menyimpan catatan. Penghapusan ini tidak dapat

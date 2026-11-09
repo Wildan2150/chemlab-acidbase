@@ -1,5 +1,9 @@
 # Kontrak data — mode tamu lokal
 
+## Tambahan asesmen akhir bab
+
+Progres memiliki field opsional `assessment: { draft, attempts }`. Draf mencatat UUID, versi asesmen, waktu, posisi, serta jawaban pilihan/angka. Hasil mencatat salinan instrumen dan domain, jawaban terkunci, skor, serta waktu selesai. Data lama tanpa field asesmen tetap valid. Pemulihan format asesmen dilakukan terpisah dari progres inti; riwayat yang valid dipertahankan jika ada entri rusak. Skor hasil lama diturunkan dari instrumen tersimpan, bukan bank aktif. Ekspor progres menyertakan asesmen; reset berkonfirmasi mengosongkannya. Kontrak lengkap: [CHAPTER_ASSESSMENT.md](docs/CHAPTER_ASSESSMENT.md).
+
 Belum ada database cloud. Key `chemlab:guest:v1` menyimpan satu objek JSON untuk origin aplikasi. Reset menimpa key ini saja, tanpa `localStorage.clear()`.
 
 ```text

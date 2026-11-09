@@ -1,0 +1,631 @@
+.assessment-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 35px;
+  background: #edf2e3;
+  border: 1px solid #dce5cf;
+  border-radius: 18px;
+  padding: 34px;
+  margin-bottom: 25px;
+}
+.assessment-intro h2 {
+  font-size: 35px;
+  line-height: 1.35;
+  letter-spacing: -1.1px;
+  font-weight: 600;
+  margin: 16px 0;
+}
+.assessment-intro > div > p {
+  font-size: 12px;
+  line-height: 2;
+  max-width: 560px;
+  color: #4d663e;
+}
+.assessment-intro .button {
+  margin-top: 23px;
+  font-size: 12px;
+}
+.assessment-meta {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.assessment-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #4e683c;
+  line-height: 1.8;
+}
+.assessment-intro aside {
+  border-left: 1px solid #cbdab8;
+  padding: 13px 0 10px 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.assessment-large-number {
+  font-size: 75px;
+  font-weight: 500;
+  letter-spacing: -4px;
+  line-height: 1;
+  color: #3e6031;
+}
+.assessment-large-number > span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  font-weight: 650;
+  line-height: 1.9;
+  margin-top: 12px;
+}
+.assessment-intro aside p {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #4c653c;
+  margin-top: 22px;
+}
+.assessment-intro aside .small-link {
+  margin-top: 18px;
+}
+.assessment-domains {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 25px 0;
+}
+.assessment-domains .surface {
+  padding: 23px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.assessment-domains h2 {
+  font-size: 19px;
+  line-height: 1.6;
+  letter-spacing: -0.4px;
+  margin: 10px 0;
+  font-weight: 600;
+}
+.assessment-domains p {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #536b43;
+  margin-bottom: 17px;
+}
+.assessment-domains .small-link {
+  margin-top: auto;
+}
+.assessment-instructions {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  margin-top: 24px;
+}
+.assessment-instructions > svg {
+  flex-shrink: 0;
+  color: #5a783d;
+  margin-top: 3px;
+}
+.assessment-instructions h2 {
+  font-size: 20px;
+  letter-spacing: -0.4px;
+  line-height: 1.8;
+}
+.assessment-instructions ul {
+  margin: 15px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 2;
+  color: #4c633d;
+}
+.assessment-instructions li + li {
+  margin-top: 9px;
+}
+.assessment-home-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #eaf0df;
+  border: 1px solid #d5e1c4;
+  border-radius: 11px;
+  padding: 18px;
+  margin-top: 18px;
+  color: #466534;
+}
+.assessment-home-link > span {
+  min-width: 0;
+}
+.assessment-home-link strong {
+  font-size: 12px;
+  line-height: 1.8;
+  font-weight: 600;
+}
+.assessment-home-link small {
+  font-size: 11px;
+  line-height: 1.9;
+  display: block;
+  color: #536d42;
+  margin-top: 4px;
+}
+.assessment-home-link > svg {
+  flex-shrink: 0;
+}
+.assessment-home-link > svg:last-child {
+  margin-left: auto;
+}
+.numeric-answer {
+  margin-top: 25px;
+  padding: 22px;
+  background: #f2f6ea;
+  border: 1px solid #d4e1c3;
+  border-radius: 10px;
+}
+.numeric-answer > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+.numeric-answer input {
+  width: 100%;
+  max-width: 240px;
+  min-height: 48px;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  padding: 11px 14px;
+  border: 1px solid #a9bd8b;
+  border-radius: 8px;
+  color: #2f4c25;
+  background: #fffefa;
+}
+.numeric-answer > p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #506b3e;
+  margin-top: 15px;
+}
+.numeric-answer .numeric-error {
+  color: #8b4f30;
+}
+.assessment-map .question-map {
+  row-gap: 10px;
+}
+.assessment-map .full-width {
+  font-size: 11px;
+  margin-top: 18px;
+  white-space: normal;
+}
+.assessment-submission-review {
+  padding: 28px;
+}
+.submission-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+  text-align: left;
+  border-top: 1px solid var(--line);
+  padding: 17px 0;
+}
+.submission-row > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+.submission-row strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+.submission-row small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #506a40;
+  overflow-wrap: anywhere;
+  margin-top: 5px;
+}
+.submission-row > svg {
+  flex-shrink: 0;
+  color: #54733d;
+}
+.submission-row:hover {
+  background: #f2f6e9;
+}
+.assessment-review-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 25px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.assessment-review-actions .button {
+  font-size: 11px;
+}
+.assessment-result {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: #edf3e2;
+  padding: 30px;
+}
+.assessment-result > div:nth-child(2) {
+  min-width: 0;
+}
+.assessment-result h2 {
+  font-size: 25px;
+  line-height: 1.6;
+  letter-spacing: -0.6px;
+  margin: 8px 0 13px;
+  font-weight: 600;
+}
+.assessment-result p {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #506a40;
+  margin-top: 10px;
+}
+.assessment-result .result-actions {
+  gap: 13px;
+  flex-wrap: wrap;
+}
+.assessment-result .result-actions > .button {
+  font-size: 11px;
+}
+.domain-track {
+  height: 6px;
+  background: #dfe8d2;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 5px 0 17px;
+}
+.domain-track > span {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: #7c9e56;
+}
+.assessment-review-title {
+  margin-top: 32px;
+  align-items: flex-start;
+}
+.assessment-review-title h2 {
+  font-size: 21px;
+  line-height: 1.7;
+}
+.assessment-review-title .subtle {
+  font-size: 11px;
+  line-height: 1.9;
+  text-align: right;
+}
+.assessment-review .review-explanation ol {
+  padding-left: 20px;
+  margin: 15px 0 0;
+  font-size: 12px;
+  line-height: 2;
+}
+.assessment-review .review-explanation li + li {
+  margin-top: 8px;
+}
+.review-reading-link {
+  margin-top: 18px;
+  font-size: 11px;
+}
+.assessment-history {
+  margin-top: 28px;
+}
+.assessment-history .section-heading h2 {
+  font-size: 21px;
+  line-height: 1.6;
+  margin-top: 5px;
+}
+.assessment-history .small-link {
+  font-size: 11px;
+}
+.assessment-empty {
+  font-size: 12px;
+  line-height: 2;
+  color: #526b43;
+  padding: 20px 0 0;
+}
+.assessment-history-list {
+  margin-top: 23px;
+}
+.assessment-history-list > a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 19px 0;
+  border-top: 1px solid var(--line);
+}
+.assessment-history-list > a:hover {
+  background: #f2f6e9;
+}
+.assessment-history-list > a > div {
+  min-width: 0;
+}
+.assessment-history-list strong {
+  font-size: 12px;
+  line-height: 1.8;
+  font-weight: 600;
+  display: block;
+}
+.assessment-history-list > a > div > span {
+  display: block;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #566d45;
+  margin-top: 5px;
+}
+.assessment-history-score {
+  margin-left: auto;
+  font-size: 23px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.assessment-history-score > small {
+  font-size: 11px;
+  font-weight: 450;
+  color: #526c42;
+}
+.assessment-history-list > a > svg {
+  flex-shrink: 0;
+  color: #567140;
+}
+#assessment-question:focus {
+  outline: none;
+}
+@media (max-width: 1100px) {
+  .assessment-intro {
+    grid-template-columns: minmax(0, 1fr) 190px;
+    padding: 28px;
+    gap: 25px;
+  }
+  .assessment-intro h2 {
+    font-size: 30px;
+  }
+  .assessment-intro aside {
+    padding-left: 22px;
+  }
+  .assessment-domains {
+    gap: 14px;
+  }
+  .assessment-domains .surface {
+    padding: 20px;
+  }
+  .assessment-domains h2 {
+    font-size: 17px;
+  }
+  .assessment-domains p {
+    font-size: 11px;
+  }
+  .assessment-map .full-width {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+  .assessment-map .quiz-note {
+    grid-row: 1/5;
+  }
+  .assessment-meta {
+    gap: 10px 15px;
+  }
+  .assessment-meta span {
+    font-size: 10px;
+  }
+}
+@media (max-width: 780px) {
+  .assessment-intro h2 {
+    font-size: 31px;
+  }
+  .assessment-result h2 {
+    font-size: 22px;
+  }
+  .assessment-result p {
+    font-size: 11px;
+  }
+  .assessment-result {
+    gap: 25px;
+  }
+  .assessment-domains h2 {
+    font-size: 17px;
+  }
+  .assessment-domains .eyebrow {
+    font-size: 9px;
+  }
+  .assessment-review-title {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 540px) {
+  .assessment-intro {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 25px 22px;
+    gap: 27px;
+  }
+  .assessment-intro h2 {
+    font-size: 29px;
+    letter-spacing: -0.9px;
+  }
+  .assessment-intro > div > p {
+    font-size: 11px;
+  }
+  .assessment-intro .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .assessment-intro aside {
+    border-left: 0;
+    border-top: 1px solid #cbdab8;
+    padding: 25px 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 14px 24px;
+  }
+  .assessment-large-number {
+    font-size: 58px;
+    grid-row: 1/3;
+  }
+  .assessment-large-number > span {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .assessment-intro aside p {
+    font-size: 11px;
+    margin: 0;
+  }
+  .assessment-intro aside .small-link {
+    margin-top: 0;
+    font-size: 10px;
+    grid-column: 1/-1;
+  }
+  .assessment-domains {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+  .assessment-domains .surface {
+    padding: 22px;
+  }
+  .assessment-domains h2 {
+    font-size: 21px;
+  }
+  .assessment-domains .eyebrow {
+    font-size: 10px;
+  }
+  .assessment-domains p {
+    font-size: 12px;
+  }
+  .assessment-instructions {
+    padding: 22px 18px;
+    gap: 12px;
+  }
+  .assessment-instructions h2 {
+    font-size: 19px;
+  }
+  .assessment-instructions ul {
+    font-size: 11px;
+  }
+  .assessment-instructions > svg {
+    width: 20px;
+  }
+  .assessment-home-link {
+    padding: 17px 14px;
+    gap: 11px;
+  }
+  .assessment-home-link strong {
+    font-size: 11px;
+  }
+  .assessment-home-link small {
+    font-size: 10px;
+  }
+  .numeric-answer {
+    padding: 19px 16px;
+  }
+  .numeric-answer input {
+    max-width: 100%;
+  }
+  .numeric-answer > p {
+    font-size: 10px;
+  }
+  .assessment-map .quiz-note {
+    grid-row: auto;
+  }
+  .assessment-map .full-width {
+    max-width: 280px;
+  }
+  .assessment-submission-review {
+    padding: 22px 18px;
+  }
+  .submission-row {
+    gap: 12px;
+  }
+  .submission-row strong {
+    font-size: 11px;
+  }
+  .submission-row small {
+    font-size: 10px;
+  }
+  .assessment-review-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .assessment-review-actions .button {
+    font-size: 11px;
+  }
+  .assessment-result {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 27px 22px;
+  }
+  .assessment-result .score-circle {
+    align-self: center;
+  }
+  .assessment-result h2 {
+    font-size: 22px;
+  }
+  .assessment-result p {
+    font-size: 11px;
+  }
+  .assessment-result .result-actions .button {
+    font-size: 10px;
+  }
+  .assessment-review-title h2 {
+    font-size: 20px;
+  }
+  .assessment-review-title .subtle {
+    text-align: left;
+    font-size: 10px;
+  }
+  .assessment-review .review-explanation ol {
+    font-size: 11px;
+  }
+  .assessment-history {
+    padding: 22px 18px;
+  }
+  .assessment-history .section-heading {
+    flex-wrap: wrap;
+  }
+  .assessment-history .section-heading h2 {
+    font-size: 20px;
+  }
+  .assessment-history .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .assessment-history-list > a {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .assessment-history-list .history-order {
+    font-size: 11px;
+    padding-right: 12px;
+  }
+  .assessment-history-list strong {
+    font-size: 11px;
+  }
+  .assessment-history-list > a > div > span {
+    font-size: 9px;
+  }
+  .assessment-history-score {
+    font-size: 20px;
+  }
+  .assessment-history-score > small {
+    font-size: 10px;
+  }
+  .assessment-history-list > a > svg {
+    width: 14px;
+  }
+  .assessment-history .small-link {
+    font-size: 10px;
+  }
+}

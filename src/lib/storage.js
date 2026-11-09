@@ -1,5 +1,6 @@
 import { lessons, questions, QUESTION_VERSION } from '../data/chemData.js';
 import { makeAttempt } from './chemistry.js';
+import { emptyAssessment, restoreAssessment } from './chapterAssessment.js';
 
 export const STORAGE_KEY = 'chemlab:guest:v1';
 export function createDraft(kind = 'diagnostic') {
@@ -19,6 +20,7 @@ export function emptyProgress() {
     ph: 7,
     draft: createDraft(),
     attempts: [],
+    assessment: emptyAssessment(),
   };
 }
 const validAnswers = (answers) =>
@@ -67,6 +69,7 @@ export function loadProgress(storage) {
       saved.completedLessons.some((id) => !lessons.some((l) => l.id === id))
     )
       throw new Error('Invalid progress');
+    const assessment = restoreAssessment(saved.assessment);
     return {
       data: {
         ...fresh,
@@ -75,8 +78,9 @@ export function loadProgress(storage) {
         ph: saved.ph,
         draft: saved.draft,
         attempts,
+        assessment: assessment.data,
       },
-      warning: '',
+      warning: assessment.warning,
     };
   } catch {
     return {

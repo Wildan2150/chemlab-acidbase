@@ -1,5 +1,7 @@
 # ChemLab — demo pembelajaran asam–basa dan pH
 
+Branch `feat/chapter-assessment` menambahkan **Asesmen akhir bab** dari baseline `feat/material-updates` (`834ee59`). Tersedia 15 soal (9 pilihan ganda dan 6 jawaban angka), draf tersimpan, tinjauan/konfirmasi pengumpulan, hasil per cakupan, pembahasan, riwayat, serta ekspor. Baca [kisi-kisi dan kontrak asesmen](docs/CHAPTER_ASSESSMENT.md). Buka `/#asesmen` melalui menu atau akhir bacaan ketiga. Branch akun/interaktif tidak digabungkan.
+
 Branch `feat/material-updates` memperdalam tiga bacaan menjadi 24 bagian dengan contoh hitung, tabel, daftar isi, refleksi, dan sumber per bagian. Baca [peta materi dan sumber](docs/MATERIAL_SOURCES.md). Branch ini berdiri sendiri dari `main`; fitur interaktif eksternal dan akun dikerjakan pada branch lain.
 
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.

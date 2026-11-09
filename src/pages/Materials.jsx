@@ -207,8 +207,8 @@ export default function Materials({ lessonId, progress, completeLesson }) {
               <Icon name={done ? 'done' : 'check'} size={18} />
               {done ? 'Sudah dipelajari' : 'Tandai sudah dipelajari'}
             </button>
-            <a className="text-button" href={next ? `#materi/${next.id}` : '#laboratorium'}>
-              {next ? 'Bagian berikutnya' : 'Lanjut ke laboratorium'}
+            <a className="text-button" href={next ? `#materi/${next.id}` : '#asesmen'}>
+              {next ? 'Bagian berikutnya' : 'Lanjut ke asesmen akhir bab'}
               <Icon name="arrow" size={18} />
             </a>
           </div>

@@ -161,6 +161,14 @@ export default function Home({ progress, setPh }) {
               <Icon name="arrow" size={16} />
             </a>
           </div>
+          <a className="assessment-home-link" href="#asesmen">
+            <Icon name="chart" size={24} />
+            <span>
+              <strong>Sudah menuntaskan bacaan?</strong>
+              <small>Hubungkan seluruh konsep melalui asesmen akhir bab.</small>
+            </span>
+            <Icon name="up" size={18} />
+          </a>
         </section>
         <aside className="mini-lab">
           <div className="mini-lab-title">
