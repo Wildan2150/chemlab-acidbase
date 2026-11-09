@@ -1,0 +1,10 @@
+{
+  "clientDate": "7 November 2026 WIB",
+  "target": "production build on local Vite preview",
+  "routes": ["beranda", "materi", "materi/skala", "laboratorium", "kuis", "progres", "guru"],
+  "labSampleAndReload": "pass",
+  "runtimeErrors": [],
+  "failedRequests": [],
+  "externalRuntimeRequests": [],
+  "browser": "156.0.4314.58"
+}
