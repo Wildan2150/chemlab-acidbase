@@ -81,7 +81,7 @@ export default function Home({ progress, setPh }) {
               <Icon name="book" size={14} />3 bagian materi
             </span>
             <i />
-            <span>± 15 menit belajar</span>
+            <span>± 75 menit belajar</span>
             <i />
             <span>Untuk kelas XI</span>
           </div>

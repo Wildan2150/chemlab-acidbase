@@ -1,3 +1,5 @@
+import { readingContent, readingSources } from './readingContent.js';
+
 export const QUESTION_VERSION = 'asam-basa-v1';
 
 export const lessons = [
@@ -5,98 +7,34 @@ export const lessons = [
     id: 'kenali',
     number: '01',
     title: 'Kenali asam & basa',
-    duration: '4 menit',
-    description: 'Dua sifat larutan yang dekat dengan keseharian kita.',
+    description: 'Teori, pasangan konjugasi, dan kesetimbangan ionisasi.',
     icon: 'flask',
     color: 'peach',
-    objective: 'Membedakan asam dan basa berdasarkan ion yang dihasilkan dalam air.',
-    sections: [
-      {
-        title: 'Mulai dari partikel',
-        body: 'Dalam pengertian Arrhenius, asam meningkatkan konsentrasi ion hidronium (H₃O⁺) di dalam air. Basa meningkatkan konsentrasi ion hidroksida (OH⁻). Ion H⁺ dalam persamaan sederhana merupakan singkatan untuk proton yang terhidrasi dalam air.',
-        formula: 'HCl + H₂O → H₃O⁺ + Cl⁻',
-      },
-      {
-        title: 'Lalu, bagaimana dengan basa?',
-        body: 'Natrium hidroksida terdisosiasi menjadi ion Na⁺ dan OH⁻ dalam air. Keberadaan OH⁻ menjelaskan sifat basa larutannya.',
-        formula: 'NaOH → Na⁺ + OH⁻',
-      },
-      {
-        title: 'Kuat tidak sama dengan pekat',
-        body: 'Kekuatan asam berkaitan dengan derajat ionisasi pada kondisi tertentu. Konsentrasi menyatakan banyaknya zat per volume larutan. Asam kuat dapat dibuat encer; asam lemah dapat dibuat lebih pekat.',
-        callout:
-          'HCl adalah asam kuat, sedangkan CH₃COOH adalah asam lemah. Nilai pH keduanya tetap bergantung pada konsentrasi serta kesetimbangannya.',
-      },
-    ],
     check:
-      'Jika larutan menghasilkan lebih banyak OH⁻ dibandingkan H₃O⁺, apakah larutan itu bersifat asam atau basa?',
-    answer: 'Basa. Pada 25 °C, larutan ini mempunyai pH di atas 7.',
+      'Jika larutan menghasilkan lebih banyak OH⁻ dibandingkan H₃O⁺ pada 25 °C, apakah sifat larutannya?',
+    answer: 'Basa. Hubungkan klasifikasi dengan spesies, bukan hanya nama zat.',
   },
   {
     id: 'skala',
     number: '02',
     title: 'Membaca skala pH',
-    duration: '6 menit',
-    description: 'Pahami mengapa satu angka bisa berarti sepuluh kali.',
+    description: 'Dari aktivitas ion hingga strategi perhitungan larutan.',
     icon: 'chart',
     color: 'sage',
-    objective:
-      'Menghubungkan pH dengan konsentrasi H₃O⁺ menggunakan pendekatan larutan ideal encer.',
-    sections: [
-      {
-        title: 'Sebuah skala logaritmik',
-        body: 'pH didefinisikan dari aktivitas ion hidrogen. Untuk larutan ideal encer, aktivitas dapat didekati dengan konsentrasi relatif terhadap keadaan standar 1 mol/L. Pada pendekatan ini kita memakai persamaan berikut, dengan [H₃O⁺] dinyatakan dalam mol/L.',
-        formula: 'pH ≈ −log₁₀[H₃O⁺]',
-      },
-      {
-        title: 'Selisih satu, berbeda sepuluh kali',
-        body: 'Larutan dengan pH 3 mempunyai konsentrasi H₃O⁺ sekitar 100 kali larutan dengan pH 5 pada pendekatan ideal. Selisih dua satuan berarti 10², bukan dua kali.',
-        formula: '10⁻³ / 10⁻⁵ = 10² = 100',
-      },
-      {
-        title: 'Titik netral dan suhu',
-        body: 'Pada 25 °C, larutan netral memiliki [H₃O⁺] = [OH⁻] dan pH sekitar 7. Larutan asam memiliki pH di bawah 7, sedangkan basa di atas 7. pH netral berubah dengan suhu.',
-        formula: 'pH + pOH ≈ 14,00  (25 °C)',
-        callout:
-          'Rentang 0–14 adalah rentang belajar yang umum. Nilai pH nyata dapat berada di luar rentang ini. Warna indikator merupakan ilustrasi.',
-      },
-    ],
     check: 'Konsentrasi H₃O⁺ berkurang sepuluh kali. Ke arah mana pH berubah?',
-    answer:
-      'pH naik satu satuan pada pendekatan larutan ideal. Contohnya, 10⁻² menjadi 10⁻³ mol/L: pH 2 menjadi pH 3.',
+    answer: 'pH naik satu satuan pada pendekatan larutan ideal.',
   },
   {
     id: 'kehidupan',
     number: '03',
     title: 'Kimia di sekitar kita',
-    duration: '5 menit',
-    description: 'Hubungkan konsep, contoh, dan reaksi netralisasi.',
+    description: 'Netralisasi, hidrolisis, penyangga, dan titrasi.',
     icon: 'leaf',
     color: 'lavender',
-    objective:
-      'Menafsirkan contoh larutan dan netralisasi tanpa menyamakan pH dengan kekuatan asam.',
-    sections: [
-      {
-        title: 'Contoh yang mudah dikenali',
-        body: 'Sari lemon cenderung asam, sedangkan larutan sabun tertentu bersifat basa. Nilai pH bahan sehari-hari bergantung pada komposisi, konsentrasi, dan kondisi pengukuran. Contoh pH di laboratorium virtual merupakan nilai ilustratif.',
-      },
-      {
-        title: 'Ketika asam bertemu basa',
-        body: 'Ion hidronium bereaksi dengan ion hidroksida membentuk air. Pencampuran jumlah mol yang sama dari HCl dan NaOH pada 25 °C menghasilkan larutan NaCl dengan pH mendekati 7 dalam pendekatan ideal.',
-        formula: 'H₃O⁺ + OH⁻ → 2H₂O',
-      },
-      {
-        title: 'Jangan buru-buru menyimpulkan',
-        body: 'Tidak semua pencampuran asam dan basa menghasilkan pH 7. Pereaksi yang berlebih, kekuatan asam/basa, dan hidrolisis ion garam dapat memengaruhi pH akhir.',
-        callout:
-          'Gunakan indikator atau alat ukur untuk mengenali sifat larutan. Jangan mengecap atau menyentuh bahan untuk menguji sifat asam–basanya.',
-      },
-    ],
     check: 'Apakah setiap pencampuran asam dan basa pasti menghasilkan larutan netral?',
-    answer:
-      'Tidak. Contoh netral dalam materi ini dibatasi pada HCl dan NaOH dengan jumlah mol yang sama pada 25 °C.',
+    answer: 'Tidak. Periksa mol pereaksi, ion garam, dan suhu sebelum menyimpulkan pH akhir.',
   },
-];
+].map((lesson) => ({ ...lesson, ...readingContent[lesson.id] }));
 
 export const questions = [
   {
@@ -177,17 +115,4 @@ export const demoStudents = [
   { code: 'KIM-06', name: 'Siswa 06', answers: { q1: 1, q2: 2, q3: 0, q4: 3, q5: 0 } },
 ];
 
-export const sources = [
-  {
-    title: 'OpenStax Chemistry 2e · 14.1 Brønsted–Lowry Acids and Bases',
-    url: 'https://openstax.org/books/chemistry-2e/pages/14-1-bronsted-lowry-acids-and-bases',
-  },
-  {
-    title: 'OpenStax Chemistry 2e · 14.2 pH and pOH',
-    url: 'https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh',
-  },
-  {
-    title: 'OpenStax Chemistry 2e · 14.3 Relative Strengths of Acids and Bases',
-    url: 'https://openstax.org/books/chemistry-2e/pages/14-3-relative-strengths-of-acids-and-bases',
-  },
-];
+export const sources = readingSources;

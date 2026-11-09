@@ -12,7 +12,7 @@ export default function Materials({ lessonId, progress, completeLesson }) {
         <div className="page-heading">
           <p className="eyebrow">MODUL 01 · ASAM & BASA</p>
           <h1>Mulai dari konsep.</h1>
-          <p>Tiga bagian singkat untuk membangun pemahaman yang utuh.</p>
+          <p>Tiga bacaan mendalam, dari teori asam–basa hingga penyangga dan titrasi.</p>
         </div>
         <div className="info-strip">
           <Icon name="bulb" />
@@ -68,20 +68,122 @@ export default function Materials({ lessonId, progress, completeLesson }) {
               <p>{lesson.objective}</p>
             </div>
           </div>
+          <div className="reading-prerequisites">
+            <strong>Sebelum mulai</strong>
+            <p>{lesson.prerequisites.join(' · ')}</p>
+          </div>
+          <details className="reading-outline">
+            <summary>Daftar isi bacaan · {lesson.sections.length} bagian</summary>
+            <nav aria-label="Daftar isi bacaan">
+              {lesson.sections.map((section, i) => (
+                <button
+                  key={section.title}
+                  onClick={() => {
+                    const target = document.getElementById(`reading-${i}`);
+                    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target?.focus({ preventScroll: true });
+                  }}
+                >
+                  {String(i + 1).padStart(2, '0')} · {section.title}
+                </button>
+              ))}
+            </nav>
+          </details>
           {lesson.sections.map((s, i) => (
             <section className="reading-section" key={s.title}>
-              <span className="reading-index">0{i + 1}</span>
-              <h2>{s.title}</h2>
-              <p>{s.body}</p>
+              <span className="reading-index">{String(i + 1).padStart(2, '0')}</span>
+              <h2 id={`reading-${i}`} tabIndex="-1">
+                {s.title}
+              </h2>
+              {(s.paragraphs || [s.body]).map((p, n) => (
+                <p key={n}>{p}</p>
+              ))}
               {s.formula && <div className="formula-block">{s.formula}</div>}
+              {s.table && (
+                <div className="table-scroll reading-table">
+                  <table>
+                    <caption>{s.table.caption}</caption>
+                    <thead>
+                      <tr>
+                        {s.table.headers.map((h) => (
+                          <th key={h} scope="col">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {s.table.rows.map((row, n) => (
+                        <tr key={n}>
+                          {row.map((cell, j) =>
+                            j === 0 ? (
+                              <th key={j} scope="row">
+                                {cell}
+                              </th>
+                            ) : (
+                              <td key={j}>{cell}</td>
+                            ),
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {s.example && (
+                <div className="worked-example">
+                  <span className="eyebrow">CONTOH TERBIMBING</span>
+                  <h3>{s.example.question}</h3>
+                  <ol>
+                    {s.example.steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ol>
+                  <p>
+                    <strong>Kesimpulan:</strong> {s.example.answer}
+                  </p>
+                </div>
+              )}
               {s.callout && (
                 <div className="callout">
                   <Icon name="bulb" />
                   <p>{s.callout}</p>
                 </div>
               )}
+              <div className="section-references">
+                <span>Rujukan konsep:</span>
+                {s.sourceIds.map((id) => {
+                  const source = sources.find((item) => item.id === id);
+                  return (
+                    <a key={id} href={source.url} target="_blank" rel="noreferrer">
+                      {source.title}
+                      <Icon name="external" size={12} />
+                    </a>
+                  );
+                })}
+              </div>
             </section>
           ))}
+          <section className="reading-recap">
+            <h2>Hubungkan kembali konsepnya</h2>
+            <ul>
+              {lesson.keyPoints.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          </section>
+          <section className="reading-practice">
+            <h2>Uji alasanmu</h2>
+            <p>Coba jelaskan dengan kata-katamu sendiri sebelum membuka pembahasan.</p>
+            {lesson.checks.map((check, i) => (
+              <details key={check.question}>
+                <summary>
+                  {i + 1}. {check.question}
+                </summary>
+                <p>{check.answer}</p>
+              </details>
+            ))}
+          </section>
           <section className="self-check">
             <span className="eyebrow">BERHENTI SEJENAK, COBA PIKIRKAN</span>
             <h2>{lesson.check}</h2>
@@ -110,7 +212,7 @@ export default function Materials({ lessonId, progress, completeLesson }) {
               <Icon name="arrow" size={18} />
             </a>
           </div>
-          <SourceList />
+          <SourceList ids={[...new Set(lesson.sections.flatMap((s) => s.sourceIds))]} />
         </article>
         <aside className="reading-sidebar">
           <span className="eyebrow">ISI MODUL</span>
@@ -140,17 +242,19 @@ export default function Materials({ lessonId, progress, completeLesson }) {
   );
 }
 
-export function SourceList() {
+export function SourceList({ ids } = {}) {
   return (
     <section className="sources">
       <h2>Bacaan & sumber konsep</h2>
       <p>Perdalam pemahaman asam–basa melalui referensi berikut.</p>
-      {sources.map((s) => (
-        <a href={s.url} key={s.url} target="_blank" rel="noreferrer">
-          {s.title}
-          <Icon name="external" size={13} />
-        </a>
-      ))}
+      {sources
+        .filter((s) => !ids || ids.includes(s.id))
+        .map((s) => (
+          <a href={s.url} key={s.url} target="_blank" rel="noreferrer">
+            {s.title}
+            <Icon name="external" size={13} />
+          </a>
+        ))}
     </section>
   );
 }

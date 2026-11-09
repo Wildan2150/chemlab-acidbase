@@ -1,5 +1,7 @@
 # ChemLab — demo pembelajaran asam–basa dan pH
 
+Branch `feat/material-updates` memperdalam tiga bacaan menjadi 24 bagian dengan contoh hitung, tabel, daftar isi, refleksi, dan sumber per bagian. Baca [peta materi dan sumber](docs/MATERIAL_SOURCES.md). Branch ini berdiri sendiri dari `main`; fitur interaktif eksternal dan akun dikerjakan pada branch lain.
+
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
 
 ## Jalankan
