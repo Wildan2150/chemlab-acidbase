@@ -21,3 +21,9 @@
 **Perubahan:** menghapus badge demo, banner demonstrasi, dan narasi perkuliahan/implementasi dari antarmuka. Panduan menjelaskan cara belajar; footer, deskripsi halaman, referensi, serta tombol memakai bahasa produk. Panel guru memakai nama/kode siswa netral dan menyebut asal data latihan fiktif satu kali pada keterangan sumber. Konteks pengembangan tetap tersedia dalam dokumentasi proyek.
 
 **Pemeriksaan:** selector uji yang mengikuti nama tombol diperbarui; pemeriksaan halaman dan panduan pada skenario browser memastikan label/narasi demo tidak tampil. Hasil akhir dicatat di `TESTING.md`.
+
+## Pengembangan terpisah — feat/login-page
+
+Berangkat dari `main` commit `30505f7`. Pengajar memilih Firebase Auth dan konfigurasi proyek menyusul. Ditambahkan alur email/password, registrasi, verifikasi, pemulihan sekali pakai, profil, perubahan email/password dengan autentikasi ulang, logout, dan hapus akun berkonfirmasi. State/progres dipisahkan per UID dan tamu. Tidak ada penggabungan branch materi atau interaktif.
+
+Integrasi diuji melalui Firebase Auth Emulator yang sesungguhnya menggunakan fixture unik, tanpa kredensial/akun produksi. Dua instalasi npm sempat bentrok; dependency dipulihkan melalui pemasangan bersih dari lockfile sebelum uji. Override kompatibel grpc menghilangkan advisory produksi. Build, tujuh uji logika, delapan skenario belajar, dan empat skenario Auth Emulator lulus. Email nyata dan domain produksi belum diuji karena konfigurasi belum diberikan.

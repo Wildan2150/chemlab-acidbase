@@ -2,6 +2,7 @@ import { lessons, questions, QUESTION_VERSION } from '../data/chemData.js';
 import { makeAttempt } from './chemistry.js';
 
 export const STORAGE_KEY = 'chemlab:guest:v1';
+export const accountProgressKey = (uid) => (uid ? `chemlab:user:${uid}:v1` : STORAGE_KEY);
 export function createDraft(kind = 'diagnostic') {
   return {
     id: globalThis.crypto.randomUUID(),
@@ -39,10 +40,10 @@ const validDraft = (draft) =>
   Number.isFinite(Date.parse(draft.startedAt)) &&
   validAnswers(draft.answers);
 
-export function loadProgress(storage) {
+export function loadProgress(storage, key = STORAGE_KEY) {
   const fresh = emptyProgress();
   try {
-    const raw = storage.getItem(STORAGE_KEY);
+    const raw = storage.getItem(key);
     if (!raw) return { data: fresh, warning: '' };
     const saved = JSON.parse(raw);
     if (
@@ -87,9 +88,9 @@ export function loadProgress(storage) {
   }
 }
 
-export function saveProgress(storage, data) {
+export function saveProgress(storage, data, key = STORAGE_KEY) {
   try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(data));
+    storage.setItem(key, JSON.stringify(data));
     return true;
   } catch {
     return false;

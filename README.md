@@ -1,5 +1,7 @@
 # ChemLab — demo pembelajaran asam–basa dan pH
 
+Branch `feat/login-page` menambahkan Firebase Auth: masuk, registrasi, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Berangkat langsung dari `main`; tidak memuat perubahan branch materi maupun interaktif. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
+
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
 
 ## Jalankan
@@ -8,9 +10,19 @@ Prasyarat: Node.js 22.12+ atau Node.js 24. Lingkungan pembuatan memakai Node.js 
 
 ```powershell
 cd ProyekContoh
-npm.cmd install
+npm.cmd ci --ignore-scripts
 npm.cmd run dev
 ```
+
+Untuk memakai akun nyata, isi `.env.local` mengikuti `.env.example`, aktifkan Email/Password di Firebase Console, dan atur domain serta email action URL sesuai panduan. Konfigurasi proyek produksi belum diisi.
+
+Untuk mencoba alur akun sepenuhnya tanpa proyek produksi:
+
+```powershell
+npm.cmd run dev:emulator
+```
+
+Buka **http://127.0.0.1:5174**. Auth Emulator berjalan lokal; tautan verifikasi dan reset tersedia melalui emulator/terminal, bukan email sungguhan.
 
 Buka alamat yang dicetak Vite, biasanya **http://127.0.0.1:5173**. `npm.cmd` bisa diganti `npm` jika PowerShell mengizinkan skrip npm. Jangan membuka `index.html` langsung dengan klik ganda.
 
@@ -31,6 +43,7 @@ Build siap hosting tersedia di `dist/`. Aplikasi menggunakan URL hash, sehingga 
 - Progres tamu, ekspor JSON, serta reset dengan konfirmasi.
 - Panel guru dengan **enam siswa fiktif**, agregat per konsep, pencarian/filter, rincian jawaban, dan contoh tindak lanjut.
 - Pencarian konsep, navigasi keyboard, dialog, dan tampilan ponsel.
+- Login/registrasi Firebase, verifikasi email, pemulihan password, pengelolaan akun, serta pemisahan progres tiap UID dan tamu.
 
 Nama **ChemLab**, desain hijau, dan sasaran kelas XI adalah keputusan awal yang dapat disesuaikan. Topik asam–basa, bentuk aplikasi siswa, serta mode lokal/data guru fiktif sudah dipilih pengajar melalui percakapan.
 
@@ -38,9 +51,11 @@ Antarmuka menggunakan bahasa aplikasi belajar untuk siswa dan guru, tanpa label 
 
 ## Batas versi ini
 
-Demo **tanpa akun dan tanpa database cloud**, sesuai pilihan pengajar. Panel guru tidak membaca progres tamu. Tidak ada login palsu, antrean kirim, atau klaim sinkronisasi. Login, pemisahan data per akun, aturan akses server, dan deployment publik merupakan pengembangan berikutnya, bukan fitur yang sudah selesai.
+Branch ini memakai **Firebase Auth untuk identitas akun**, dengan konfigurasi proyek produksi menyusul. Belajar tanpa masuk tetap tersedia. Progres akun dan tamu dipisahkan pada browser; Firestore, sinkronisasi hasil antarperangkat, antrean kirim, serta pembacaan hasil nyata oleh guru belum ditambahkan. Panel guru tetap memakai data latihan fiktif.
 
 `localStorage` menyimpan data pada origin browser yang sama. Data tidak berpindah perangkat, dan berganti port berarti berganti origin. Jika penyimpanan ditolak, aplikasi tetap berjalan dalam memori dan memberi informasi untuk mengekspor progres. Data yang rusak atau tidak sesuai versi diganti sesi baru. Ekspor JSON merupakan salinan untuk dibaca; fitur impor belum dibuat. Aplikasi bukan PWA; membuka pertama kali tanpa koneksi ke server belum didukung.
+
+Kata sandi diproses melalui Firebase SDK, tidak disimpan oleh aplikasi di localStorage. Perubahan email/password dan penghapusan akun meminta autentikasi ulang. Penggantian email memakai verifikasi alamat baru terlebih dahulu.
 
 Skor dan kunci tersedia di sisi browser. Gunakan sebagai alat belajar dan demo diagnostik, bukan ujian dengan penilaian server. Persentase progres mengukur aktivitas, bukan penguasaan konsep.
 
@@ -77,6 +92,8 @@ npm.cmd run test:e2e
 ```
 
 Uji browser otomatis memakai Microsoft Edge pada Windows. Pada OS lain, pasang Chromium Playwright terlebih dahulu dengan `npx playwright install chromium`. Konfigurasi akan menjalankan server Vite sendiri bila port 5173 belum digunakan. Detail hasil serta batas pengujian terdapat di [TESTING.md](TESTING.md).
+
+Pada branch akun, pengujian juga menjalankan stack Auth Emulator pada port 9099 dan aplikasi uji pada port 5175. Gunakan `--project=learning` untuk skenario belajar saja atau `--project=firebase-auth` untuk skenario akun; kedua server tetap dikelola konfigurasi Playwright.
 
 Pratinjau tersimpan di [desktop](docs/preview-desktop.png) dan [ponsel](docs/preview-mobile.png).
 

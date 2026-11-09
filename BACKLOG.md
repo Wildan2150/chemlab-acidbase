@@ -1,5 +1,15 @@
 # Backlog dan keputusan lanjutan
 
+## Selesai pada branch akun
+
+- [x] Firebase Auth email/password, registrasi, verifikasi email, dan pemulihan password.
+- [x] Profil, perubahan email terverifikasi, perubahan password dengan autentikasi ulang.
+- [x] Logout, hapus akun berkonfirmasi, serta pemisahan progres browser per UID/tamu.
+- [x] Pengujian terhadap Auth Emulator, bukan penyimpanan password lokal.
+- [ ] Pengisian konfigurasi Firebase produksi, authorized domains, template email, dan pengujian produksi.
+
+Daftar baseline di bawah dipertahankan sebagai konteks; integrasi hasil belajar cloud, Google login, dan panel guru dengan hasil nyata belum dikerjakan.
+
 ## Selesai pada demo lokal
 
 - [x] Beranda, tiga bagian materi, tujuan, refleksi, dan sumber.

@@ -1,5 +1,11 @@
 # Hasil pengujian demo
 
+## Verifikasi branch Firebase Auth
+
+`feat/login-page` berangkat langsung dari `main` commit `30505f7`. Build produksi lulus (JavaScript 127,00 KB gzip; CSS 16,75 KB gzip). Tujuh uji logika lulus, termasuk pemisahan key tamu/dua akun. Delapan skenario browser baseline serta empat skenario Firebase Auth Emulator lulus: registrasi/verifikasi, sesi, profil, password benar/salah, hapus/batal, reset sekali pakai, penggantian email setelah verifikasi, dan draf per identitas. Pemeriksaan aksesibilitas serta ponsel mencakup halaman masuk/daftar/pemulihan dan tiga tab akun.
+
+Hasil browser diverifikasi melalui pemeriksaan lengkap (10 lulus) dan verifikasi ulang dua skenario setelah selector input password serta field `newEmail` pada pembacaan kode emulator diperbaiki. Tidak ada mock keberhasilan autentikasi. Audit dependency produksi: 0 temuan. Dependency Firebase CLI untuk development masih memiliki advisory moderate; CLI tidak dikirim ke browser. Konfigurasi proyek/domain produksi serta email sungguhan belum diuji. Panduan: [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md). Bagian di bawah merupakan riwayat baseline.
+
 Tanggal: **7 November 2026 WIB**. Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright. Seluruh pemeriksaan berikut dilakukan pada proyek lokal; tidak ada pengujian akun/cloud atau URL publik.
 
 ## Hasil aktual

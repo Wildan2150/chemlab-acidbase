@@ -1,5 +1,9 @@
 # Kontrak data — mode tamu lokal
 
+## Tambahan branch akun
+
+Firebase Auth mengelola identitas dan sesi, sedangkan kontrak progres di bawah tetap dipakai per browser. Tamu menggunakan `chemlab:guest:v1`; akun menggunakan `chemlab:user:<UID>:v1`. Memuat/menulis progres menerima key identitas aktif. State belajar di-remount saat UID berubah agar draf tidak tersalin ke akun lain. Logout kembali ke data tamu; penghapusan akun menghapus key milik UID yang dihapus pada browser itu saja. Profil/email/password dikelola SDK, bukan dimasukkan ke objek progres. Tidak ada database hasil cloud pada branch ini. Detail konfigurasi: [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
+
 Belum ada database cloud. Key `chemlab:guest:v1` menyimpan satu objek JSON untuk origin aplikasi. Reset menimpa key ini saja, tanpa `localStorage.clear()`.
 
 ```text

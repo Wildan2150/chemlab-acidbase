@@ -1,10 +1,11 @@
 # Panduan perubahan ProyekContoh
 
 - Ini demo React + Vite berbahasa Indonesia untuk topik asam–basa/pH.
-- Ruang lingkup yang dipilih pengajar: aplikasi siswa, lokal tanpa akun, panel guru data fiktif.
+- Branch ini menambahkan Firebase Auth sesuai pilihan pengajar; progres belajar tetap lokal dan dipisahkan per UID/tamu. Panel guru tetap memakai data fiktif. `main` mempertahankan baseline tanpa akun.
 - Simpan materi/soal/sumber di `src/data/chemData.js`; perhitungan dan penyimpanan terpisah dari komponen tampilan.
 - Jangan mengubah dokumen mata kuliah di luar `ProyekContoh` untuk perubahan demo.
 - Jangan menyebut login/cloud berhasil tanpa integrasi dan bukti aktual. Panel guru contoh harus tetap berlabel fiktif.
+- Uji akun menggunakan Auth Emulator dengan project ID `demo-chemlab`; jangan memakai akun/proyek produksi untuk uji yang membuat atau menghapus pengguna. Konfigurasi produksi menyusul. Jangan menggabungkan perubahan branch materi atau interaktif ke branch ini.
 - Teks antarmuka berbicara langsung kepada siswa/guru sebagai pengguna aplikasi. Jangan menampilkan label demo atau narasi tentang kuliah, prototipe, maupun implementasi. Asal data latihan dijelaskan singkat pada keterangan sumber panel guru, bukan banner atau label pada setiap elemen.
 - Pertahankan draf per pilihan, ID percobaan stabil, pemisahan diagnostik awal dan latihan ulang, serta reset berkonfirmasi.
 - Jangan memakai `localStorage.clear()`. Perubahan soal memerlukan keputusan versi dan migrasi data.
