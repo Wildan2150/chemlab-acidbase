@@ -10,11 +10,13 @@ import Laboratory from './pages/Laboratory.jsx';
 import Quiz from './pages/Quiz.jsx';
 import Progress from './pages/Progress.jsx';
 import Teacher from './pages/Teacher.jsx';
+import Exploration from './pages/Exploration.jsx';
 
 const navigation = [
   { id: 'beranda', label: 'Beranda', icon: 'home' },
   { id: 'materi', label: 'Materi belajar', icon: 'book' },
   { id: 'laboratorium', label: 'Laboratorium pH', icon: 'flask' },
+  { id: 'eksplorasi', label: 'Eksplorasi kimia', icon: 'atom' },
   { id: 'kuis', label: 'Kuis diagnostik', icon: 'quiz' },
   { id: 'progres', label: 'Progres saya', icon: 'chart' },
 ];
@@ -110,6 +112,11 @@ export default function App() {
   }
   const setPh = (ph) => setProgress((p) => ({ ...p, ph, labVisited: true }));
   const markLab = () => setProgress((p) => ({ ...p, labVisited: true }));
+  const updateActivity = (id, patch) =>
+    setProgress((p) => ({
+      ...p,
+      activityNotes: { ...p.activityNotes, [id]: { ...p.activityNotes?.[id], ...patch } },
+    }));
   const updateAnswer = (id, value) =>
     setProgress((p) => ({
       ...p,
@@ -140,6 +147,12 @@ export default function App() {
       description: 'Lima soal asam basa dan pembahasan.',
       href: '#kuis',
       icon: 'quiz',
+    },
+    {
+      title: 'Eksplorasi kimia',
+      description: 'PhET, model molekul 3D, dan data senyawa PubChem dengan catatan pengamatan.',
+      href: '#eksplorasi',
+      icon: 'atom',
     },
   ].filter((r) => `${r.title} ${r.description}`.toLowerCase().includes(query.toLowerCase().trim()));
 
@@ -300,6 +313,14 @@ export default function App() {
               updateAnswer={updateAnswer}
               submitQuiz={submitQuiz}
               newAttempt={() => setProgress((p) => ({ ...p, draft: createDraft('practice') }))}
+              storageOk={storageOk}
+            />
+          ) : page === 'eksplorasi' ? (
+            <Exploration
+              key={lessonId || 'phet'}
+              activityId={lessonId}
+              progress={progress}
+              updateActivity={updateActivity}
               storageOk={storageOk}
             />
           ) : page === 'progres' ? (

@@ -1,5 +1,6 @@
 import { lessons, questions, QUESTION_VERSION } from '../data/chemData.js';
 import { makeAttempt } from './chemistry.js';
+import { normalizeActivityNotes } from './activityNotes.js';
 
 export const STORAGE_KEY = 'chemlab:guest:v1';
 export function createDraft(kind = 'diagnostic') {
@@ -19,6 +20,7 @@ export function emptyProgress() {
     ph: 7,
     draft: createDraft(),
     attempts: [],
+    activityNotes: {},
   };
 }
 const validAnswers = (answers) =>
@@ -75,6 +77,7 @@ export function loadProgress(storage) {
         ph: saved.ph,
         draft: saved.draft,
         attempts,
+        activityNotes: normalizeActivityNotes(saved.activityNotes),
       },
       warning: '',
     };

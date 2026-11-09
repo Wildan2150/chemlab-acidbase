@@ -173,6 +173,14 @@ export default function Laboratory({ progress, setPh, markLab }) {
           <Icon name="arrow" size={17} />
         </a>
       </div>
+      <a className="exploration-home-link" href="#eksplorasi">
+        <Icon name="atom" size={24} />
+        <span>
+          <strong>Bandingkan model dengan sumber ilmiah.</strong>
+          <small>Amati PhET, putar molekul, dan telusuri PubChem.</small>
+        </span>
+        <Icon name="arrow" size={19} />
+      </a>
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { lessons, QUESTION_VERSION } from '../data/chemData.js';
 import { Icon } from '../components/Visuals.jsx';
 import { AttemptReview } from './Quiz.jsx';
+import { activities } from '../data/activities.js';
 
 export const formatDate = (date) =>
   new Intl.DateTimeFormat('id-ID', {
@@ -144,6 +145,23 @@ export default function Progress({ progress, requestReset, storageOk }) {
           </section>
         ))
       )}
+      <section className="surface activity-history">
+        <h2>Catatan eksplorasi</h2>
+        <p className="caption">Catatan ini ikut disertakan saat kamu mengekspor progres.</p>
+        {activities.map((activity) => {
+          const note = progress.activityNotes?.[activity.id];
+          return (
+            <a className="checklist-row" key={activity.id} href={`#eksplorasi/${activity.id}`}>
+              <Icon name={activity.icon} size={20} />
+              <span>{activity.title}</span>
+              <small>
+                {note?.completedAt ? 'Catatan lengkap' : note ? 'Draf catatan' : 'Belum dicatat'}
+              </small>
+              <Icon name="next" size={15} />
+            </a>
+          );
+        })}
+      </section>
       <section className="local-data-note">
         <div>
           <Icon name="help" size={22} />

@@ -21,3 +21,7 @@
 **Perubahan:** menghapus badge demo, banner demonstrasi, dan narasi perkuliahan/implementasi dari antarmuka. Panduan menjelaskan cara belajar; footer, deskripsi halaman, referensi, serta tombol memakai bahasa produk. Panel guru memakai nama/kode siswa netral dan menyebut asal data latihan fiktif satu kali pada keterangan sumber. Konteks pengembangan tetap tersedia dalam dokumentasi proyek.
 
 **Pemeriksaan:** selector uji yang mengikuti nama tombol diperbarui; pemeriksaan halaman dan panduan pada skenario browser memastikan label/narasi demo tidak tampil. Hasil akhir dicatat di `TESTING.md`.
+
+## Pengembangan terpisah — feat/interactive-activities
+
+Berangkat dari `main` commit `30505f7`. Memilih F08 (PhET), F07 (3Dmol), dan F10 (PubChem) dari Lampiran F, dengan pendampingan yang terkait asam–basa. Sumber resmi dan dokumentasi API diperiksa; ketiga endpoint diperiksa langsung dan mengembalikan HTTP 200. Catatan siswa disimpan lokal bersama progres, tanpa mengklaim pembacaan isi iframe. Pengujian meliputi jaringan gagal/404, respons API, aksesibilitas, ponsel, draf, dan reset. Tidak ada perubahan materi mendalam atau login pada branch ini.
