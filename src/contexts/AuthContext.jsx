@@ -10,6 +10,7 @@ const snapshot = (user) =>
         displayName: user.displayName || '',
         email: user.email || '',
         emailVerified: user.emailVerified,
+        providers: user.providerData.map((provider) => provider.providerId),
       }
     : null;
 export function AuthProvider({ children }) {

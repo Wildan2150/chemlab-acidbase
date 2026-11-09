@@ -1,6 +1,6 @@
 # ChemLab — demo pembelajaran asam–basa dan pH
 
-Branch `feat/login-page` menambahkan Firebase Auth: masuk, registrasi, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Berangkat langsung dari `main`; tidak memuat perubahan branch materi maupun interaktif. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
+Branch `feat/login-page` menambahkan Firebase Auth: masuk/daftar dengan email atau Google, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Berangkat langsung dari `main`; tidak memuat perubahan branch materi maupun interaktif. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
 
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
 
@@ -14,7 +14,7 @@ npm.cmd ci --ignore-scripts
 npm.cmd run dev
 ```
 
-Untuk memakai akun nyata, isi `.env.local` mengikuti `.env.example`, aktifkan Email/Password di Firebase Console, dan atur domain serta email action URL sesuai panduan. Konfigurasi proyek produksi belum diisi.
+Untuk memakai akun nyata, isi `.env.local` mengikuti `.env.example`, aktifkan Email/Password serta Google di Firebase Console, dan atur domain serta email action URL sesuai panduan. Konfigurasi proyek produksi belum diisi. Tombol Google dapat dicoba dengan identitas fiktif melalui pemilih akun pada Auth Emulator.
 
 Untuk mencoba alur akun sepenuhnya tanpa proyek produksi:
 
@@ -55,7 +55,7 @@ Branch ini memakai **Firebase Auth untuk identitas akun**, dengan konfigurasi pr
 
 `localStorage` menyimpan data pada origin browser yang sama. Data tidak berpindah perangkat, dan berganti port berarti berganti origin. Jika penyimpanan ditolak, aplikasi tetap berjalan dalam memori dan memberi informasi untuk mengekspor progres. Data yang rusak atau tidak sesuai versi diganti sesi baru. Ekspor JSON merupakan salinan untuk dibaca; fitur impor belum dibuat. Aplikasi bukan PWA; membuka pertama kali tanpa koneksi ke server belum didukung.
 
-Kata sandi diproses melalui Firebase SDK, tidak disimpan oleh aplikasi di localStorage. Perubahan email/password dan penghapusan akun meminta autentikasi ulang. Penggantian email memakai verifikasi alamat baru terlebih dahulu.
+Kata sandi diproses melalui Firebase SDK, tidak disimpan oleh aplikasi di localStorage. Perubahan email/password dan penghapusan akun meminta autentikasi ulang. Penggantian email akun password memakai verifikasi alamat baru terlebih dahulu. Akun khusus Google mengelola email/password melalui Google dan mengonfirmasi penghapusan akun ChemLab melalui pop-up Google.
 
 Skor dan kunci tersedia di sisi browser. Gunakan sebagai alat belajar dan demo diagnostik, bukan ujian dengan penilaian server. Persentase progres mengukur aktivitas, bukan penguasaan konsep.
 

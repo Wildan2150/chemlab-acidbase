@@ -27,6 +27,8 @@ export default function Account() {
     if (!user) window.location.hash = 'masuk';
   }, [user]);
   if (!user) return null;
+  const hasPassword = user.providers.includes('password');
+  const hasGoogle = user.providers.includes('google.com');
   async function perform(action, success, form) {
     setError('');
     setMessage('');
@@ -92,6 +94,7 @@ export default function Account() {
         <div>
           <h2>{user.displayName || 'Penjelajah kimia'}</h2>
           <p>{user.email}</p>
+          {hasGoogle && <p>Masuk dengan Google{hasPassword ? ' dan kata sandi' : ''}</p>}
           <span className={`account-verification ${user.emailVerified ? 'verified' : ''}`}>
             {user.emailVerified ? (
               <>
@@ -202,84 +205,132 @@ export default function Account() {
             </form>
           </section>
           <section className="surface account-setting">
-            <h2>Ganti alamat email</h2>
-            <p>Email baru digunakan setelah kamu menyelesaikan verifikasi pada alamat tersebut.</p>
-            <form
-              aria-label="Ubah email"
-              onSubmit={(event) => {
-                const form = event.currentTarget;
-                const data = values(event);
-                perform(
-                  () => changeAccountEmail(data.currentPassword, data.email),
-                  'Petunjuk verifikasi email baru telah diminta. Selesaikan verifikasi sebelum masuk dengan alamat baru.',
-                  form,
-                );
-              }}
-            >
-              <div className="auth-field">
-                <label htmlFor="new-email">Alamat email baru</label>
-                <input
-                  id="new-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  maxLength="254"
-                  required
-                  disabled={busy}
-                />
-              </div>
-              <PasswordField label="Kata sandi saat ini" name="currentPassword" disabled={busy} />
-              <button className="button primary" disabled={busy}>
-                Verifikasi email baru
-                <Icon name="arrow" size={16} />
-              </button>
-            </form>
+            {hasPassword ? (
+              <>
+                <h2>Ganti alamat email</h2>
+                <p>
+                  Email baru digunakan setelah kamu menyelesaikan verifikasi pada alamat tersebut.
+                </p>
+                <form
+                  aria-label="Ubah email"
+                  onSubmit={(event) => {
+                    const form = event.currentTarget;
+                    const data = values(event);
+                    perform(
+                      () => changeAccountEmail(data.currentPassword, data.email),
+                      'Petunjuk verifikasi email baru telah diminta. Selesaikan verifikasi sebelum masuk dengan alamat baru.',
+                      form,
+                    );
+                  }}
+                >
+                  <div className="auth-field">
+                    <label htmlFor="new-email">Alamat email baru</label>
+                    <input
+                      id="new-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      maxLength="254"
+                      required
+                      disabled={busy}
+                    />
+                  </div>
+                  <PasswordField
+                    label="Kata sandi saat ini"
+                    name="currentPassword"
+                    disabled={busy}
+                  />
+                  <button className="button primary" disabled={busy}>
+                    Verifikasi email baru
+                    <Icon name="arrow" size={16} />
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <h2>Alamat email Google</h2>
+                <p>
+                  Kamu masuk dengan akun Google. Kelola alamat email melalui pengaturan akun Google
+                  yang kamu gunakan.
+                </p>
+                <a
+                  className="button outline"
+                  href="https://myaccount.google.com/personal-info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Kelola akun Google
+                  <Icon name="external" size={16} />
+                </a>
+              </>
+            )}
           </section>
         </div>
       )}
       {tab === 'keamanan' && (
         <section className="surface account-setting account-narrow">
-          <h2>Perbarui kata sandi</h2>
-          <p>Masukkan kata sandi saat ini untuk mengonfirmasi perubahan.</p>
-          <form
-            aria-label="Ubah kata sandi"
-            onSubmit={(event) => {
-              const form = event.currentTarget;
-              const data = values(event);
-              if (data.password !== data.confirmPassword) {
-                setError('Kata sandi baru dan konfirmasi belum sama.');
-                return;
-              }
-              perform(
-                () => changeAccountPassword(data.currentPassword, data.password),
-                'Kata sandi berhasil diperbarui. Gunakan kata sandi baru untuk masuk berikutnya.',
-                form,
-              );
-            }}
-          >
-            <PasswordField label="Kata sandi saat ini" name="currentPassword" disabled={busy} />
-            <PasswordField
-              label="Kata sandi baru"
-              name="password"
-              minLength="12"
-              autoComplete="new-password"
-              disabled={busy}
-            />
-            <p className="field-hint">
-              Gunakan 12–128 karakter dan hindari memakai kata sandi yang sama di layanan lain.
-            </p>
-            <PasswordField
-              label="Konfirmasi kata sandi baru"
-              name="confirmPassword"
-              minLength="12"
-              autoComplete="new-password"
-              disabled={busy}
-            />
-            <button className="button primary" disabled={busy}>
-              Simpan kata sandi
-              <Icon name="check" size={16} />
-            </button>
-          </form>
+          {hasPassword ? (
+            <>
+              <h2>Perbarui kata sandi</h2>
+              <p>Masukkan kata sandi saat ini untuk mengonfirmasi perubahan.</p>
+              <form
+                aria-label="Ubah kata sandi"
+                onSubmit={(event) => {
+                  const form = event.currentTarget;
+                  const data = values(event);
+                  if (data.password !== data.confirmPassword) {
+                    setError('Kata sandi baru dan konfirmasi belum sama.');
+                    return;
+                  }
+                  perform(
+                    () => changeAccountPassword(data.currentPassword, data.password),
+                    'Kata sandi berhasil diperbarui. Gunakan kata sandi baru untuk masuk berikutnya.',
+                    form,
+                  );
+                }}
+              >
+                <PasswordField label="Kata sandi saat ini" name="currentPassword" disabled={busy} />
+                <PasswordField
+                  label="Kata sandi baru"
+                  name="password"
+                  minLength="12"
+                  autoComplete="new-password"
+                  disabled={busy}
+                />
+                <p className="field-hint">
+                  Gunakan 12–128 karakter dan hindari memakai kata sandi yang sama di layanan lain.
+                </p>
+                <PasswordField
+                  label="Konfirmasi kata sandi baru"
+                  name="confirmPassword"
+                  minLength="12"
+                  autoComplete="new-password"
+                  disabled={busy}
+                />
+                <button className="button primary" disabled={busy}>
+                  Simpan kata sandi
+                  <Icon name="check" size={16} />
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <h2>Keamanan akun Google</h2>
+              <p>
+                Kamu tidak memerlukan kata sandi terpisah di ChemLab. Atur kata sandi dan verifikasi
+                dua langkah melalui akun Google yang kamu gunakan untuk masuk.
+              </p>
+              <a
+                className="button outline"
+                href="https://myaccount.google.com/security"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Buka keamanan Google
+                <Icon name="external" size={16} />
+              </a>
+            </>
+          )}
         </section>
       )}
       {tab === 'data' && (
@@ -308,13 +359,20 @@ export default function Account() {
                 setConfirmDelete(true);
               }}
             >
-              <PasswordField
-                label="Kata sandi untuk menghapus akun"
-                name="deletePassword"
-                value={deletePassword}
-                onChange={(event) => setDeletePassword(event.target.value)}
-                disabled={busy}
-              />
+              {hasPassword ? (
+                <PasswordField
+                  label="Kata sandi untuk menghapus akun"
+                  name="deletePassword"
+                  value={deletePassword}
+                  onChange={(event) => setDeletePassword(event.target.value)}
+                  disabled={busy}
+                />
+              ) : (
+                <p className="field-hint">
+                  Setelah konfirmasi, pilih akun Google yang sama untuk mengizinkan penghapusan akun
+                  ChemLab. Akun Google kamu tetap aktif.
+                </p>
+              )}
               <label className="auth-checkbox deletion-check">
                 <input type="checkbox" required disabled={busy} />
                 <span>Saya memahami akun akan dihapus secara permanen.</span>
@@ -341,6 +399,12 @@ export default function Account() {
             Akun {user.email} akan dihapus dari layanan autentikasi. Progres akun pada browser ini
             juga dihapus. Pastikan kamu sudah mengekspor catatan yang diperlukan.
           </p>
+          {!hasPassword && (
+            <p className="dialog-description">
+              Konfirmasi berikutnya akan membuka Google. Pilih {user.email} untuk melanjutkan.
+              Tindakan ini tidak menghapus akun Google.
+            </p>
+          )}
           <div className="dialog-actions">
             <button
               className="button outline"

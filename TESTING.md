@@ -1,5 +1,17 @@
 # Hasil pengujian demo
 
+## 9 November 2026 WIB — Google pada feat/login-page
+
+- Build produksi lulus: JavaScript **125,29 KB gzip**, CSS **16,85 KB gzip**.
+- **7 uji logika** dan **15 skenario browser** lulus dalam pemeriksaan terakhir: 8 skenario belajar, 4 email/password, dan 3 Google. Lingkungan Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright; dua worker, Auth Emulator proyek `demo-chemlab`.
+- Google diuji melalui pemilih provider pada emulator menggunakan SDK aplikasi: daftar tanpa mengisi form password, masuk ulang dengan UID/progres yang sama, ubah nama, logout, pemisahan progres tamu, reload, sesi yang diingat antar-tab, serta sesi default per tab.
+- Penghapusan akun Google diuji setelah penolakan identitas berbeda, pembatalan jendela, lalu autentikasi ulang yang benar. API emulator memastikan akun telah dihapus dan key progres akun hilang. Form tidak meminta password yang belum dibuat.
+- Pembatalan masuk memulihkan tombol. Pemblokiran pop-up disimulasikan dengan `window.open` mengembalikan `null`; keberhasilan autentikasi tetap menggunakan Firebase SDK dan emulator, tanpa mock sukses.
+- Pemeriksaan otomatis WCAG AA dan lebar 390 px mencakup layar masuk serta tiga tab akun Google. Pratinjau masuk/daftar diperbarui dan tampilan ponsel diperiksa secara visual. Tanpa konfigurasi, tombol Google pada masuk/daftar tetap terlihat dan nonaktif dengan pesan layanan belum tersedia.
+- Pengujian awal menemukan sesi yang diingat dapat berakhir ketika tab lain memigrasikan penyimpanan default SDK. Inisialisasi local/session diseragamkan; pemeriksaan lengkap di atas lulus setelah perbaikan. Pengujian pembatalan menunggu toleransi penutupan pop-up SDK, bukan menganggap penutupan langsung menghasilkan callback.
+
+OAuth Google pada proyek/domain produksi, consent screen, Safari/Firefox, dan ponsel fisik belum diuji. Provider Google serta konfigurasi proyek perlu diisi mengikuti [panduan Firebase](docs/FIREBASE_AUTH_SETUP.md). Catatan di bawah merupakan riwayat versi sebelumnya.
+
 ## Verifikasi branch Firebase Auth
 
 `feat/login-page` berangkat langsung dari `main` commit `30505f7`. Build produksi lulus (JavaScript 127,00 KB gzip; CSS 16,75 KB gzip). Tujuh uji logika lulus, termasuk pemisahan key tamu/dua akun. Delapan skenario browser baseline serta empat skenario Firebase Auth Emulator lulus: registrasi/verifikasi, sesi, profil, password benar/salah, hapus/batal, reset sekali pakai, penggantian email setelah verifikasi, dan draf per identitas. Pemeriksaan aksesibilitas serta ponsel mencakup halaman masuk/daftar/pemulihan dan tiga tab akun.

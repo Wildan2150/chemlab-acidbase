@@ -1,5 +1,11 @@
 import { getApps, initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  browserPopupRedirectResolver,
+  browserSessionPersistence,
+  connectAuthEmulator,
+  initializeAuth,
+} from 'firebase/auth';
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,7 +22,12 @@ let instance = null;
 if (accountServiceConfigured) {
   try {
     const app = getApps().find((app) => app.name === 'chemlab') || initializeApp(config, 'chemlab');
-    instance = getAuth(app);
+    // Keep every tab on the same persistence order as the sign-in services.
+    // A different default can migrate storage and sign the original tab out.
+    instance = initializeAuth(app, {
+      persistence: [browserLocalPersistence, browserSessionPersistence],
+      popupRedirectResolver: browserPopupRedirectResolver,
+    });
     instance.languageCode = 'id';
     if (wantsEmulator && !instance.emulatorConfig)
       connectAuthEmulator(instance, 'http://127.0.0.1:9099', { disableWarnings: true });

@@ -4,12 +4,15 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   EmailAuthProvider,
+  GoogleAuthProvider,
   reauthenticateWithCredential,
+  reauthenticateWithPopup,
   reload,
   sendEmailVerification,
   sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updatePassword,
   updateProfile,
@@ -51,6 +54,15 @@ export function accountError(error) {
     'auth/expired-action-code': 'Tautan sudah kedaluwarsa. Minta tautan baru.',
     'auth/invalid-action-code': 'Tautan tidak valid atau sudah digunakan. Minta tautan baru.',
     'auth/operation-not-allowed': 'Layanan masuk belum tersedia. Hubungi pengelola.',
+    'auth/popup-blocked':
+      'Jendela Google diblokir browser. Izinkan pop-up untuk situs ini, lalu coba lagi.',
+    'auth/popup-closed-by-user': 'Jendela Google ditutup. Silakan coba kembali saat siap.',
+    'auth/cancelled-popup-request': 'Proses masuk Google dibatalkan. Silakan coba kembali.',
+    'auth/unauthorized-domain':
+      'Layanan masuk belum tersedia pada alamat situs ini. Hubungi pengelola.',
+    'auth/account-exists-with-different-credential':
+      'Email ini sudah memakai cara masuk lain. Masuk dengan cara yang sebelumnya kamu gunakan.',
+    'auth/user-mismatch': 'Pilih akun Google yang sama dengan akun yang sedang kamu gunakan.',
   };
   return (
     messages[error?.code] ||
@@ -72,6 +84,16 @@ export async function loginAccount({ email, password, remember }) {
   await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
   return signInWithEmailAndPassword(auth, email.trim(), password);
 }
+function googleProvider() {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  return provider;
+}
+export async function loginWithGoogle({ remember = false } = {}) {
+  const auth = requireAuthService();
+  await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+  return signInWithPopup(auth, googleProvider());
+}
 export const logoutAccount = () => signOut(requireAuthService());
 export const verifyAccountEmail = () => sendEmailVerification(currentUser(), emailActionSettings());
 export async function resetAccountPassword(email) {
@@ -92,20 +114,32 @@ export async function saveAccountName(name) {
 }
 async function reauthenticate(password) {
   const user = currentUser();
+  if (!user.providerData.some((provider) => provider.providerId === 'password')) {
+    if (!user.providerData.some((provider) => provider.providerId === 'google.com'))
+      throw new Error('Masuk kembali untuk mengonfirmasi tindakan ini.');
+    await reauthenticateWithPopup(user, googleProvider());
+    return user;
+  }
   if (!password) throw new Error('Masukkan kata sandi saat ini.');
   await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, password));
   return user;
 }
 export async function changeAccountPassword(currentPassword, newPassword) {
+  requirePasswordProvider();
   validatePassword(newPassword);
   const user = await reauthenticate(currentPassword);
   await updatePassword(user, newPassword);
 }
 export async function changeAccountEmail(password, email) {
+  requirePasswordProvider();
   const user = await reauthenticate(password);
   if (user.email?.toLowerCase() === email.trim().toLowerCase())
     throw new Error('Masukkan alamat email baru yang berbeda.');
   await verifyBeforeUpdateEmail(user, email.trim(), emailActionSettings());
+}
+function requirePasswordProvider() {
+  if (!currentUser().providerData.some((provider) => provider.providerId === 'password'))
+    throw new Error('Kelola email dan kata sandi melalui akun Google yang kamu gunakan.');
 }
 export async function removeAccount(password) {
   const user = await reauthenticate(password);

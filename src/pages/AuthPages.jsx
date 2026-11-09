@@ -3,15 +3,18 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import {
   accountError,
   loginAccount,
+  loginWithGoogle,
   registerAccount,
   resetAccountPassword,
 } from '../services/account.js';
 import { HeroIllustration, Icon } from '../components/Visuals.jsx';
 import PasswordField from '../components/PasswordField.jsx';
+import GoogleMark from '../components/GoogleMark.jsx';
 
 export default function AuthPages({ mode }) {
   const { user, configured, syncUser } = useAuth();
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [remember, setRemember] = useState(false);
@@ -20,6 +23,24 @@ export default function AuthPages({ mode }) {
   useEffect(() => {
     if (user && !reset) window.location.hash = 'akun';
   }, [user, reset]);
+  async function googleLogin() {
+    setError('');
+    setSuccess('');
+    setBusy(true);
+    setGoogleBusy(true);
+    try {
+      await loginWithGoogle({ remember });
+      syncUser();
+      window.location.hash = 'akun';
+    } catch (error) {
+      if (['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(error.code))
+        setSuccess('Masuk dengan Google dibatalkan. Kamu bisa mencoba lagi saat siap.');
+      else setError(accountError(error));
+    } finally {
+      setBusy(false);
+      setGoogleBusy(false);
+    }
+  }
   async function submit(event) {
     event.preventDefault();
     setError('');
@@ -103,6 +124,23 @@ export default function AuthPages({ mode }) {
           <p className="auth-success" role="status">
             {success}
           </p>
+        )}
+        {!reset && (
+          <>
+            <button
+              type="button"
+              className="button google-signin full-width"
+              onClick={googleLogin}
+              disabled={busy || !configured}
+              aria-busy={googleBusy}
+            >
+              <GoogleMark />
+              {googleBusy ? 'Menghubungkan ke Google…' : 'Lanjutkan dengan Google'}
+            </button>
+            <div className="auth-divider">
+              <span>atau gunakan email</span>
+            </div>
+          </>
         )}
         <form
           onSubmit={submit}
