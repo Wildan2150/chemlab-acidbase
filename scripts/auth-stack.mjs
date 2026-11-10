@@ -42,14 +42,23 @@ function start(file, args, env = {}) {
 const cli = resolve(dirname(require.resolve('firebase-tools/package.json')), 'lib/bin/firebase.js');
 start(
   cli,
-  ['emulators:start', '--only', 'auth', '--project', 'demo-chemlab', '--config', 'firebase.json'],
+  [
+    'emulators:start',
+    '--only',
+    'auth,firestore',
+    '--project',
+    'demo-chemlab',
+    '--config',
+    'firebase.json',
+  ],
   { FIREBASE_CLI_DISABLE_UPDATE_CHECK: 'true' },
 );
-const deadline = Date.now() + 60000;
+const deadline = Date.now() + 110000;
 let online = false;
 while (Date.now() < deadline) {
   try {
     await fetch('http://127.0.0.1:9099/', { signal: AbortSignal.timeout(700) });
+    await fetch('http://127.0.0.1:8080/', { signal: AbortSignal.timeout(700) });
     online = true;
     break;
   } catch {
@@ -57,7 +66,9 @@ while (Date.now() < deadline) {
   }
 }
 if (!online) {
-  process.stderr.write('Authentication Emulator tidak tersedia dalam 60 detik.\n');
+  process.stderr.write(
+    'Auth/Firestore Emulator tidak tersedia. Periksa Java 21+ dan port 9099/8080.\n',
+  );
   stop(1);
 }
 const vite = resolve(dirname(require.resolve('vite/package.json')), 'bin/vite.js');
@@ -70,5 +81,6 @@ start(
     VITE_FIREBASE_PROJECT_ID: 'demo-chemlab',
     VITE_FIREBASE_APP_ID: '1:123456789:web:chemlab',
     VITE_FIREBASE_USE_EMULATOR: 'true',
+    VITE_FIRESTORE_DATABASE_ID: '(default)',
   },
 );

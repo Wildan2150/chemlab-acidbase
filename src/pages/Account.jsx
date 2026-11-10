@@ -11,6 +11,7 @@ import {
   verifyAccountEmail,
 } from '../services/account.js';
 import { accountProgressKey } from '../lib/storage.js';
+import { progressSyncKey } from '../lib/progressDocument.js';
 import PasswordField from '../components/PasswordField.jsx';
 import Dialog from '../components/Dialog.jsx';
 import { Icon } from '../components/Visuals.jsx';
@@ -56,6 +57,7 @@ export default function Account() {
       await removeAccount(deletePassword);
       try {
         window.localStorage.removeItem(accountProgressKey(uid));
+        window.localStorage.removeItem(progressSyncKey(uid));
       } catch {
         /* Storage can be unavailable. */
       }
@@ -338,8 +340,9 @@ export default function Account() {
           <section className="surface account-setting">
             <h2>Catatan belajarmu</h2>
             <p>
-              Progres akun tersimpan pada browser ini dan terpisah dari progres tamu maupun akun
-              lain. Menggunakan akun belum memindahkan catatan ke perangkat lain.
+              Progres akun disinkronkan agar dapat dilanjutkan pada perangkat lain. Catatan tetap
+              terpisah dari progres tamu maupun akun lain. Periksa status simpan sebelum berpindah
+              perangkat.
             </p>
             <a className="button outline" href="#progres">
               Lihat progres & ekspor
@@ -349,8 +352,9 @@ export default function Account() {
           <section className="surface account-setting account-danger">
             <h2>Hapus akun</h2>
             <p>
-              Identitas akun dan progres milik akun ini di browser ini akan dihapus. Simpan salinan
-              catatan sebelum melanjutkan. Tindakan ini tidak dapat dibatalkan.
+              Identitas akun dan progres cloud milik akun ini akan dihapus. Salinan pada browser ini
+              juga dihapus. Simpan salinan catatan sebelum melanjutkan. Tindakan ini tidak dapat
+              dibatalkan.
             </p>
             <form
               aria-label="Hapus akun"
@@ -396,8 +400,8 @@ export default function Account() {
           }}
         >
           <p className="dialog-description">
-            Akun {user.email} akan dihapus dari layanan autentikasi. Progres akun pada browser ini
-            juga dihapus. Pastikan kamu sudah mengekspor catatan yang diperlukan.
+            Akun {user.email}, progres cloud, dan salinan pada browser ini akan dihapus. Pastikan
+            kamu sudah mengekspor catatan yang diperlukan. Tindakan ini memerlukan koneksi.
           </p>
           {!hasPassword && (
             <p className="dialog-description">

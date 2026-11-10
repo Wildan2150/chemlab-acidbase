@@ -1,0 +1,13 @@
+{
+  "migratedAt": "2026-11-10T10:18:24.727Z",
+  "projectId": "chemlab-web",
+  "source": "Existing active learningProgress UIDs and Firebase Auth account metadata",
+  "activeProgressAccounts": 2,
+  "authAccountsMatched": 2,
+  "profilesCreated": 2,
+  "profilesAlreadyPresent": 0,
+  "accountsWithoutEmail": 0,
+  "authUsersCreated": 0,
+  "authUsersDeleted": 0,
+  "learningResultsChanged": 0
+}

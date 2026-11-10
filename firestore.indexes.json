@@ -1,0 +1,6 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    { "collectionGroup": "learningProgress", "fieldPath": "payload", "indexes": [] }
+  ]
+}

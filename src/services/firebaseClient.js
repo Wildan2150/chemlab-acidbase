@@ -1,4 +1,5 @@
 import { getApps, initializeApp } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import {
   browserLocalPersistence,
   browserPopupRedirectResolver,
@@ -19,9 +20,10 @@ export const accountServiceConfigured =
   Object.values(config).every((v) => typeof v === 'string' && v.trim()) &&
   (!wantsEmulator || (import.meta.env.DEV && loopback));
 let instance = null;
+let app = null;
 if (accountServiceConfigured) {
   try {
-    const app = getApps().find((app) => app.name === 'chemlab') || initializeApp(config, 'chemlab');
+    app = getApps().find((app) => app.name === 'chemlab') || initializeApp(config, 'chemlab');
     // Keep every tab on the same persistence order as the sign-in services.
     // A different default can migrate storage and sign the original tab out.
     instance = initializeAuth(app, {
@@ -36,6 +38,9 @@ if (accountServiceConfigured) {
   }
 }
 export const firebaseAuth = instance;
+export const firestoreDatabaseId = import.meta.env.VITE_FIRESTORE_DATABASE_ID || '(default)';
+export const firestoreDb = instance && app ? getFirestore(app, firestoreDatabaseId) : null;
+if (firestoreDb && wantsEmulator) connectFirestoreEmulator(firestoreDb, '127.0.0.1', 8080);
 
 export function requireAuthService() {
   if (!firebaseAuth)

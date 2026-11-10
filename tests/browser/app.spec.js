@@ -74,7 +74,9 @@ test('incomplete diagnostics cannot be submitted and focus on missing answer', a
   expect((await readData(page)).attempts).toHaveLength(0);
 });
 
-test('search, teacher filters, item detail and real JSON downloads work', async ({ page }) => {
+test('search and progress exports work while the teacher route stays private for guests', async ({
+  page,
+}) => {
   await page.goto('/');
   await page.getByRole('button', { name: /Cari konsep atau materi/ }).click();
   await page.getByRole('textbox', { name: 'Cari konsep atau materi' }).fill('netralisasi');
@@ -84,20 +86,9 @@ test('search, teacher filters, item detail and real JSON downloads work', async 
     .click();
   await expect(page).toHaveURL(/materi\/kehidupan/);
   await page.goto('/#guru');
-  await expect(page.getByRole('heading', { name: 'Di balik setiap jawaban.' })).toBeVisible();
-  await expect(page.locator('tbody tr')).toHaveCount(6);
-  await page.getByLabel('Filter hasil siswa').selectOption('review');
-  await expect(page.locator('tbody tr')).toHaveCount(2);
-  await page.getByRole('textbox', { name: 'Cari siswa' }).fill('03');
-  await expect(page.locator('tbody tr')).toHaveCount(1);
-  await page.getByRole('button', { name: 'Rincian Siswa 03' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await expect(page.getByRole('dialog').locator('.review-item')).toHaveCount(5);
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  const teacherDownload = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Ekspor hasil' }).click();
-  expect((await teacherDownload).suggestedFilename()).toBe('chemlab-hasil-belajar.json');
+  await expect(page.getByRole('heading', { name: 'Masuk sebagai guru' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Panel guru', exact: true })).toHaveCount(0);
+  await expect(page.locator('tbody tr')).toHaveCount(0);
   await page.goto('/#progres');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Ekspor progres' }).click();

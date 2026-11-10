@@ -8,7 +8,7 @@
     "dev:emulator": "node scripts/auth-stack.mjs",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --test tests/domain.test.js tests/assessment.test.js",
+    "test": "node --test tests/domain.test.js tests/assessment.test.js tests/progress-sync.test.js tests/teacher.test.js",
     "test:e2e": "playwright test",
     "format": "prettier --write src tests *.js *.md *.json index.html"
   },

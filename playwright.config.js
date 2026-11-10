@@ -7,10 +7,23 @@ export default defineConfig({
   workers: 2,
   reporter: 'list',
   projects: [
-    { name: 'learning', testIgnore: ['**/auth.spec.js', '**/google-auth.spec.js'] },
+    {
+      name: 'learning',
+      testIgnore: [
+        '**/auth.spec.js',
+        '**/google-auth.spec.js',
+        '**/firestore.spec.js',
+        '**/teacher.spec.js',
+      ],
+    },
     {
       name: 'firebase-auth',
-      testMatch: ['**/auth.spec.js', '**/google-auth.spec.js'],
+      testMatch: [
+        '**/auth.spec.js',
+        '**/google-auth.spec.js',
+        '**/firestore.spec.js',
+        '**/teacher.spec.js',
+      ],
       use: { baseURL: 'http://127.0.0.1:5175' },
     },
   ],

@@ -1,5 +1,52 @@
 # Hasil pengujian demo
 
+## 10 November 2026 WIB — panel guru dengan akses terbatas
+
+- `npm.cmd test`: **36 lulus**, 0 gagal. Delapan uji baru memeriksa email guru terverifikasi, pengecualian guru/akun terhapus, data rusak, diagnostik pertama/asesmen terbaru, denominator dan skor nol, pencarian/filter, snapshot ekspor, serta formula CSV.
+- `npm.cmd run test:e2e`: **31 lulus**, 0 gagal dalam 2,6 menit. Pengujian tamu yang dulu melihat panel contoh diperbarui menjadi pengujian penolakan akses. Tiga skenario panel guru memanggil Auth/Firestore Emulator sesungguhnya.
+- Setelah sesi pembacaan kelas dipisahkan dari cache progres siswa, tiga skenario guru dijalankan ulang dan **seluruhnya lulus**. Pengujian mencakup tamu, siswa, email guru belum terverifikasi, guru terverifikasi, manipulasi localStorage/nama/field role, serta larangan guru mengubah hasil akun lain.
+- Panel menerima pembaruan progres siswa tanpa reload. Filter, ekspor JSON/CSV, diagnostik pertama versus latihan ulang, asesmen dengan snapshot 15 soal, serta rincian catatan eksplorasi diperiksa.
+- Lebar 320, 390, 768, dan 1440 piksel tidak melampaui viewport halaman. axe tidak menemukan pelanggaran pada pemeriksaan WCAG 2 A/AA dan 2.1 AA di panel/dialog yang diperiksa. Pratinjau desktop/ponsel dari emulator diperiksa secara visual.
+- `npm.cmd run build`: **lulus**, JavaScript 294,60 KB gzip dan CSS 20,64 KB gzip. Peringatan Vite untuk chunk besar tetap ada. `git diff --check` lulus.
+- Rules guru sudah di-deploy ke `chemlab-web` dan sumber release aktif cocok dengan berkas lokal. **14 simulasi Rules produksi lulus**, termasuk hak baca guru pada progres/profil serta penolakan guru untuk menulis hasil atau menghapus profil siswa lain.
+- Akun produksi `wildannashihin@gmail.com` ditemukan aktif, email terverifikasi, dan terhubung Google. Dua profil akun lama dibuat dari metadata Firebase Auth menggunakan prasyarat dokumen belum ada. Tidak ada akun Auth atau hasil belajar yang diubah. Dua baris siswa produksi berhasil dinormalisasi tanpa catatan rusak; akun guru dikeluarkan dari roster.
+
+Bukti: [pemeriksaan produksi](docs/firestore-production-check.json), [pelengkapan profil](docs/teacher-profile-backfill.json), [pratinjau desktop](docs/preview-teacher.png), dan [pratinjau ponsel](docs/preview-teacher-mobile.png). Akun fixture hanya dibuat di emulator. Interaksi Google OAuth nyata, Safari/Firefox, dan ponsel fisik tetap di luar pengujian ini. Hak akses dan batas penilaian dijelaskan di [TEACHER_PANEL.md](docs/TEACHER_PANEL.md).
+
+## 10 November 2026 WIB — penyelesaian konfigurasi Firestore produksi
+
+Setelah pengguna login Firebase CLI dan memasang Rules, pemeriksaan berikut dilakukan terhadap proyek produksi `chemlab-web`:
+
+- Database `(default)` tersedia, bertipe `FIRESTORE_NATIVE`, di region `asia-southeast2`.
+- Sumber Rules pada release aktif sama persis dengan `firestore.rules` setelah normalisasi akhir baris. Pengecualian indeks `learningProgress.payload` terpasang dengan `indexes: []`.
+- **6 simulasi Rules produksi lulus**: pemilik dapat membaca dokumennya; akun lain/tamu, pembacaan daftar, penghapusan langsung, dan koleksi di luar ruang lingkup ditolak.
+- Probe baca pada ID dokumen baru yang tidak ditulis mendapat HTTP 404 melalui IAM CLI, sementara permintaan tanpa autentikasi mendapat HTTP 403. Ini memverifikasi konektivitas dan penolakan tamu, bukan penulisan client dengan akun nyata.
+- Konfigurasi API key Web App menunjuk nomor proyek yang sama. Provider Email/Password dan Google aktif, dan domain `localhost` serta `127.0.0.1` diizinkan. Emulator nonaktif pada konfigurasi produksi lokal.
+- `npm.cmd test` dijalankan ulang: **28 lulus**, 0 gagal. `npm.cmd run build` lulus; peringatan ukuran chunk yang dicatat pada tahap integrasi tetap berlaku. Tidak ada perubahan kode aplikasi pada tahap verifikasi ini; 28 skenario browser dari tahap integrasi tidak dijalankan ulang.
+
+Bukti terstruktur tanpa token atau data akun: [firestore-production-check.json](docs/firestore-production-check.json). Pemeriksaan ini tidak membuat/menghapus akun produksi dan tidak menulis data pengguna. Alur client menyimpan/memulihkan/reset/menghapus data tetap mengacu pada pemeriksaan Auth/Firestore Emulator. Batas login CLI pada catatan tahap integrasi di bawah sudah terselesaikan.
+
+## 10 November 2026 WIB — integrasi Cloud Firestore
+
+Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright, serta Auth/Firestore Emulator proyek `demo-chemlab`. Firestore Emulator dijalankan dengan Java 21 portabel untuk pengujian; konfigurasi Java global komputer tidak diubah.
+
+- `npm.cmd test`: **28 lulus**, 0 gagal. Termasuk 12 skenario baru untuk penggabungan perubahan, pemuatan server sebelum menulis, perubahan saat transaksi berjalan, antrean setelah reload, reset lintas perangkat, kegagalan izin, penghapusan, batas byte, riwayat besar, dan pencegahan callback sesi akun lama.
+- `npm.cmd run test:e2e`: **28 lulus**, 0 gagal dalam 2,2 menit. Suite belajar dan akun sebelumnya dijalankan bersama tiga skenario Firestore baru.
+- Browser baru tanpa cache berhasil memulihkan materi, pH, hasil diagnostik, snapshot asesmen bernilai 100, dan catatan eksplorasi dari emulator. SDK aplikasi dan database emulator sesungguhnya digunakan.
+- Dua konteks browser memeriksa perubahan offline yang digabung dengan materi dari perangkat lain, serta reset yang tidak dibatalkan oleh antrean lama.
+- Pengujian Rules memverifikasi pemilik bisa membaca dokumennya; tamu, UID lain, pembacaan daftar, penulisan field role tambahan, dan penghidupan kembali data terhapus ditolak. Penghapusan akun menghasilkan payload `null` dan penanda `deleted`.
+- `npm.cmd run build`: **lulus**, JavaScript 287,72 KB gzip dan CSS 20,37 KB gzip. Vite memberi peringatan chunk di atas 500 KB setelah penambahan SDK Firestore; build tetap berhasil. Pemisahan bundle dapat menjadi pekerjaan kinerja berikutnya.
+- `git diff --check` lulus. Konfigurasi `.env.local` yang sudah terisi tidak dimasukkan Git.
+
+**Batas saat tahap integrasi awal:** Firebase CLI saat itu mengembalikan `Failed to authenticate`; pemasangan Rules/indeks baru diverifikasi pada tahap penyelesaian produksi di atas. Pengujian tulis dengan akun nyata serta OAuth/email produksi tidak dilakukan. Kontrak lengkap tersedia di [FIRESTORE_SETUP.md](docs/FIRESTORE_SETUP.md).
+
+## 10 November 2026 WIB — perbaikan scroll sidebar
+
+- Masalah direproduksi pada 1366 × 768: sidebar setinggi 768 piksel memuat isi 987 piksel, tetapi roda mouse tidak menggulir sidebar dan profil terpotong.
+- Pemeriksaan browser langsung melalui Playwright/Microsoft Edge lulus pada 1366 × 768, 1440 × 900, 1024 × 600, 1440 × 1050, 390 × 500, dan 740 × 360. Scroll ke atas/bawah, profil utuh di dalam viewport, serta fokus keyboard ke tautan akun diperiksa. Pada 1440 × 1050 seluruh isi muat tanpa scroll.
+- Pada dua ukuran ponsel, Enter pada tautan akun membuka halaman masuk dan menutup menu. Tidak ada overflow horizontal sidebar pada ukuran yang diperiksa.
+- Pratinjau desktop sebelum/sesudah scroll diperiksa secara visual. `npm.cmd run build` serta `git diff --check` lulus. Suite logika dan seluruh suite akun tidak dijalankan ulang untuk perubahan CSS ini; hasil integrasi sebelumnya tercatat di bawah.
+
 ## 10 November 2026 WIB — integrasi seluruh branch ke main
 
 Menggabungkan `feat/material-updates`, `feat/chapter-assessment`, `feat/interactive-activities`, dan `feat/login-page`. Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright, dua worker, serta Firebase Auth Emulator dengan project ID `demo-chemlab`.

@@ -4,6 +4,7 @@ import { Icon } from '../components/Visuals.jsx';
 import { AttemptReview } from './Quiz.jsx';
 import { AssessmentHistory } from '../components/AssessmentResults.jsx';
 import { activities } from '../data/activities.js';
+import { syncLabels } from '../components/SyncStatus.jsx';
 
 export const formatDate = (date) =>
   new Intl.DateTimeFormat('id-ID', {
@@ -22,7 +23,7 @@ export function downloadJson(data, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export default function Progress({ progress, requestReset, storageOk }) {
+export default function Progress({ progress, requestReset, storageOk, sync }) {
   const [expanded, setExpanded] = useState(null);
   const completed =
     progress.completedLessons.length +
@@ -169,11 +170,19 @@ export default function Progress({ progress, requestReset, storageOk }) {
         <div>
           <Icon name="help" size={22} />
           <div>
-            <h3>{storageOk ? 'Tersimpan di browser ini' : 'Penyimpanan browser tidak tersedia'}</h3>
+            <h3>
+              {sync?.state !== 'guest'
+                ? syncLabels[sync.state]
+                : storageOk
+                  ? 'Tersimpan di browser ini'
+                  : 'Penyimpanan browser tidak tersedia'}
+            </h3>
             <p>
-              {storageOk
-                ? 'Progresmu tersimpan di perangkat dan browser ini. Ekspor catatan sebelum menghapus data browser atau menggunakan perangkat bersama.'
-                : 'Aktivitas masih dapat digunakan, tetapi akan hilang saat halaman ditutup. Ekspor progres untuk menyimpan salinannya.'}
+              {sync?.state !== 'guest'
+                ? 'Progres akun dapat dilanjutkan pada perangkat lain setelah status menunjukkan tersimpan. Saat koneksi terputus, perubahan menunggu untuk disinkronkan. Ekspor progres untuk menyimpan salinan.'
+                : storageOk
+                  ? 'Progresmu tersimpan di perangkat dan browser ini. Ekspor catatan sebelum menghapus data browser atau menggunakan perangkat bersama.'
+                  : 'Aktivitas masih dapat digunakan, tetapi akan hilang saat halaman ditutup. Ekspor progres untuk menyimpan salinannya.'}
             </p>
           </div>
         </div>

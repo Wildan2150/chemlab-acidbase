@@ -1,5 +1,7 @@
 # PRD — ChemLab demo lokal
 
+Perkembangan `main`: materi mendalam, aktivitas interaktif, asesmen akhir bab, Firebase Auth, dan Firestore sudah ditambahkan. Panel guru kini membaca hasil siswa nyata dan dibatasi untuk email guru terverifikasi yang ditetapkan pengajar; tamu tetap lokal. Bagian berikut mempertahankan rancangan versi awal; kontrak terbaru ada di [DATABASE.md](DATABASE.md) dan [TEACHER_PANEL.md](docs/TEACHER_PANEL.md).
+
 ## Masalah dan pengguna
 
 Siswa kelas XI sering membaca pH secara linear dan menyamakan kuat/lemah dengan pekat/encer. Demo menghubungkan representasi partikel, persamaan, skala pH, dan jawaban diagnostik. Mahasiswa Pendidikan Kimia memakainya sebagai contoh produk kuliah; guru melihat contoh pemanfaatan bukti per butir.

@@ -1,6 +1,6 @@
 # Firebase Auth dan manajemen akun
 
-Fitur akun dikembangkan pada `feat/login-page` dari `main` commit `30505f7`, kemudian digabungkan ke `main` bersama materi, asesmen, dan aktivitas interaktif pada 10 November 2026 WIB. Penyedia yang dipilih pengajar adalah Firebase Auth; konfigurasi proyek produksi menyusul.
+Fitur akun dikembangkan pada `feat/login-page` dari `main` commit `30505f7`, kemudian digabungkan ke `main` bersama materi, asesmen, dan aktivitas interaktif pada 10 November 2026 WIB. Penyedia yang dipilih pengajar adalah Firebase Auth. Konfigurasi proyek `chemlab-web`, provider Email/Password dan Google, serta domain `localhost`/`127.0.0.1` sudah terverifikasi melalui API produksi. Bukti: [pemeriksaan produksi](firestore-production-check.json).
 
 ## Fitur
 
@@ -27,7 +27,7 @@ npm.cmd ci --ignore-scripts
 npm.cmd run dev:emulator
 ```
 
-Perintah tersebut menjalankan Auth Emulator pada `127.0.0.1:9099` dengan project ID khusus `demo-chemlab` dan Vite pada `127.0.0.1:5174`. Tidak menggunakan kredensial admin, billing, atau akun pada proyek produksi. Tautan verifikasi/reset tersedia dari emulator dan terminal; email sungguhan tidak dikirim. Data akun emulator berada di memori selama proses berjalan.
+Perintah tersebut menjalankan Auth Emulator pada `127.0.0.1:9099`, Firestore Emulator pada `127.0.0.1:8080`, serta Vite pada `127.0.0.1:5174`, dengan project ID khusus `demo-chemlab`. Firestore Emulator memerlukan Java 21+ pada `PATH`. Tidak menggunakan kredensial admin, billing, atau akun produksi. Tautan verifikasi/reset tersedia dari emulator dan terminal; email sungguhan tidak dikirim. Data emulator bersifat sementara selama proses berjalan.
 
 Untuk mencoba Google, klik tombol Google lalu **Add new account** pada jendela pemilih milik emulator. Isi identitas fiktif, lalu lanjutkan. Pemilih tersebut mengemulasikan provider, tidak menghubungi Google atau meminta kata sandi Google sungguhan. Kode aplikasi menggunakan alur SDK yang sama seperti produksi.
 
@@ -50,7 +50,7 @@ Sambungan emulator dibatasi untuk mode development pada host loopback. Build pro
 1. Pada **Authentication → Sign-in method → Google**, aktifkan provider, isi nama publik proyek dan email dukungan, lalu simpan. Gunakan proyek yang sama dengan konfigurasi Web App di `.env.local`; tidak perlu menambahkan client secret ke frontend.
 2. Pastikan domain aplikasi terdaftar di **Authentication → Settings → Authorized domains**. Gunakan `authDomain` bawaan Firebase untuk konfigurasi awal. Jika menggunakan domain autentikasi khusus, ikuti panduan resmi untuk menambahkan domain tersebut serta URI `https://<authDomain>/__/auth/handler` pada OAuth client proyek.
 3. Jalankan ulang Vite setelah mengubah `.env.local`. Klik **Lanjutkan dengan Google** pada halaman masuk atau daftar. Izinkan pop-up situs bila diblokir browser. Setelah berhasil, periksa profil, muat ulang, logout, lalu masuk lagi untuk memastikan identitas/progres tetap sama.
-4. Uji pada browser/perangkat dan domain hosting sebenarnya. Pengujian lokal tidak memverifikasi OAuth consent screen, authorized domains, pembatasan browser ponsel, atau kredensial produksi. Konfigurasi proyek tersebut tetap menyusul.
+4. Uji pada browser/perangkat dan domain hosting sebenarnya. Provider dan authorized domains lokal sudah diperiksa pada proyek produksi; pengujian emulator tidak memverifikasi OAuth consent screen, pembatasan browser ponsel, atau interaksi OAuth nyata pada domain hosting.
 
 Pembatalan pop-up mengembalikan pengguna ke halaman masuk dan tombol dapat dicoba kembali. Kesalahan pop-up diblokir, domain belum diizinkan, provider belum aktif, dan konflik cara masuk memiliki pesan yang dapat ditindaklanjuti. Aplikasi tidak melakukan penggabungan kredensial sendiri atau menyimpan token OAuth di state/progres. Firebase menentukan identitas akun sesuai pengaturan provider proyek. Akun yang memiliki provider password tetap mempertahankan pengaturan password dan verifikasi email baru seperti sebelumnya.
 
@@ -60,15 +60,15 @@ Pembatalan pop-up mengembalikan pengguna ke halaman masuk dan tombol dapat dicob
 
 `chemlab:guest:v1` tetap menyimpan progres tamu. Akun menggunakan `chemlab:user:<UID>:v1`. Pergantian identitas me-remount state belajar dari key milik identitas baru sebelum menyimpan perubahan. Logout memulihkan progres tamu. Tidak ada penyalinan otomatis progres tamu ke akun lain.
 
-Menghapus akun menghapus identitas di Firebase serta key progres akun pada browser yang dipakai. Catatan pada browser/perangkat lain tidak dapat dihapus dari browser ini. Fitur ini belum menambahkan Firestore, sinkronisasi progres, antrean kirim, atau pembacaan hasil nyata oleh guru. Panel guru baseline tetap memakai data latihan fiktif.
+Progres akun disinkronkan ke Firestore dengan antrean lokal dan pemulihan lintas perangkat. Profil nama/email pemilik disimpan pada `learnerProfiles/{UID}`. Menghapus akun meminta autentikasi ulang, mengosongkan payload cloud dan menghapus profil, lalu menghapus identitas Firebase serta cache akun pada browser yang dipakai. Salinan perangkat lain yang offline tidak dapat dihapus dari browser ini. Guru terverifikasi yang ditetapkan dapat membaca data siswa sesuai [TEACHER_PANEL.md](TEACHER_PANEL.md). Kontrak dan pemasangan Rules ada di [FIRESTORE_SETUP.md](FIRESTORE_SETUP.md).
 
 Manajemen akun berarti pengelolaan akun sendiri. Administrasi seluruh pengguna, pengangkatan guru, dan pencabutan seluruh sesi dari server memerlukan backend/admin policy dan bukan bagian branch ini.
 
 ## Pengujian dan keamanan
 
-`npm run test:e2e` menyalakan server baseline dan satu stack khusus emulator pada port 5175. Kredensial fixture bersifat fiktif dan unik per skenario. Pengujian memanggil SDK serta endpoint Auth Emulator sesungguhnya; tidak mengganti autentikasi dengan localStorage atau mock keberhasilan form.
+`npm run test:e2e` menyalakan server baseline dan satu stack Auth/Firestore Emulator dengan aplikasi pada port 5175. Kredensial fixture bersifat fiktif dan unik per skenario. Pengujian memanggil SDK serta endpoint emulator sesungguhnya; tidak mengganti autentikasi atau penulisan database dengan mock keberhasilan.
 
-Skenario mencakup registrasi, verifikasi, profil, password benar/salah, hapus/batal, pemulihan sekali pakai, perubahan email terverifikasi, pemisahan dua akun dan tamu, aksesibilitas, dan ponsel. Pengujian Google menambahkan masuk/daftar melalui pop-up emulator, UID/progres yang sama saat masuk ulang, persistensi antar-tab, sesi per tab, pembatalan, pop-up diblokir, penolakan identitas berbeda saat autentikasi ulang, serta penghapusan akun yang diperiksa melalui API emulator. Penutupan pop-up menunggu toleransi SDK terhadap hasil autentikasi yang masih diproses. Konfigurasi produksi, OAuth Google sebenarnya, serta pengiriman email nyata belum diuji karena proyek produksi belum diberikan.
+Skenario mencakup registrasi, verifikasi, profil, password benar/salah, hapus/batal, pemulihan sekali pakai, perubahan email terverifikasi, pemisahan dua akun dan tamu, aksesibilitas, dan ponsel. Pengujian Google menambahkan masuk/daftar melalui pop-up emulator, UID/progres yang sama saat masuk ulang, persistensi antar-tab, sesi per tab, pembatalan, pop-up diblokir, penolakan identitas berbeda saat autentikasi ulang, serta penghapusan akun yang diperiksa melalui API emulator. Penutupan pop-up menunggu toleransi SDK terhadap hasil autentikasi yang masih diproses. Konfigurasi produksi sudah diperiksa melalui API; interaksi OAuth Google sebenarnya dan pengiriman email nyata belum diuji.
 
 Audit dependency produksi tidak menemukan kerentanan saat pemeriksaan. Versi `@grpc/grpc-js` dinaikkan dalam rentang kompatibel lewat override untuk mengatasi advisory transitif. Firebase CLI tetap memiliki advisory tingkat moderate pada dependency alat development; CLI tidak masuk bundle browser. Tidak dilakukan downgrade lintas mayor atau perbaikan paksa yang belum diverifikasi.
 

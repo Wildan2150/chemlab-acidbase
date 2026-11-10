@@ -1,5 +1,9 @@
 # Desain teknis
 
+Panel guru menggunakan pemeriksaan email terverifikasi di UI dan Firestore Rules. `teacherData.js` menyimpan profil pemilik dan membuka listener pembacaan kelas dengan sesi Firebase sementara di memori; `teacherReport.js` menghitung rekap/ekspor dari data ternormalisasi. Detail kontrak dan hak akses: [TEACHER_PANEL.md](docs/TEACHER_PANEL.md).
+
+Perkembangan `main`: Firebase Auth mengelola akun; Firestore menyimpan progres per UID, sedangkan antrean/salinan browser mempertahankan alur lokal. Service `firestoreProgress.js`, controller `progressSession.js`, dan hook `useLearningProgress.js` memisahkan akses database dari tampilan. Materi/hasil tetap mengikuti versi instrumen masing-masing. Kontrak terbaru: [DATABASE.md](DATABASE.md) dan [panduan Firestore](docs/FIRESTORE_SETUP.md). Penjelasan baseline di bawah mendokumentasikan versi lokal awal.
+
 ## Pilihan implementasi
 
 React + Vite mengikuti materi kuliah. JavaScript biasa, pemisahan data, komponen fungsional, props, state, dan CSS Variables memudahkan mahasiswa menemukan bagian yang akan diubah. Navigasi hash menghindari backend/router tambahan. Penyimpanan lokal hanya untuk tamu tunggal pada satu browser.

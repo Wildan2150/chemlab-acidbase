@@ -1,5 +1,49 @@
 # Log bantuan AI
 
+## 10 November 2026 WIB — panel guru untuk email yang ditetapkan
+
+**Arahan pengajar:** selesaikan panel guru dan tetapkan hanya akun ber-email `wildannashihin@gmail.com` sebagai guru.
+
+**Keputusan implementasi:** akses memerlukan email yang ditetapkan dan status verifikasi Firebase Auth, diperiksa di UI dan Firestore Rules dari token server. Profil atau localStorage tidak dapat memberikan hak guru. Akun produksi tersebut sudah aktif, terverifikasi, dan terhubung Google; tidak diperlukan perubahan identitas atau custom claim.
+
+**Perubahan:** mengganti panel data fiktif dengan profil/progres Firestore; menambah metadata profil pemilik saat login/perubahan identitas; menyertakan penghapusan profil pada hapus akun; membatasi menu dan tautan langsung; menambah rekap diagnostik pertama/asesmen terbaru, filter/pencarian, ambang pendampingan, rincian jawaban/riwayat/catatan, serta JSON/CSV. Sesi baca kelas diisolasi di memori dan dibuang saat panel ditutup/logout. Hasil belum dikumpulkan tidak dianggap bernilai nol dan catatan rusak ditandai. CSV melindungi field profil yang dapat dianggap formula spreadsheet.
+
+**Produksi:** sebelum deploy, Rules aktif dibandingkan dengan release yang sebelumnya diverifikasi. Rules baru dikompilasi dan dipasang ke `chemlab-web`. Dua profil akun yang sudah memiliki progres dilengkapi dari Firebase Auth dengan prasyarat belum ada; hasil dan akun Auth tidak diubah. Sumber release baru, indeks payload, akun guru terverifikasi, serta 14 simulasi Rules diperiksa. Roster produksi dibaca dengan IAM dan normalisasi panel: dua siswa, dua profil, tanpa catatan rusak.
+
+**Verifikasi:** 36 uji logika, 31 skenario browser, tiga pengujian ulang khusus guru setelah isolasi cache, build produksi, serta pemeriksaan diff lulus. Screenshots emulator diperiksa; bukti produksi dan migrasi memuat metadata/counts saja, tanpa token atau identitas siswa. Percobaan awal simulasi izin list diperbaiki agar request Rules API mengacu pada dokumen yang cocok dengan query koleksi; seluruh 14 hasil akhir lulus. OAuth nyata dan perangkat fisik tidak diuji. Panduan dan batas fitur ada di `docs/TEACHER_PANEL.md`.
+
+## 10 November 2026 WIB — verifikasi produksi setelah login CLI
+
+**Arahan pengajar:** Firebase CLI sudah login dan Rules sudah dipasang; selesaikan sisa integrasi.
+
+**Pemeriksaan aktual:** Firebase CLI berhasil membaca database `(default)` proyek `chemlab-web` di `asia-southeast2`. Sumber release Rules aktif cocok dengan berkas lokal. Pengecualian indeks payload terpasang. Enam simulasi melalui Firebase Rules API lulus; probe baca IAM mendapat 404 pada dokumen yang tidak ada, sedangkan permintaan tanpa login ditolak 403. Konfigurasi public Auth, project number API key, provider Email/Password/Google, dan domain lokal diperiksa tanpa menampilkan token/kredensial.
+
+**Penyelesaian:** memperbarui status pemasangan, menghapus petunjuk yang masih menyatakan konfigurasi belum terpasang, menutup butir backlog Rules/indeks, serta menyimpan bukti pada `docs/firestore-production-check.json`. Tidak diperlukan perubahan kode aplikasi atau pemasangan ulang Rules karena konfigurasi produksi sudah cocok.
+
+**Verifikasi dan batas:** 28 uji logika dan build dijalankan ulang serta lulus. Pemeriksaan produksi tidak membuat/menghapus pengguna, menulis data, atau memakai token CLI pada aplikasi browser. Pengujian tulis, sinkronisasi lintas perangkat, reset, serta penghapusan pengguna tetap menggunakan hasil 28 skenario Auth/Firestore Emulator pada tahap integrasi. Interaksi OAuth/email produksi belum diuji. Hambatan login CLI dari catatan sebelumnya sudah terselesaikan.
+
+## 10 November 2026 WIB — penyimpanan Firestore
+
+**Arahan pengajar:** Firestore sudah disiapkan; integrasikan penyimpanan aplikasi ke database tersebut.
+
+**Konteks:** konfigurasi Firebase client sudah terisi untuk proyek `chemlab-web`. Berkas `.env.local` tetap privat. Perubahan scroll sidebar dari tugas sebelumnya dipertahankan.
+
+**Perubahan:** menambahkan dokumen progres per UID pada Firestore, snapshot server sebelum menulis, transaksi dengan penggabungan field/hasil ber-ID stabil, antrean lokal dengan debounce dan percobaan ulang, status penyimpanan berdasarkan konfirmasi server, reset lintas perangkat, serta penghapusan payload sebelum identitas Auth dihapus. Tamu tetap lokal; panel guru tetap memakai data fiktif. Rules membatasi akses pemilik dan metadata penulisan; field payload tidak diindeks. Panduan konfigurasi, batas ukuran, kebijakan konflik, dan deploy diperbarui.
+
+**Verifikasi:** 28 uji logika, 28 skenario browser, dan build produksi lulus. Pengujian memakai SDK serta Auth/Firestore Emulator proyek `demo-chemlab`, dengan akun fixture unik. Java 21 portabel dipasang di folder scratch untuk menjalankan emulator tanpa mengubah Java global. Pustaka Firebase yang sudah terpasang dipakai tanpa dependency tambahan.
+
+**Batas nyata:** Firebase CLI belum login dan mengembalikan kegagalan autentikasi pada pemeriksaan database. Rules/indeks produksi belum dipasang dan pengujian akun/database produksi tidak dilakukan. Instruksi penyelesaian konfigurasi tersedia di `docs/FIRESTORE_SETUP.md`; tidak ada klaim produksi berhasil. Integrasi mengacu pada dokumentasi resmi transaksi, listener, Rules, dan batas dokumen Firebase.
+
+## 10 November 2026 WIB — sidebar terpotong
+
+**Laporan pengguna:** bagian bawah sidebar terpotong dan tidak dapat di-scroll.
+
+**Temuan:** pada viewport desktop 1366 × 768, isi sidebar setinggi 987 piksel memakai `overflow-y: visible`; roda mouse tidak mengubah posisi scroll sehingga profil berada di bawah layar. Scroll sebelumnya hanya diaktifkan pada breakpoint ponsel.
+
+**Perubahan:** mengaktifkan scroll vertikal sidebar pada semua ukuran, menahan perpindahan scroll ke halaman utama, mencegah scroll horizontal, serta menjaga tinggi elemen menu melalui `flex-shrink: 0`.
+
+**Verifikasi:** pemeriksaan browser langsung menggunakan Microsoft Edge pada enam ukuran desktop/ponsel memastikan roda mouse, akses profil melalui Tab/Enter, serta navigasi ponsel bekerja. Sidebar pada layar tinggi tidak memerlukan scroll. Build produksi dan pemeriksaan diff lulus; rincian ada di `TESTING.md`.
+
 ## 10 November 2026 WIB — merge seluruh branch
 
 **Arahan pengajar:** gabungkan semua branch repo dan selesaikan konflik.

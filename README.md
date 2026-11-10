@@ -10,6 +10,10 @@
 
 **Firebase Auth** menyediakan masuk/daftar dengan email atau Google, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Seluruh progres belajar, termasuk asesmen dan catatan eksplorasi, dipisahkan per akun/tamu di browser. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
 
+**Cloud Firestore** menyimpan progres akun, memulihkannya pada perangkat lain, dan menyinkronkan perubahan yang menunggu koneksi. Tamu tetap lokal. Pasang aturan akses mengikuti [panduan Firestore](docs/FIRESTORE_SETUP.md); konfigurasi memakai proyek Firebase yang sama dengan Auth.
+
+**Panel guru** menampilkan progres siswa nyata dari akun yang tersinkron. Hanya akun terverifikasi `wildannashihin@gmail.com` yang dapat membukanya. Rekap diagnostik/asesmen, rincian percobaan, catatan eksplorasi, serta ekspor JSON/CSV tersedia. Aturan akses guru sudah dipasang ke produksi; lihat [panduan panel guru](docs/TEACHER_PANEL.md).
+
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
 
 ## Jalankan
@@ -22,7 +26,7 @@ npm.cmd ci --ignore-scripts
 npm.cmd run dev
 ```
 
-Untuk memakai akun nyata, isi `.env.local` mengikuti `.env.example`, aktifkan Email/Password serta Google di Firebase Console, dan atur domain serta email action URL sesuai panduan. Konfigurasi proyek produksi belum diisi. Tombol Google dapat dicoba dengan identitas fiktif melalui pemilih akun pada Auth Emulator.
+Konfigurasi produksi lokal sudah mengarah ke proyek `chemlab-web`, dengan Firestore `(default)`, Rules/indeks terpasang, serta Email/Password dan Google aktif. Jalankan aplikasi lalu masuk untuk menyinkronkan progres akun. Untuk instalasi baru, isi `.env.local` mengikuti `.env.example` dan [panduan Firestore](docs/FIRESTORE_SETUP.md). Tombol Google juga dapat dicoba dengan identitas fiktif melalui Auth Emulator.
 
 Untuk mencoba alur akun sepenuhnya tanpa proyek produksi:
 
@@ -30,7 +34,7 @@ Untuk mencoba alur akun sepenuhnya tanpa proyek produksi:
 npm.cmd run dev:emulator
 ```
 
-Buka **http://127.0.0.1:5174**. Auth Emulator berjalan lokal; tautan verifikasi dan reset tersedia melalui emulator/terminal, bukan email sungguhan.
+Buka **http://127.0.0.1:5174**. Auth dan Firestore Emulator berjalan lokal; Firestore Emulator memerlukan Java 21+. Tautan verifikasi/reset tersedia melalui emulator/terminal, bukan email sungguhan.
 
 Buka alamat yang dicetak Vite, biasanya **http://127.0.0.1:5173**. `npm.cmd` bisa diganti `npm` jika PowerShell mengizinkan skrip npm. Jangan membuka `index.html` langsung dengan klik ganda.
 
@@ -49,19 +53,19 @@ Build siap hosting tersedia di `dist/`. Aplikasi menggunakan URL hash, sehingga 
 - Lima soal diagnostik. Setiap pilihan disimpan; pembahasan baru dibuka setelah seluruh jawaban dikumpulkan.
 - Percobaan awal dan latihan ulang memiliki ID berbeda. Riwayat menyimpan jawaban per butir, konsep, versi soal, dan skor.
 - Progres tamu, ekspor JSON, serta reset dengan konfirmasi.
-- Panel guru dengan **enam siswa fiktif**, agregat per konsep, pencarian/filter, rincian jawaban, dan contoh tindak lanjut.
+- Panel guru khusus akun yang ditetapkan: rekap siswa tersinkron, diagnostik awal/asesmen terbaru, pencarian/filter, rincian jawaban dan catatan, serta ekspor JSON/CSV.
 - Pencarian konsep, navigasi keyboard, dialog, dan tampilan ponsel.
 - Login/registrasi Firebase, verifikasi email, pemulihan password, pengelolaan akun, serta pemisahan progres tiap UID dan tamu.
 
-Nama **ChemLab**, desain hijau, dan sasaran kelas XI adalah keputusan awal yang dapat disesuaikan. Topik asam–basa, bentuk aplikasi siswa, serta mode lokal/data guru fiktif sudah dipilih pengajar melalui percakapan.
+Nama **ChemLab**, desain hijau, dan sasaran kelas XI adalah keputusan awal yang dapat disesuaikan. Versi awal lokal telah dikembangkan menjadi akun tersinkron dan panel guru terbatas sesuai arahan pengajar.
 
-Antarmuka menggunakan bahasa aplikasi belajar untuk siswa dan guru, tanpa label demo maupun narasi proses pembuatan. Asal data latihan fiktif pada panel guru dicantumkan satu kali sebagai keterangan sumber. Konteks penggunaan untuk kuliah dijelaskan dalam dokumentasi ini.
+Antarmuka menggunakan bahasa aplikasi belajar untuk siswa dan guru, tanpa narasi proses pembuatan. Panel guru menjelaskan bahwa datanya berasal dari progres akun yang tersinkron. Konteks penggunaan untuk kuliah dijelaskan dalam dokumentasi ini.
 
 ## Batas versi ini
 
-Aplikasi memakai **Firebase Auth untuk identitas akun**, dengan konfigurasi proyek produksi menyusul. Belajar tanpa masuk tetap tersedia. Progres akun dan tamu dipisahkan pada browser; Firestore, sinkronisasi hasil antarperangkat, antrean kirim, serta pembacaan hasil nyata oleh guru belum ditambahkan. Panel guru tetap memakai data latihan fiktif.
+Aplikasi memakai **Firebase Auth untuk identitas akun** dan **Cloud Firestore untuk progres akun**. Belajar tanpa masuk tetap tersedia. Catatan tamu tetap lokal, sementara progres akun disinkronkan setelah login. Status simpan membedakan progres yang sudah dikonfirmasi server dari perubahan yang masih menunggu. Guru membaca progres tersinkron dari seluruh akun siswa aplikasi pada proyek ini; belum ada pembagian kelas atau guru kedua.
 
-`localStorage` menyimpan data pada origin browser yang sama. Data tidak berpindah perangkat, dan berganti port berarti berganti origin. Jika penyimpanan ditolak, aplikasi tetap berjalan dalam memori dan memberi informasi untuk mengekspor progres. Data yang rusak atau tidak sesuai versi diganti sesi baru. Ekspor JSON merupakan salinan untuk dibaca; fitur impor belum dibuat. Aplikasi bukan PWA; membuka pertama kali tanpa koneksi ke server belum didukung.
+`localStorage` menyimpan progres tamu serta salinan/antrean akun pada origin browser yang sama; berganti port berarti berganti origin. Progres akun yang sudah tersimpan di Firestore dapat dipulihkan pada perangkat lain. Jika penyimpanan browser ditolak, gunakan ekspor sebelum menutup sesi. Ekspor JSON merupakan salinan untuk dibaca; fitur impor belum dibuat. Aplikasi bukan PWA; membuka pertama kali tanpa koneksi ke server belum didukung. Batas ukuran payload dan kebijakan perubahan bersamaan dijelaskan pada panduan Firestore.
 
 Kata sandi diproses melalui Firebase SDK, tidak disimpan oleh aplikasi di localStorage. Perubahan email/password dan penghapusan akun meminta autentikasi ulang. Penggantian email akun password memakai verifikasi alamat baru terlebih dahulu. Akun khusus Google mengelola email/password melalui Google dan mengonfirmasi penghapusan akun ChemLab melalui pop-up Google.
 
@@ -89,7 +93,7 @@ Font dan ikon dipaketkan lokal; aplikasi tidak bergantung pada CDN saat dijalank
 3. Selesaikan lima soal dan tunjukkan pembahasan serta tindak lanjut per konsep.
 4. Mulai latihan baru: hasil diagnostik awal tetap ada di **Progres saya**.
 5. Buka materi, tandai selesai, lalu eksplorasi pH 3 dan 5 di laboratorium. Konsentrasi H₃O⁺ berubah 100 kali.
-6. Buka **Panel guru**: jelaskan data fiktif, filter hasil, buka rincian siswa, dan tunjukkan interpretasi soal logaritmik.
+6. Masuk dengan akun guru terverifikasi, buka **Panel guru**, filter hasil yang sudah tersinkron, tinjau jawaban/catatan siswa, dan ekspor rekap yang diperlukan. Akun biasa tidak dapat membuka data siswa lain.
 7. Ekspor progres, lalu tunjukkan reset berkonfirmasi jika diperlukan.
 
 ## Pengujian
@@ -101,7 +105,7 @@ npm.cmd run test:e2e
 
 Uji browser otomatis memakai Microsoft Edge pada Windows. Pada OS lain, pasang Chromium Playwright terlebih dahulu dengan `npx playwright install chromium`. Konfigurasi akan menjalankan server Vite sendiri bila port 5173 belum digunakan. Detail hasil serta batas pengujian terdapat di [TESTING.md](TESTING.md).
 
-Pengujian juga menjalankan stack Auth Emulator pada port 9099 dan aplikasi uji pada port 5175. Gunakan `--project=learning` untuk skenario belajar saja atau `--project=firebase-auth` untuk skenario akun; kedua server tetap dikelola konfigurasi Playwright.
+Pengujian juga menjalankan Auth Emulator pada port 9099, Firestore Emulator pada port 8080, serta aplikasi uji pada port 5175. Java 21+ diperlukan pada `PATH`. Gunakan `--project=learning` untuk skenario belajar atau `--project=firebase-auth` untuk akun/Firestore; kedua server tetap dikelola konfigurasi Playwright.
 
 Pratinjau tersimpan di [desktop](docs/preview-desktop.png) dan [ponsel](docs/preview-mobile.png).
 

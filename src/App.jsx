@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { lessons } from './data/chemData.js';
-import {
-  accountProgressKey,
-  createDraft,
-  emptyProgress,
-  loadProgress,
-  saveProgress,
-} from './lib/storage.js';
+import { createDraft } from './lib/storage.js';
+import useLearningProgress from './hooks/useLearningProgress.js';
+import SyncStatus from './components/SyncStatus.jsx';
 import { makeAttempt } from './lib/chemistry.js';
 import { Icon } from './components/Visuals.jsx';
 import Dialog from './components/Dialog.jsx';
@@ -36,18 +32,6 @@ const navigation = [
 const getRoute = () =>
   window.location.hash.slice(1) ||
   (new URLSearchParams(window.location.search).has('oobCode') ? 'tindakan-akun' : 'beranda');
-function initialProgress(key) {
-  try {
-    return loadProgress(window.localStorage, key);
-  } catch {
-    return {
-      data: emptyProgress(),
-      warning:
-        'Penyimpanan browser tidak tersedia. Progres hanya bertahan selama sesi ini; kamu bisa mengekspornya.',
-    };
-  }
-}
-
 export default function App() {
   return (
     <AuthProvider>
@@ -67,22 +51,32 @@ function AccountSession() {
   return <LearningApp key={user?.uid || 'guest'} />;
 }
 function LearningApp() {
-  const { user, error: authError } = useAuth();
-  const progressKey = accountProgressKey(user?.uid);
-  const [initial] = useState(() => initialProgress(progressKey));
-  const [progress, setProgress] = useState(initial.data);
+  const { user, error: authError, profileError, isTeacher } = useAuth();
+  const {
+    progress,
+    setProgress,
+    resetProgress,
+    storageOk,
+    storageWarning,
+    setStorageWarning,
+    sync,
+    retrySync,
+  } = useLearningProgress(user?.uid);
   const [route, setRoute] = useState(getRoute);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dialog, setDialog] = useState(null);
   const [query, setQuery] = useState('');
-  const [storageOk, setStorageOk] = useState(!initial.warning);
-  const [storageWarning, setStorageWarning] = useState(initial.warning);
   const [announcement, setAnnouncement] = useState('');
   const mainRef = useRef(null);
   const firstRender = useRef(true);
   const page = route.split('/')[0].split('?')[0];
   const lessonId = route.split('/')[1];
   const current = navigation.find((n) => n.id === page);
+  const loadingProgress =
+    user &&
+    sync.state === 'loading' &&
+    !sync.ready &&
+    !['akun', 'masuk', 'daftar', 'lupa-password', 'tindakan-akun', 'guru'].includes(page);
   const accountLabels = {
     masuk: 'Masuk',
     daftar: 'Buat akun',
@@ -113,19 +107,6 @@ function LearningApp() {
     window.scrollTo({ top: 0 });
     mainRef.current?.focus({ preventScroll: true });
   }, [route, pageLabel]);
-  useEffect(() => {
-    let saved = false;
-    try {
-      saved = saveProgress(window.localStorage, progress, progressKey);
-    } catch {
-      /* Browser can deny access to localStorage. */
-    }
-    setStorageOk(saved);
-    if (!saved)
-      setStorageWarning(
-        'Penyimpanan browser tidak tersedia. Progres hanya bertahan selama sesi ini. Ekspor catatan melalui “Progres saya”.',
-      );
-  }, [progress, progressKey]);
   useEffect(() => {
     const onKey = (e) => {
       const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
@@ -281,13 +262,17 @@ function LearningApp() {
             </a>
           ))}
         </nav>
-        <div className="sidebar-label teacher-label">UNTUK PENGAJAR</div>
-        <nav aria-label="Navigasi pengajar">
-          <a href="#guru" aria-current={page === 'guru' ? 'page' : undefined}>
-            <Icon name="teacher" size={21} />
-            <span>Panel guru</span>
-          </a>
-        </nav>
+        {isTeacher && (
+          <>
+            <div className="sidebar-label teacher-label">UNTUK PENGAJAR</div>
+            <nav aria-label="Navigasi pengajar">
+              <a href="#guru" aria-current={page === 'guru' ? 'page' : undefined}>
+                <Icon name="teacher" size={21} />
+                <span>Panel guru</span>
+              </a>
+            </nav>
+          </>
+        )}
         <div className="sidebar-bottom">
           <div className="sidebar-invitation">
             <span className="sidebar-orbit">
@@ -380,6 +365,12 @@ function LearningApp() {
           </a>
         </header>
         <main id="main-content" ref={mainRef} tabIndex="-1" className="main-content">
+          {page !== 'guru' && <SyncStatus sync={sync} retry={retrySync} />}
+          {profileError && (
+            <p className="storage-warning" role="status">
+              {profileError}
+            </p>
+          )}
           {authError && (
             <p className="auth-error" role="alert">
               {authError}
@@ -398,7 +389,13 @@ function LearningApp() {
               </button>
             </div>
           )}
-          {page === 'beranda' ? (
+          {loadingProgress ? (
+            <section className="empty-state" aria-busy="true">
+              <Icon name="book" size={35} />
+              <h1>Memuat catatan belajarmu…</h1>
+              <p>Progres akun sedang dipulihkan sebelum kamu melanjutkan.</p>
+            </section>
+          ) : page === 'beranda' ? (
             <Home progress={progress} setPh={setPh} />
           ) : page === 'materi' ? (
             <Materials
@@ -430,6 +427,7 @@ function LearningApp() {
               progress={progress}
               requestReset={() => setDialog('reset')}
               storageOk={storageOk}
+              sync={sync}
             />
           ) : page === 'guru' ? (
             <Teacher />
@@ -546,8 +544,10 @@ function LearningApp() {
           <div className="callout">
             <Icon name="help" />
             <p>
-              Progresmu tersimpan di browser ini. Gunakan “Ekspor progres” untuk menyimpan salinan
-              sebelum berganti perangkat atau menggunakan perangkat bersama.
+              {user
+                ? 'Progres akun disinkronkan saat terhubung. Periksa status penyimpanan sebelum berganti perangkat.'
+                : 'Progresmu tersimpan di browser ini. Masuk untuk menyimpan progres akun di perangkat lain.'}{' '}
+              Gunakan “Ekspor progres” untuk menyimpan salinan catatan.
             </p>
           </div>
           <button className="button primary full-width" onClick={() => setDialog(null)}>
@@ -559,8 +559,10 @@ function LearningApp() {
       {dialog === 'reset' && (
         <Dialog title="Mulai perjalanan baru?" onClose={() => setDialog(null)}>
           <p className="dialog-description">
-            Seluruh progres materi, draf jawaban, eksplorasi, riwayat kuis, dan asesmen akhir bab di
-            browser ini akan dihapus.
+            Seluruh progres materi, draf jawaban, eksplorasi, riwayat kuis, dan asesmen akhir bab{' '}
+            {user
+              ? 'milik akun ini akan dihapus, termasuk catatan yang tersinkron di perangkat lain.'
+              : 'di browser ini akan dihapus.'}
           </p>
           <p className="dialog-description">
             Ekspor progres terlebih dahulu jika ingin menyimpan catatan. Penghapusan ini tidak dapat
@@ -573,7 +575,7 @@ function LearningApp() {
             <button
               className="button danger-button"
               onClick={() => {
-                setProgress(emptyProgress());
+                resetProgress();
                 setDialog(null);
                 setAnnouncement('Progres belajar telah direset.');
               }}

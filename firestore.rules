@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function teacher() {
+      return request.auth != null
+        && request.auth.token.email is string
+        && request.auth.token.email.lower() == 'wildannashihin@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+    function owner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    match /learnerProfiles/{uid} {
+      function activeAccount() {
+        let progress = /databases/$(database)/documents/learningProgress/$(uid);
+        return !exists(progress) || get(progress).data.deleted == false;
+      }
+      function validProfile() {
+        let data = request.resource.data;
+        return data.keys().hasAll(['displayName', 'email', 'updatedAt'])
+          && data.keys().hasOnly(['displayName', 'email', 'updatedAt'])
+          && data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 60
+          && data.email is string && data.email.size() <= 320
+          && data.email == request.auth.token.email
+          && data.updatedAt == request.time;
+      }
+      allow get: if owner(uid) || teacher();
+      allow list: if teacher();
+      allow create, update: if owner(uid) && validProfile() && activeAccount();
+      allow delete: if owner(uid);
+    }
+    match /learningProgress/{uid} {
+      function validDocument() {
+        let data = request.resource.data;
+        return data.keys().hasAll(['version', 'revision', 'resetId', 'deleted', 'payload', 'updatedAt'])
+          && data.keys().hasOnly(['version', 'revision', 'resetId', 'deleted', 'payload', 'updatedAt'])
+          && data.version == 1
+          && data.revision is int && data.revision > 0
+          && data.resetId is string && data.resetId.size() > 0 && data.resetId.size() <= 100
+          && data.deleted is bool
+          && ((data.deleted == true && data.payload == null)
+            || (data.deleted == false && data.payload is string && data.payload.size() <= 850000))
+          && data.updatedAt == request.time;
+      }
+      allow get: if owner(uid) || teacher();
+      allow list: if teacher();
+      allow create: if owner(uid) && validDocument() && request.resource.data.revision == 1;
+      allow update: if owner(uid) && validDocument() && resource.data.deleted == false
+        && request.resource.data.revision == resource.data.revision + 1;
+      // Deletion is an empty tombstone, preventing another device from recreating the account data.
+      allow delete: if false;
+    }
+  }
+}

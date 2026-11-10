@@ -14,8 +14,8 @@ Storage ditolak → aktivitas berjalan dalam sesi → status menjelaskan batas p
 
 Progres → ekspor → unduh JSON. Progres → reset → dialog penjelasan → batal mempertahankan data / konfirmasi mengganti hanya data ChemLab dengan sesi baru.
 
-## Guru, mode demonstrasi
+## Guru dengan akun terverifikasi
 
-Panel guru → baca label data fiktif → rekap enam siswa → konsep per butir → interpretasi dan tindak lanjut → cari/filter siswa → rincian lima jawaban → ekspor data contoh.
+Masuk dengan akun terverifikasi `wildannashihin@gmail.com` → menu **Panel guru** → muat profil dan progres siswa dari Firestore → pilih diagnostik awal atau asesmen terbaru → tinjau rekap per konsep → cari/filter siswa → buka riwayat jawaban dan catatan eksplorasi → ekspor JSON/CSV sesuai filter.
 
-Tidak ada peralihan akun/role atau akses ke hasil nyata. Panel guru bukan batas keamanan dan hanya memuat data demonstrasi yang boleh dilihat publik.
+Tamu yang membuka tautan langsung diminta masuk. Akun biasa mendapat penjelasan akses khusus guru; akun guru yang belum terverifikasi diarahkan ke halaman akun untuk memeriksa email. Firestore Rules tetap memeriksa token Auth saat UI diubah atau API dipanggil langsung. Logout menutup panel, listener, dan cache memori pembacaan kelas.

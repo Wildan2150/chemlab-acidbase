@@ -1,11 +1,13 @@
 # Panduan perubahan ProyekContoh
 
 - Ini demo React + Vite berbahasa Indonesia untuk topik asam–basa/pH.
-- Main menggabungkan materi mendalam, asesmen akhir bab, aktivitas interaktif, serta Firebase Auth sesuai arahan pengajar. Pisahkan asesmen akhir bab dari kuis diagnostik; progres tetap lokal per UID/tamu dan panel guru memakai data fiktif.
+- Main menggabungkan materi, asesmen, aktivitas interaktif, Firebase Auth, Firestore, serta panel guru dengan progres siswa nyata sesuai arahan pengajar. Pisahkan asesmen akhir bab dari diagnostik. Progres akun disinkronkan per UID; tamu tetap lokal.
 - Simpan data di `src/data/`: metadata dan diagnostik di `chemData.js`, bacaan di `readingContent.js`, instrumen asesmen di `chapterAssessment.js`, serta aktivitas di `activities.js`. Pisahkan perhitungan dan penyimpanan dari komponen tampilan.
 - Jangan mengubah dokumen mata kuliah di luar `ProyekContoh` untuk perubahan demo.
-- Jangan menyebut login/cloud berhasil tanpa integrasi dan bukti aktual. Panel guru contoh harus tetap berlabel fiktif.
-- Uji akun menggunakan Auth Emulator dengan project ID `demo-chemlab`; jangan memakai akun/proyek produksi untuk uji yang membuat atau menghapus pengguna. Konfigurasi produksi menyusul.
+- Jangan menyebut login/cloud berhasil tanpa integrasi dan bukti aktual. Panel guru membaca data akun yang tersinkron; jangan memasukkan siswa/hasil fiktif ke panel produksi.
+- Guru ditetapkan hanya untuk email terverifikasi `wildannashihin@gmail.com`. Pemeriksaan UI harus didampingi Firestore Rules dari token Auth; nama tampilan, profil client, dan localStorage tidak boleh memberi hak guru. Hak guru hanya membaca profil/progres siswa, tanpa menulis hasil akun lain.
+- Uji akun dan penyimpanan menggunakan Auth/Firestore Emulator dengan project ID `demo-chemlab`; jangan memakai akun/proyek produksi untuk uji yang membuat atau menghapus pengguna. Jangan mengklaim Rules sudah terpasang atau produksi terverifikasi tanpa bukti aktual.
+- Baca progres cloud sebelum menulis. Pertahankan isolasi UID, antrean perubahan, revisi/reset lintas perangkat, dan hasil asesmen tersimpan. Status tersinkron hanya setelah konfirmasi server; kegagalan izin/jaringan tidak boleh menghapus antrean. Perubahan Rules memerlukan uji pemilik, tamu, dan akun lain.
 - Google memakai Firebase SDK; pertahankan urutan persistensi local/session yang konsisten antar-tab. Akun khusus Google tidak diminta password ChemLab untuk penghapusan; lakukan autentikasi ulang dengan provider yang sama dan tetap minta konfirmasi hapus.
 - Teks antarmuka berbicara langsung kepada siswa/guru sebagai pengguna aplikasi. Jangan menampilkan label demo atau narasi tentang kuliah, prototipe, maupun implementasi. Asal data latihan dijelaskan singkat pada keterangan sumber panel guru, bukan banner atau label pada setiap elemen.
 - Pertahankan draf per pilihan, ID percobaan stabil, pemisahan diagnostik awal dan latihan ulang, serta reset berkonfirmasi.

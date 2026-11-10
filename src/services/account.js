@@ -19,6 +19,12 @@ import {
   verifyBeforeUpdateEmail,
 } from 'firebase/auth';
 import { emailActionSettings, requireAuthService } from './firebaseClient.js';
+import {
+  flushActiveProgress,
+  pauseActiveProgress,
+  resumeActiveProgress,
+} from '../lib/progressSession.js';
+import { deleteCloudProgress } from './firestoreProgress.js';
 
 function currentUser() {
   const user = requireAuthService().currentUser;
@@ -94,7 +100,10 @@ export async function loginWithGoogle({ remember = false } = {}) {
   await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
   return signInWithPopup(auth, googleProvider());
 }
-export const logoutAccount = () => signOut(requireAuthService());
+export async function logoutAccount() {
+  await flushActiveProgress();
+  await signOut(requireAuthService());
+}
 export const verifyAccountEmail = () => sendEmailVerification(currentUser(), emailActionSettings());
 export async function resetAccountPassword(email) {
   try {
@@ -143,5 +152,12 @@ function requirePasswordProvider() {
 }
 export async function removeAccount(password) {
   const user = await reauthenticate(password);
-  await deleteUser(user);
+  await pauseActiveProgress();
+  try {
+    await deleteCloudProgress(user.uid);
+    await deleteUser(user);
+  } catch (error) {
+    resumeActiveProgress();
+    throw error;
+  }
 }

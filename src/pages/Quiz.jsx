@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { questions } from '../data/chemData.js';
 import { Icon } from '../components/Visuals.jsx';
 
-export function AttemptReview({ attempt }) {
+export function AttemptReview({ attempt, answerLabel = 'Jawabanmu' }) {
   return (
     <div className="answer-review">
       {questions.map((q, i) => {
@@ -21,7 +21,7 @@ export function AttemptReview({ attempt }) {
             </div>
             <h3>{q.text}</h3>
             <p>
-              Jawabanmu: <strong>{q.options[selected]}</strong>
+              {answerLabel}: <strong>{q.options[selected]}</strong>
             </p>
             {!correct && (
               <p>

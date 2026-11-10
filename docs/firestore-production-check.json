@@ -1,0 +1,111 @@
+{
+  "checkedAt": "2026-11-10T10:25:13.445Z",
+  "timeZone": "Asia/Jakarta",
+  "projectId": "chemlab-web",
+  "databaseId": "(default)",
+  "location": "asia-southeast2",
+  "databaseType": "FIRESTORE_NATIVE",
+  "clientConfiguration": {
+    "production": true,
+    "emulator": false,
+    "apiKeyProjectMatches": true,
+    "authDomain": "chemlab-web.firebaseapp.com"
+  },
+  "firestore": {
+    "rulesMatchLocalSource": true,
+    "rulesSha256": "4e811a128ec64ea719a9c1aaec08f417e301200e24b00fe66e92ba101dc355af",
+    "ruleset": "projects/chemlab-web/rulesets/da0b221b-fd2f-4946-b089-894247229cbc",
+    "rulesReleasedAt": "2026-11-10T10:17:29.228082Z",
+    "payloadIndexExemptionVerified": true
+  },
+  "authentication": {
+    "emailPasswordEnabled": true,
+    "googleEnabled": true,
+    "localhostAuthorized": true,
+    "loopbackAuthorized": true
+  },
+  "deployedRulesSimulation": [
+    {
+      "name": "owner_read_allowed",
+      "result": "PASS"
+    },
+    {
+      "name": "other_account_read_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "guest_read_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "student_collection_list_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_progress_list_allowed",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_student_read_allowed",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_profiles_list_allowed",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_profile_read_allowed",
+      "result": "PASS"
+    },
+    {
+      "name": "unverified_teacher_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "fake_teacher_role_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_cannot_change_student_result",
+      "result": "PASS"
+    },
+    {
+      "name": "teacher_cannot_delete_student_profile",
+      "result": "PASS"
+    },
+    {
+      "name": "owner_direct_progress_delete_denied",
+      "result": "PASS"
+    },
+    {
+      "name": "unrelated_collection_denied",
+      "result": "PASS"
+    }
+  ],
+  "readOnlyConnectivityProbe": {
+    "authenticatedIamReadOfMissingDocument": 404,
+    "anonymousReadDenied": 403
+  },
+  "productionDataWritten": true,
+  "productionUsersCreated": false,
+  "productionUsersDeleted": false,
+  "scope": "Teacher Rules release, verified teacher account, profile metadata backfill, payload index exemption and fourteen deployed Rules simulations verified. Interactive teacher login and dashboard behavior tested through Auth/Firestore Emulator.",
+  "teacherAccess": {
+    "email": "wildannashihin@gmail.com",
+    "emailVerified": true,
+    "accountEnabled": true,
+    "googleProviderLinked": true,
+    "studentAccess": "read-only",
+    "profileBackfillReport": "teacher-profile-backfill.json",
+    "productionRoster": {
+      "activeProgressRecords": 2,
+      "profiles": 2,
+      "studentRows": 2,
+      "unreadableStudentRecords": 0,
+      "teacherExcluded": true,
+      "studentsWithProfiles": 2,
+      "checkedUsing": "Read-only IAM data retrieval plus the same teacherReport normalizer used by the dashboard"
+    }
+  },
+  "productionDataWriteScope": "Created missing learnerProfiles metadata for existing active progress accounts from Firebase Auth. No learningProgress results or Auth accounts changed."
+}

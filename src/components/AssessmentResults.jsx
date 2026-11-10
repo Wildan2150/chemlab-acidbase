@@ -53,7 +53,7 @@ export function AssessmentHistory({ assessment }) {
   );
 }
 
-export function AssessmentReview({ attempt }) {
+export function AssessmentReview({ attempt, answerLabel = 'Jawabanmu' }) {
   return (
     <div className="assessment-review">
       {attempt.form.questions.map((question, index) => {
@@ -83,7 +83,7 @@ export function AssessmentReview({ attempt }) {
             </div>
             <h3>{question.text}</h3>
             <p>
-              Jawabanmu: <strong>{userAnswer}</strong>
+              {answerLabel}: <strong>{userAnswer}</strong>
             </p>
             {(!item.correct || question.kind === 'numeric') && (
               <p>

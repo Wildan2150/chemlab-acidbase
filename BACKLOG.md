@@ -1,5 +1,14 @@
 # Backlog dan keputusan lanjutan
 
+## Penyimpanan Firestore
+
+- [x] Progres akun pada `learningProgress/{UID}` dengan pemulihan lintas perangkat dan antrean lokal.
+- [x] Transaksi, penggabungan hasil stabil, reset lintas perangkat, dan penghapusan data akun.
+- [x] Rules per pemilik dan pengujian nyata terhadap Auth/Firestore Emulator.
+- [x] Rules/indeks produksi terpasang; sumber Rules, pengecualian indeks payload, konfigurasi Auth, domain lokal, dan koneksi baca diverifikasi. Empat belas simulasi Rules produksi termasuk akses guru lulus. Bukti: [firestore-production-check.json](docs/firestore-production-check.json).
+- [x] Panel guru dengan hasil siswa nyata dan akses email terverifikasi yang disahkan Firestore Rules; rekap, rincian, filter, JSON/CSV, serta tampilan ponsel teruji.
+- [ ] Pembagian kelas, guru tambahan, dan penilaian yang diverifikasi server untuk penggunaan formal.
+
 ## Selesai pada feat/chapter-assessment
 
 - [x] Branch turunan `feat/material-updates` dengan bacaan lengkap tetap tersedia.
@@ -15,9 +24,10 @@
 - [x] Profil, perubahan email terverifikasi, perubahan password dengan autentikasi ulang.
 - [x] Logout, hapus akun berkonfirmasi, serta pemisahan progres browser per UID/tamu.
 - [x] Pengujian terhadap Auth Emulator, bukan penyimpanan password lokal.
-- [ ] Pengisian konfigurasi Firebase produksi, authorized domains, template email, dan pengujian produksi.
+- [x] Konfigurasi Firebase produksi, provider Email/Password/Google, serta authorized domains lokal diverifikasi melalui API.
+- [ ] Pengiriman email nyata dan interaksi OAuth pada domain hosting sebenarnya.
 
-Daftar baseline di bawah dipertahankan sebagai konteks; integrasi hasil belajar cloud dan panel guru dengan hasil nyata belum dikerjakan.
+Daftar baseline di bawah dipertahankan sebagai konteks. Progres akun kini terhubung Firestore dan panel guru memakai data siswa tersinkron dengan hak baca terbatas.
 
 ## Selesai pada demo lokal
 
@@ -48,7 +58,7 @@ Daftar baseline di bawah dipertahankan sebagai konteks; integrasi hasil belajar 
 ## Pengembangan berikutnya, belum diimplementasikan
 
 - [ ] Uji pengguna bersama mahasiswa; validasi ketepatan kimia dan keselarasan instrumen.
-- [ ] Integrasi database untuk progres akun serta aturan aksesnya.
+- [x] Integrasi database untuk progres akun serta aturan aksesnya; Rules/indeks produksi sudah terpasang dan diverifikasi.
 - [ ] Riwayat milik akun, aturan satu guru, antrean terikat akun, logout/pergantian akun, uji akses negatif.
 - [ ] Deployment dari repo dan pengujian URL produksi.
 - [ ] Migrasi versi data dan impor ekspor tervalidasi jika dibutuhkan.
