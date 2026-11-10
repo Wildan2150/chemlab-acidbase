@@ -1,5 +1,17 @@
 # Hasil pengujian demo
 
+## 10 November 2026 WIB — integrasi seluruh branch ke main
+
+Menggabungkan `feat/material-updates`, `feat/chapter-assessment`, `feat/interactive-activities`, dan `feat/login-page`. Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright, dua worker, serta Firebase Auth Emulator dengan project ID `demo-chemlab`.
+
+- `npm.cmd test`: **16 lulus**, 0 gagal, mencakup penilaian, versi/pemulihan asesmen, diagnostik, dan pemisahan key akun/tamu.
+- `npm.cmd run test:e2e`: **25 lulus**, 0 gagal dalam 3,1 menit. Seluruh skenario branch belajar dan akun dijalankan bersama.
+- Skenario integrasi baru memakai UI dan Auth Emulator untuk memeriksa bacaan, draf asesmen, serta catatan eksplorasi pada tamu dan dua akun. Data bertahan setelah reload/masuk ulang; reset akun aktif tidak menghapus data tamu.
+- `npm.cmd run build`: **lulus**; JavaScript 146,81 KB gzip dan CSS 20,25 KB gzip.
+- Pratinjau desktop, ponsel, serta pengantar asesmen diperbarui dari aplikasi gabungan; pratinjau beranda desktop/ponsel juga diperiksa secara visual.
+
+Pengujian akun memakai emulator lokal. OAuth Google, pengiriman email nyata, dan domain produksi belum diuji. Bagian berikut mempertahankan hasil pemeriksaan masing-masing branch sebelum integrasi.
+
 ## Verifikasi branch asesmen akhir bab
 
 Baseline `feat/material-updates` commit `834ee59`; tidak menggabungkan branch lain. Build produksi berhasil. **15 uji logika dan 13 skenario browser lulus**, termasuk sembilan uji logika penilaian/migrasi serta empat skenario browser asesmen. Acuan keenam hitungan diverifikasi dari rumus independen, selisih terhadap acuan tersimpan <10⁻⁸. Aksesibilitas otomatis diperiksa pada pengantar, soal pilihan, input angka, tinjauan, dan hasil; responsivitas hasil diperiksa pada 320, 390, 768, dan 1440 piksel. Rincian dan batas verifikasi ada di [CHAPTER_ASSESSMENT.md](docs/CHAPTER_ASSESSMENT.md). Bagian berikut mencatat riwayat branch induk dan baseline.
@@ -11,6 +23,24 @@ Baseline `feat/material-updates` commit `834ee59`; tidak menggabungkan branch la
 ## Verifikasi branch interaktif
 
 `feat/interactive-activities` berangkat langsung dari `main` commit `30505f7`. Build dan enam uji logika baseline lulus. Delapan skenario browser baseline serta empat skenario aktivitas memeriksa pemulihan/reset catatan, pemuatan sematan atas permintaan, pendampingan saat sumber diblokir, pemilihan CID, respons PubChem, 404, kegagalan jaringan, aksesibilitas, serta ponsel. Endpoint PhET, 3Dmol, dan PubChem juga mengembalikan HTTP 200 pada pemeriksaan langsung. Detail: [INTERACTIVE_ACTIVITIES.md](docs/INTERACTIVE_ACTIVITIES.md). Bagian di bawah merupakan riwayat baseline.
+
+## 9 November 2026 WIB — Google pada feat/login-page
+
+- Build produksi lulus: JavaScript **125,29 KB gzip**, CSS **16,85 KB gzip**.
+- **7 uji logika** dan **15 skenario browser** lulus dalam pemeriksaan terakhir: 8 skenario belajar, 4 email/password, dan 3 Google. Lingkungan Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright; dua worker, Auth Emulator proyek `demo-chemlab`.
+- Google diuji melalui pemilih provider pada emulator menggunakan SDK aplikasi: daftar tanpa mengisi form password, masuk ulang dengan UID/progres yang sama, ubah nama, logout, pemisahan progres tamu, reload, sesi yang diingat antar-tab, serta sesi default per tab.
+- Penghapusan akun Google diuji setelah penolakan identitas berbeda, pembatalan jendela, lalu autentikasi ulang yang benar. API emulator memastikan akun telah dihapus dan key progres akun hilang. Form tidak meminta password yang belum dibuat.
+- Pembatalan masuk memulihkan tombol. Pemblokiran pop-up disimulasikan dengan `window.open` mengembalikan `null`; keberhasilan autentikasi tetap menggunakan Firebase SDK dan emulator, tanpa mock sukses.
+- Pemeriksaan otomatis WCAG AA dan lebar 390 px mencakup layar masuk serta tiga tab akun Google. Pratinjau masuk/daftar diperbarui dan tampilan ponsel diperiksa secara visual. Tanpa konfigurasi, tombol Google pada masuk/daftar tetap terlihat dan nonaktif dengan pesan layanan belum tersedia.
+- Pengujian awal menemukan sesi yang diingat dapat berakhir ketika tab lain memigrasikan penyimpanan default SDK. Inisialisasi local/session diseragamkan; pemeriksaan lengkap di atas lulus setelah perbaikan. Pengujian pembatalan menunggu toleransi penutupan pop-up SDK, bukan menganggap penutupan langsung menghasilkan callback.
+
+OAuth Google pada proyek/domain produksi, consent screen, Safari/Firefox, dan ponsel fisik belum diuji. Provider Google serta konfigurasi proyek perlu diisi mengikuti [panduan Firebase](docs/FIREBASE_AUTH_SETUP.md). Catatan di bawah merupakan riwayat versi sebelumnya.
+
+## Verifikasi branch Firebase Auth
+
+`feat/login-page` berangkat langsung dari `main` commit `30505f7`. Build produksi lulus (JavaScript 127,00 KB gzip; CSS 16,75 KB gzip). Tujuh uji logika lulus, termasuk pemisahan key tamu/dua akun. Delapan skenario browser baseline serta empat skenario Firebase Auth Emulator lulus: registrasi/verifikasi, sesi, profil, password benar/salah, hapus/batal, reset sekali pakai, penggantian email setelah verifikasi, dan draf per identitas. Pemeriksaan aksesibilitas serta ponsel mencakup halaman masuk/daftar/pemulihan dan tiga tab akun.
+
+Hasil browser diverifikasi melalui pemeriksaan lengkap (10 lulus) dan verifikasi ulang dua skenario setelah selector input password serta field `newEmail` pada pembacaan kode emulator diperbaiki. Tidak ada mock keberhasilan autentikasi. Audit dependency produksi: 0 temuan. Dependency Firebase CLI untuk development masih memiliki advisory moderate; CLI tidak dikirim ke browser. Konfigurasi proyek/domain produksi serta email sungguhan belum diuji. Panduan: [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md). Bagian di bawah merupakan riwayat baseline.
 
 Tanggal: **7 November 2026 WIB**. Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright. Seluruh pemeriksaan berikut dilakukan pada proyek lokal; tidak ada pengujian akun/cloud atau URL publik.
 

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { lessons } from './data/chemData.js';
-import { createDraft, emptyProgress, loadProgress, saveProgress } from './lib/storage.js';
+import {
+  accountProgressKey,
+  createDraft,
+  emptyProgress,
+  loadProgress,
+  saveProgress,
+} from './lib/storage.js';
 import { makeAttempt } from './lib/chemistry.js';
 import { Icon } from './components/Visuals.jsx';
 import Dialog from './components/Dialog.jsx';
@@ -12,8 +18,11 @@ import Progress from './pages/Progress.jsx';
 import Teacher from './pages/Teacher.jsx';
 import ChapterAssessment from './pages/ChapterAssessment.jsx';
 import { createAssessmentDraft, submitChapterAssessment } from './lib/chapterAssessment.js';
-
 import Exploration from './pages/Exploration.jsx';
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
+import AuthPages from './pages/AuthPages.jsx';
+import Account from './pages/Account.jsx';
+import EmailAction from './pages/EmailAction.jsx';
 
 const navigation = [
   { id: 'beranda', label: 'Beranda', icon: 'home' },
@@ -24,10 +33,12 @@ const navigation = [
   { id: 'asesmen', label: 'Asesmen akhir bab', icon: 'chart' },
   { id: 'progres', label: 'Progres saya', icon: 'chart' },
 ];
-const getRoute = () => window.location.hash.slice(1) || 'beranda';
-function initialProgress() {
+const getRoute = () =>
+  window.location.hash.slice(1) ||
+  (new URLSearchParams(window.location.search).has('oobCode') ? 'tindakan-akun' : 'beranda');
+function initialProgress(key) {
   try {
-    return loadProgress(window.localStorage);
+    return loadProgress(window.localStorage, key);
   } catch {
     return {
       data: emptyProgress(),
@@ -38,7 +49,27 @@ function initialProgress() {
 }
 
 export default function App() {
-  const [initial] = useState(initialProgress);
+  return (
+    <AuthProvider>
+      <AccountSession />
+    </AuthProvider>
+  );
+}
+function AccountSession() {
+  const { user, ready } = useAuth();
+  if (!ready)
+    return (
+      <div className="auth-loading" role="status">
+        <Icon name="flask" size={30} />
+        <p>Menyiapkan ruang belajarmu…</p>
+      </div>
+    );
+  return <LearningApp key={user?.uid || 'guest'} />;
+}
+function LearningApp() {
+  const { user, error: authError } = useAuth();
+  const progressKey = accountProgressKey(user?.uid);
+  const [initial] = useState(() => initialProgress(progressKey));
   const [progress, setProgress] = useState(initial.data);
   const [route, setRoute] = useState(getRoute);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,10 +80,20 @@ export default function App() {
   const [announcement, setAnnouncement] = useState('');
   const mainRef = useRef(null);
   const firstRender = useRef(true);
-  const page = route.split('/')[0];
+  const page = route.split('/')[0].split('?')[0];
   const lessonId = route.split('/')[1];
   const current = navigation.find((n) => n.id === page);
-  const pageLabel = current?.label || (page === 'guru' ? 'Panel guru' : 'Halaman tidak ditemukan');
+  const accountLabels = {
+    masuk: 'Masuk',
+    daftar: 'Buat akun',
+    'lupa-password': 'Pemulihan akun',
+    akun: 'Akun saya',
+    'tindakan-akun': 'Konfirmasi akun',
+  };
+  const pageLabel =
+    current?.label ||
+    accountLabels[page] ||
+    (page === 'guru' ? 'Panel guru' : 'Halaman tidak ditemukan');
 
   useEffect(() => {
     const onHash = () => {
@@ -75,7 +116,7 @@ export default function App() {
   useEffect(() => {
     let saved = false;
     try {
-      saved = saveProgress(window.localStorage, progress);
+      saved = saveProgress(window.localStorage, progress, progressKey);
     } catch {
       /* Browser can deny access to localStorage. */
     }
@@ -84,7 +125,7 @@ export default function App() {
       setStorageWarning(
         'Penyimpanan browser tidak tersedia. Progres hanya bertahan selama sesi ini. Ekspor catatan melalui “Progres saya”.',
       );
-  }, [progress]);
+  }, [progress, progressKey]);
   useEffect(() => {
     const onKey = (e) => {
       const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
@@ -272,14 +313,20 @@ export default function App() {
             Panduan belajar
             <Icon name="up" size={15} />
           </button>
-          <div className="guest-profile">
-            <span className="guest-avatar">P</span>
+          <a
+            className="guest-profile account-profile-link"
+            href={user ? '#akun' : '#masuk'}
+            aria-label={user ? 'Kelola akun saya' : 'Masuk ke akun'}
+          >
+            <span className="guest-avatar">
+              {(user?.displayName || 'P').slice(0, 1).toUpperCase()}
+            </span>
             <div>
-              <strong>Penjelajah kimia</strong>
-              <span>Belajar mandiri</span>
+              <strong>{user?.displayName || 'Penjelajah kimia'}</strong>
+              <span>{user ? 'Kelola akun' : 'Masuk atau buat akun'}</span>
             </div>
-            <span className="online-dot" />
-          </div>
+            <Icon name="next" size={15} />
+          </a>
         </div>
       </aside>
       <div className="workspace" inert={menuOpen ? true : undefined}>
@@ -315,11 +362,29 @@ export default function App() {
             <span className="tiny-dot" />
             Asam & basa
           </span>
-          <span className="topbar-avatar" aria-hidden="true">
-            P
-          </span>
+          <a
+            className="topbar-account"
+            href={user ? '#akun' : '#masuk'}
+            aria-label={user ? 'Buka akun saya' : 'Masuk ke akun'}
+          >
+            {user ? (
+              <span className="topbar-avatar">
+                {(user.displayName || 'P').slice(0, 1).toUpperCase()}
+              </span>
+            ) : (
+              <>
+                <Icon name="next" size={15} />
+                <span>Masuk</span>
+              </>
+            )}
+          </a>
         </header>
         <main id="main-content" ref={mainRef} tabIndex="-1" className="main-content">
+          {authError && (
+            <p className="auth-error" role="alert">
+              {authError}
+            </p>
+          )}
           {storageWarning && (
             <div className="storage-warning" role="status">
               <Icon name="help" size={19} />
@@ -379,6 +444,12 @@ export default function App() {
               submitAttempt={submitAssessment}
               storageOk={storageOk}
             />
+          ) : ['masuk', 'daftar', 'lupa-password'].includes(page) ? (
+            <AuthPages key={page} mode={page} />
+          ) : page === 'akun' ? (
+            <Account />
+          ) : page === 'tindakan-akun' ? (
+            <EmailAction key={route} />
           ) : (
             <section className="empty-state">
               <Icon name="search" size={40} />

@@ -1,6 +1,6 @@
 # Cakupan bacaan dan verifikasi sumber
 
-Branch ini dikembangkan langsung dari `main` pada commit `30505f7`, tanpa menggabungkan branch fitur lain.
+Bacaan dikembangkan pada `feat/material-updates` dari `main` commit `30505f7`, diteruskan oleh branch asesmen, dan digabungkan ke `main` bersama seluruh fitur pada 10 November 2026 WIB.
 
 Tiga ID bacaan dipertahankan agar penanda selesai tetap sesuai. Masing-masing kini mempunyai delapan bagian, prasyarat, rangkuman, referensi per bagian, tabel perbandingan, latihan refleksi, dan contoh hitung yang disusun untuk aplikasi ini. Bank lima soal diagnostik serta versinya tetap sama.
 

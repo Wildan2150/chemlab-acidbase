@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:emulator": "node scripts/auth-stack.mjs",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/domain.test.js tests/assessment.test.js",
@@ -13,6 +14,7 @@
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "5.3.0",
+    "firebase": "13.2.0",
     "lucide-react": "1.70.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
@@ -21,10 +23,14 @@
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.65.0",
     "@vitejs/plugin-react": "6.2.1",
+    "firebase-tools": "15.35.0",
     "prettier": "3.9.10",
     "vite": "8.3.6"
   },
   "engines": {
     "node": ">=22.12.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6"
   }
 }

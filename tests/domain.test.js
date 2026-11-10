@@ -7,6 +7,7 @@ import {
   loadProgress,
   saveProgress,
   STORAGE_KEY,
+  accountProgressKey,
 } from '../src/lib/storage.js';
 import { demoStudents, QUESTION_VERSION } from '../src/data/chemData.js';
 
@@ -92,4 +93,23 @@ test('teacher demo aggregate is derived from one fictitious diagnostic per stude
   assert.equal(scores.reduce((a, b) => a + b) / scores.length, 70);
   assert.equal(scores.filter((s) => s < 80).length, 2);
   assert.equal(demoStudents.filter((s) => s.answers.q2 === 2).length, 3);
+});
+
+test('guest and account progress are isolated under separate keys', () => {
+  const values = new Map();
+  const storage = {
+    getItem: (key) => values.get(key) || null,
+    setItem: (key, value) => values.set(key, value),
+  };
+  const guest = emptyProgress();
+  guest.completedLessons = ['kenali'];
+  const first = emptyProgress();
+  first.ph = 3;
+  saveProgress(storage, guest);
+  saveProgress(storage, first, accountProgressKey('student-a'));
+  assert.equal(accountProgressKey(null), STORAGE_KEY);
+  assert.notEqual(accountProgressKey('student-a'), accountProgressKey('student-b'));
+  assert.equal(loadProgress(storage, accountProgressKey('student-a')).data.ph, 3);
+  assert.deepEqual(loadProgress(storage).data.completedLessons, ['kenali']);
+  assert.equal(loadProgress(storage, accountProgressKey('student-b')).data.ph, 7);
 });

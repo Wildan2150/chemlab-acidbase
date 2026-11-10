@@ -8,6 +8,17 @@
 - [x] Uji hitungan, toleransi angka, migrasi data, alur browser, aksesibilitas, dan ponsel.
 - [ ] Peninjauan pengajar terhadap kisi-kisi, bobot, tingkat kesulitan, dan penggunaan untuk penilaian formal.
 
+## Selesai pada branch akun
+
+- [x] Firebase Auth email/password, registrasi, verifikasi email, dan pemulihan password.
+- [x] Login/registrasi Google, pilihan persistensi sesi, dan autentikasi ulang Google untuk hapus akun.
+- [x] Profil, perubahan email terverifikasi, perubahan password dengan autentikasi ulang.
+- [x] Logout, hapus akun berkonfirmasi, serta pemisahan progres browser per UID/tamu.
+- [x] Pengujian terhadap Auth Emulator, bukan penyimpanan password lokal.
+- [ ] Pengisian konfigurasi Firebase produksi, authorized domains, template email, dan pengujian produksi.
+
+Daftar baseline di bawah dipertahankan sebagai konteks; integrasi hasil belajar cloud dan panel guru dengan hasil nyata belum dikerjakan.
+
 ## Selesai pada demo lokal
 
 - [x] Beranda, tiga bagian materi, tujuan, refleksi, dan sumber.
@@ -37,7 +48,7 @@
 ## Pengembangan berikutnya, belum diimplementasikan
 
 - [ ] Uji pengguna bersama mahasiswa; validasi ketepatan kimia dan keselarasan instrumen.
-- [ ] Integrasi Google login + satu provider database, hanya jika masuk tahap berikutnya.
+- [ ] Integrasi database untuk progres akun serta aturan aksesnya.
 - [ ] Riwayat milik akun, aturan satu guru, antrean terikat akun, logout/pergantian akun, uji akses negatif.
 - [ ] Deployment dari repo dan pengujian URL produksi.
 - [ ] Migrasi versi data dan impor ekspor tervalidasi jika dibutuhkan.

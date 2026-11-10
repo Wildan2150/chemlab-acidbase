@@ -1,6 +1,6 @@
 # Asesmen akhir bab — Asam & Basa
 
-Branch `feat/chapter-assessment` dibuat langsung dari `feat/material-updates` commit `834ee59`. Seluruh 24 bagian bacaan tetap tersedia. Branch akun dan interaktif tidak digabungkan; `main` dan branch induk tidak diubah.
+Asesmen dikembangkan pada `feat/chapter-assessment` dari `feat/material-updates` commit `834ee59`, kemudian digabungkan ke `main` bersama fitur akun dan interaktif pada 10 November 2026 WIB. Seluruh 24 bagian bacaan tetap tersedia; hasil dan draf asesmen mengikuti penyimpanan per UID/tamu.
 
 ## Alur siswa
 

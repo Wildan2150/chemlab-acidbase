@@ -1,6 +1,6 @@
 # Aktivitas eksternal asam–basa
 
-Branch `feat/interactive-activities` berangkat dari `main` commit `30505f7`. Tidak menggabungkan branch materi atau akun.
+Aktivitas dikembangkan pada `feat/interactive-activities` dari `main` commit `30505f7`, kemudian digabungkan ke `main` bersama materi, asesmen, dan akun pada 10 November 2026 WIB. Catatan eksplorasi mengikuti penyimpanan progres per UID/tamu.
 
 | Lampiran F | Implementasi | Bukti belajar |
 | --- | --- | --- |

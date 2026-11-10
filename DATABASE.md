@@ -1,8 +1,16 @@
 # Kontrak data — mode tamu lokal
 
+## Integrasi pada main
+
+Materi, diagnostik, asesmen akhir bab, dan catatan eksplorasi memakai satu objek progres per identitas. Field `activityNotes` menyimpan prediksi, pengamatan, penjelasan, pilihan molekul, serta waktu pencatatan per aktivitas; data lama tanpa field ini dipulihkan sebagai catatan kosong. Ekspor menyertakan kedua fitur tambahan. Reset berkonfirmasi menimpa progres identitas aktif saja, sehingga catatan tamu dan akun lain tetap tersimpan.
+
 ## Tambahan asesmen akhir bab
 
 Progres memiliki field opsional `assessment: { draft, attempts }`. Draf mencatat UUID, versi asesmen, waktu, posisi, serta jawaban pilihan/angka. Hasil mencatat salinan instrumen dan domain, jawaban terkunci, skor, serta waktu selesai. Data lama tanpa field asesmen tetap valid. Pemulihan format asesmen dilakukan terpisah dari progres inti; riwayat yang valid dipertahankan jika ada entri rusak. Skor hasil lama diturunkan dari instrumen tersimpan, bukan bank aktif. Ekspor progres menyertakan asesmen; reset berkonfirmasi mengosongkannya. Kontrak lengkap: [CHAPTER_ASSESSMENT.md](docs/CHAPTER_ASSESSMENT.md).
+
+## Tambahan branch akun
+
+Firebase Auth mengelola identitas dan sesi, sedangkan kontrak progres di bawah tetap dipakai per browser. Tamu menggunakan `chemlab:guest:v1`; akun menggunakan `chemlab:user:<UID>:v1`. Memuat/menulis progres menerima key identitas aktif. State belajar di-remount saat UID berubah agar draf tidak tersalin ke akun lain. Logout kembali ke data tamu; penghapusan akun menghapus key milik UID yang dihapus pada browser itu saja. Profil/email/password dikelola SDK, bukan dimasukkan ke objek progres. Tidak ada database hasil cloud pada branch ini. Detail konfigurasi: [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
 
 Belum ada database cloud. Key `chemlab:guest:v1` menyimpan satu objek JSON untuk origin aplikasi. Reset menimpa key ini saja, tanpa `localStorage.clear()`.
 
