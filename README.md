@@ -4,6 +4,8 @@ Branch `feat/chapter-assessment` menambahkan **Asesmen akhir bab** dari baseline
 
 Branch `feat/material-updates` memperdalam tiga bacaan menjadi 24 bagian dengan contoh hitung, tabel, daftar isi, refleksi, dan sumber per bagian. Baca [peta materi dan sumber](docs/MATERIAL_SOURCES.md). Branch ini berdiri sendiri dari `main`; fitur interaktif eksternal dan akun dikerjakan pada branch lain.
 
+Branch `feat/interactive-activities` menambahkan halaman **Eksplorasi kimia**: PhET asam–basa, tiga model molekul 3Dmol, pencarian PubChem, dan catatan pengamatan yang ikut tersimpan/diekspor bersama progres. Lihat [pemetaan Lampiran F dan sumber](docs/INTERACTIVE_ACTIVITIES.md). Branch ini berdiri sendiri dari `main`.
+
 Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
 
 ## Jalankan

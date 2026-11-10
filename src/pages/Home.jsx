@@ -169,6 +169,14 @@ export default function Home({ progress, setPh }) {
             </span>
             <Icon name="up" size={18} />
           </a>
+          <a className="exploration-home-link" href="#eksplorasi">
+            <Icon name="atom" size={24} />
+            <span>
+              <strong>Bawa konsepmu lebih jauh.</strong>
+              <small>PhET, molekul 3D, dan data senyawa.</small>
+            </span>
+            <Icon name="up" size={19} />
+          </a>
         </section>
         <aside className="mini-lab">
           <div className="mini-lab-title">

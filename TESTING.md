@@ -8,6 +8,10 @@ Baseline `feat/material-updates` commit `834ee59`; tidak menggabungkan branch la
 
 `feat/material-updates` berangkat langsung dari `main` commit `30505f7`. Build produksi dan enam uji logika lulus. Delapan skenario browser baseline serta satu skenario tambahan untuk daftar isi, fokus heading, refleksi, tabel ponsel, referensi, dan pemulihan progres lulus. Referensi dan pemeriksaan hitung dijabarkan di [MATERIAL_SOURCES.md](docs/MATERIAL_SOURCES.md). Bagian berikut merupakan riwayat pemeriksaan baseline.
 
+## Verifikasi branch interaktif
+
+`feat/interactive-activities` berangkat langsung dari `main` commit `30505f7`. Build dan enam uji logika baseline lulus. Delapan skenario browser baseline serta empat skenario aktivitas memeriksa pemulihan/reset catatan, pemuatan sematan atas permintaan, pendampingan saat sumber diblokir, pemilihan CID, respons PubChem, 404, kegagalan jaringan, aksesibilitas, serta ponsel. Endpoint PhET, 3Dmol, dan PubChem juga mengembalikan HTTP 200 pada pemeriksaan langsung. Detail: [INTERACTIVE_ACTIVITIES.md](docs/INTERACTIVE_ACTIVITIES.md). Bagian di bawah merupakan riwayat baseline.
+
 Tanggal: **7 November 2026 WIB**. Lingkungan: Windows, Node.js 24.20.0, Microsoft Edge melalui Playwright. Seluruh pemeriksaan berikut dilakukan pada proyek lokal; tidak ada pengujian akun/cloud atau URL publik.
 
 ## Hasil aktual

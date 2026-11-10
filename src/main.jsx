@@ -4,6 +4,8 @@ import '@fontsource-variable/plus-jakarta-sans';
 import './styles.css';
 import './styles-reading.css';
 import './styles-assessment.css';
+
+import './styles-activities.css';
 import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(

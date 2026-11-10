@@ -31,3 +31,7 @@ Agent menyusun 15 soal baru yang dipetakan ke bacaan lengkap, penilaian pilihan/
 ## Pengembangan terpisah — feat/material-updates
 
 Berangkat dari `main` commit `30505f7`. Materi diperluas menjadi 24 bagian pada tiga ID bacaan yang sama; sumber penerbit ditelusuri melalui web dan dirujuk per bagian. Ditambahkan prasyarat, daftar isi, tabel, contoh hitung, ringkasan, serta refleksi. Tidak ada penggabungan fitur eksternal atau akun. Bank soal dan versi diagnostik dipertahankan. Build, enam uji logika, delapan skenario browser baseline, dan satu skenario bacaan mendalam lulus.
+
+## Pengembangan terpisah — feat/interactive-activities
+
+Berangkat dari `main` commit `30505f7`. Memilih F08 (PhET), F07 (3Dmol), dan F10 (PubChem) dari Lampiran F, dengan pendampingan yang terkait asam–basa. Sumber resmi dan dokumentasi API diperiksa; ketiga endpoint diperiksa langsung dan mengembalikan HTTP 200. Catatan siswa disimpan lokal bersama progres, tanpa mengklaim pembacaan isi iframe. Pengujian meliputi jaringan gagal/404, respons API, aksesibilitas, ponsel, draf, dan reset. Tidak ada perubahan materi mendalam atau login pada branch ini.
