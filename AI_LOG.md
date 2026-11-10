@@ -1,5 +1,19 @@
 # Log bantuan AI
 
+## 10 November 2026 WIB — perbaikan model 3D dan perluasan katalog CID
+
+**Arahan pengajar:** perbaiki model molekul yang kosong, periksa dokumentasi 3dmol.org terbaru, kemudian perluas daftar CID dan tambahkan pencarian.
+
+**Penyebab yang direproduksi:** HTML viewer publik mendapat HTTP 200, tetapi parser query menolak `backgroundcolor`, menghentikan JavaScript sebelum permintaan struktur dikirim. Dokumentasi API, URL viewer, dan GLViewer diperiksa ulang. Tautan tab baru diperbaiki; penampil utama memakai API lokal dari paket npm `3dmol` versi 2.5.5, dimuat dinamis dalam dokumen viewer tersendiri agar sumber daya grafis/event listener mengikuti umur dokumen.
+
+**Perubahan:** memuat SDF dengan `addModel`, mempertahankan hidrogen eksplisit, memeriksa CID/komposisi/koordinat, memberi gaya bola/batang Jmol, memusatkan kamera, dan melaporkan hasil render. Ditambahkan pesan berkas/WebGL gagal, deteksi kehilangan context, retry, serta kontrol rotasi/zoom/reset yang dapat dipakai dengan keyboard. Kamera menyesuaikan aspek layar agar molekul besar tetap masuk pada ponsel.
+
+**Katalog:** 36 senyawa dari empat kelompok, dengan pencarian nama Indonesia/Inggris, alias, rumus Unicode/ASCII, dan CID tepat. Hasil kosong/filter tidak mengganti pilihan atau menghapus catatan. Identitas dan komposisi dibandingkan dengan properti serta SDF 3D PubChem; URL, tanggal, jumlah atom/ikatan, dan SHA-256 disertakan. Kandidat hidrogen diatomik mendapat 404 untuk rekaman 3D sehingga tidak dimasukkan; tidak ada koordinat pengganti yang dibuat. Lisensi 3Dmol.js disertakan. Tidak ada perubahan versi/skor asesmen atau kebijakan Firebase.
+
+**Verifikasi:** 40 uji logika lulus, termasuk pencarian, pemulihan CID baru, dan integritas 36 berkas. Seluruh 25 skenario browser proyek `learning` lulus terhadap build produksi. Setelah perbaikan kamera ponsel, tujuh skenario molekul lulus; uji katalog sempat mencapai batas waktu, lalu pengujian khusus yang sama dijalankan terpisah dan lulus dalam 24 detik. Seluruh 36 model diperiksa dari piksel hasil render dengan host luar diblokir. Penyebab jeda pada run yang timeout belum dipastikan; tidak diklaim sebagai kegagalan render karena semua model juga tercatat siap pada trace. Build, pemeriksaan format/diff, dan smoke test hosting subfolder `/chem/` lulus. Pratinjau desktop/ponsel diperiksa. Auth/Firestore Emulator serta login produksi tidak dijalankan ulang untuk perubahan ini.
+
+**Batas:** katalog merupakan pilihan senyawa dengan rekaman 3D yang tersedia, bukan pencarian seluruh PubChem. Build masih memberi peringatan chunk besar dan `eval` dari kode upstream 3Dmol.js. Hasil rinci serta sumber ada pada `TESTING.md`, `docs/INTERACTIVE_ACTIVITIES.md`, dan `docs/MOLECULE_CATALOGUE.md`.
+
 ## 10 November 2026 WIB — panel guru untuk email yang ditetapkan
 
 **Arahan pengajar:** selesaikan panel guru dan tetapkan hanya akun ber-email `wildannashihin@gmail.com` sebagai guru.

@@ -1,5 +1,12 @@
 # Backlog dan keputusan lanjutan
 
+## Model molekul dan katalog CID
+
+- [x] Memperbaiki struktur kosong akibat parameter URL viewer publik yang tidak didukung.
+- [x] 3Dmol.js lokal dengan model SDF 3D PubChem, status render, pesan WebGL/berkas gagal, serta kontrol keyboard.
+- [x] 36 molekul dalam empat kelompok; pencarian nama Indonesia/Inggris, rumus, alias, dan CID.
+- [x] Sumber dan integritas berkas terdokumentasi; pilihan CID tetap kompatibel dengan catatan/progres.
+
 ## Penyimpanan Firestore
 
 - [x] Progres akun pada `learningProgress/{UID}` dengan pemulihan lintas perangkat dan antrean lokal.

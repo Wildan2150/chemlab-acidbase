@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model 3D molekul · ChemLab</title>
+    <style>
+      html,
+      body,
+      main,
+      #molecule {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        overflow: hidden;
+        background: #f8f9f6;
+      }
+      #molecule {
+        position: relative;
+      }
+      #message {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        margin: 0;
+        padding: 24px;
+        color: #39512d;
+        font: 14px/1.8 sans-serif;
+        text-align: center;
+      }
+      #message[hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Struktur molekul">
+      <div id="molecule" role="img" aria-label="Struktur molekul sedang dimuat"></div>
+      <p id="message" role="status">Memuat struktur molekul…</p>
+    </main>
+    <script type="module" src="/src/molecule-viewer.js"></script>
+  </body>
+</html>

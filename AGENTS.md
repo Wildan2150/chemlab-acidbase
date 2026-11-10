@@ -2,7 +2,8 @@
 
 - Ini demo React + Vite berbahasa Indonesia untuk topik asam–basa/pH.
 - Main menggabungkan materi, asesmen, aktivitas interaktif, Firebase Auth, Firestore, serta panel guru dengan progres siswa nyata sesuai arahan pengajar. Pisahkan asesmen akhir bab dari diagnostik. Progres akun disinkronkan per UID; tamu tetap lokal.
-- Simpan data di `src/data/`: metadata dan diagnostik di `chemData.js`, bacaan di `readingContent.js`, instrumen asesmen di `chapterAssessment.js`, serta aktivitas di `activities.js`. Pisahkan perhitungan dan penyimpanan dari komponen tampilan.
+- Simpan data di `src/data/`: metadata dan diagnostik di `chemData.js`, bacaan di `readingContent.js`, instrumen asesmen di `chapterAssessment.js`, aktivitas di `activities.js`, dan katalog model 3D di `molecules.js`. Pisahkan perhitungan dan penyimpanan dari komponen tampilan.
+- Katalog molekul memakai rekaman SDF 3D PubChem lokal dengan manifest sumber/checksum pada `public/molecules/sources.json`. Periksa identitas/komposisi sebelum menambah CID; jangan menggantikan rekaman 3D yang tidak tersedia dengan koordinat buatan atau data 2D. Uji viewer perlu memeriksa struktur yang benar-benar tergambar, bukan hanya HTTP 200 atau keberadaan iframe.
 - Jangan mengubah dokumen mata kuliah di luar `ProyekContoh` untuk perubahan demo.
 - Jangan menyebut login/cloud berhasil tanpa integrasi dan bukti aktual. Panel guru membaca data akun yang tersinkron; jangan memasukkan siswa/hasil fiktif ke panel produksi.
 - Guru ditetapkan hanya untuk email terverifikasi `wildannashihin@gmail.com`. Pemeriksaan UI harus didampingi Firestore Rules dari token Auth; nama tampilan, profil client, dan localStorage tidak boleh memberi hak guru. Hak guru hanya membaca profil/progres siswa, tanpa menulis hasil akun lain.

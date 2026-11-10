@@ -30,12 +30,12 @@ export const activities = [
     title: 'Kenali struktur molekul',
     icon: 'atom',
     description:
-      'Putar model air, amonia, dan asam asetat; hubungkan struktur dengan perilaku proton.',
+      'Cari dan putar model molekul; bandingkan struktur asam, senyawa nitrogen, alkohol, dan gas.',
     goal: 'Menghubungkan rumus, gugus fungsi, dan model ruang tanpa menyimpulkan pH dari bentuk saja.',
     prediction:
       'Bagian mana dari struktur yang dapat menerima atau mendonorkan proton? Pilih satu molekul dan jelaskan dugaanmu.',
     instructions: [
-      'Pilih air, amonia, atau asam asetat. Cocokkan nama dan CID dengan sumber PubChem.',
+      'Cari berdasarkan nama, rumus, atau CID, lalu pilih molekul. Cocokkan identitasnya dengan sumber PubChem.',
       'Seret untuk memutar model; gunakan roda mouse atau cubit dua jari untuk memperbesar.',
       'Bandingkan rumus molekul dengan struktur ringkas dan legenda warna. Rotasi hanya mengubah sudut pandang.',
     ],
@@ -43,7 +43,7 @@ export const activities = [
       'Air: H–O–H, bentuk bengkok, dua H dan satu O. Amonia: NH₃, bentuk piramida trigonal, pasangan elektron bebas N dapat menerima proton. Asam asetat: CH₃–C(=O)–OH, proton gugus karboksil dapat dilepas dalam reaksi asam–basa. Struktur tidak memberikan satu pH tanpa konsentrasi dan kondisi larutan.',
     explanation:
       'Hubungkan struktur yang diamati dengan peran donor/akseptor proton. Mengapa pH tidak dapat ditentukan dari gambar molekul saja?',
-    source: 'https://3dmol.org/doc/tutorial-url.html',
+    source: 'https://3dmol.org/doc/tutorial-code.html',
     attribution: 'Viewer 3Dmol.js; identitas dan model molekul dari PubChem, NCBI.',
   },
   {
@@ -68,26 +68,4 @@ export const activities = [
     attribution: 'Data senyawa: PubChem, National Center for Biotechnology Information (NCBI).',
   },
 ];
-export const molecules = [
-  {
-    cid: 962,
-    name: 'Air',
-    formula: 'H₂O',
-    structure: 'H–O–H',
-    meaning: 'Dua H dan satu O; molekul dapat berperan sebagai donor maupun akseptor proton.',
-  },
-  {
-    cid: 222,
-    name: 'Amonia',
-    formula: 'NH₃',
-    structure: 'NH₃',
-    meaning: 'Tiga H dan satu N; pasangan elektron bebas N berkaitan dengan penerimaan proton.',
-  },
-  {
-    cid: 176,
-    name: 'Asam asetat',
-    formula: 'C₂H₄O₂',
-    structure: 'CH₃–C(=O)–OH',
-    meaning: 'Dua C, empat H, dan dua O; amati gugus karboksil, bukan hanya keberadaan OH.',
-  },
-];
+export { molecules } from './molecules.js';

@@ -3,6 +3,8 @@ import { activities, molecules } from '../data/activities.js';
 import { Icon } from '../components/Visuals.jsx';
 import ExternalResource from '../components/ExternalResource.jsx';
 import CompoundSearch from '../components/CompoundSearch.jsx';
+import MoleculeViewer from '../components/MoleculeViewer.jsx';
+import MoleculeChooser from '../components/MoleculeChooser.jsx';
 
 export default function Exploration({ activityId, progress, updateActivity, storageOk }) {
   const activity = activities.find((a) => a.id === activityId) || activities[0];
@@ -52,22 +54,13 @@ export default function Exploration({ activityId, progress, updateActivity, stor
         <div className="activity-content">
           {activity.id === 'molecules' && (
             <section className="surface molecule-choice">
-              <label htmlFor="molecule-cid">Molekul yang diamati</label>
-              <select
-                id="molecule-cid"
-                value={cid}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
+              <MoleculeChooser
+                cid={cid}
+                onChange={(value) => {
                   setCid(value);
                   saveField('cid', value);
                 }}
-              >
-                {molecules.map((m) => (
-                  <option key={m.cid} value={m.cid}>
-                    {m.name} · CID {m.cid}
-                  </option>
-                ))}
-              </select>
+              />
               <div className="molecule-identity">
                 <strong>{molecule.formula}</strong>
                 <span>{molecule.structure}</span>
@@ -83,25 +76,25 @@ export default function Exploration({ activityId, progress, updateActivity, stor
                 </a>
               </div>
               <p className="caption">
-                Model stick: karbon abu-abu, hidrogen putih, oksigen merah, nitrogen biru. Model
-                statis; rotasi kamera tidak mengubah sudut ikatan.
+                Model bola dan batang: karbon abu-abu, hidrogen putih, oksigen merah, nitrogen biru,
+                sulfur kuning, fosfor jingga, klor hijau. Rotasi kamera tidak mengubah sudut ikatan.
+                Model menunjukkan satu molekul, bukan seluruh spesies dalam larutan.
               </p>
             </section>
           )}
           {activity.id === 'pubchem' ? (
             <CompoundSearch />
+          ) : activity.id === 'molecules' ? (
+            <MoleculeViewer
+              molecule={molecule}
+              source={activity.source}
+              attribution={activity.attribution}
+            />
           ) : (
             <ExternalResource
               key={activity.id}
-              title={
-                activity.id === 'phet'
-                  ? 'PhET · Acid-Base Solutions'
-                  : `Model 3D · ${molecule.name}`
-              }
-              src={
-                activity.embed ||
-                `https://3dmol.org/viewer.html?cid=${cid}&style=stick&backgroundcolor=0xf8f9f6`
-              }
+              title="PhET · Acid-Base Solutions"
+              src={activity.embed}
               source={activity.source}
               attribution={activity.attribution}
               license={activity.license}

@@ -6,7 +6,7 @@
 
 **Asesmen akhir bab** menyediakan 15 soal (9 pilihan ganda dan 6 jawaban angka), draf tersimpan, tinjauan/konfirmasi pengumpulan, hasil per cakupan, pembahasan, riwayat, serta ekspor. Baca [kisi-kisi dan kontrak asesmen](docs/CHAPTER_ASSESSMENT.md). Buka `/#asesmen` melalui menu atau akhir bacaan ketiga.
 
-**Eksplorasi kimia** mencakup PhET asam–basa, tiga model molekul 3Dmol, pencarian PubChem, dan catatan pengamatan yang ikut tersimpan/diekspor bersama progres. Lihat [pemetaan Lampiran F dan sumber](docs/INTERACTIVE_ACTIVITIES.md).
+**Eksplorasi kimia** mencakup PhET asam–basa, 36 model molekul 3Dmol dengan pencarian nama/rumus/CID dan filter kelompok, pencarian properti PubChem, serta catatan pengamatan yang ikut tersimpan/diekspor bersama progres. Pustaka dan rekaman struktur 3D dipaketkan lokal; model dimuat saat dibuka. Lihat [pemetaan Lampiran F dan sumber](docs/INTERACTIVE_ACTIVITIES.md) serta [katalog CID](docs/MOLECULE_CATALOGUE.md).
 
 **Firebase Auth** menyediakan masuk/daftar dengan email atau Google, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Seluruh progres belajar, termasuk asesmen dan catatan eksplorasi, dipisahkan per akun/tamu di browser. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
 

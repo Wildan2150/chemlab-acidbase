@@ -1,5 +1,19 @@
 # Hasil pengujian demo
 
+## 10 November 2026 WIB — model 3D dan pencarian 36 CID
+
+- Kegagalan awal direproduksi di Edge: iframe mendapat HTTP 200, tetapi query `backgroundcolor` memicu error dan tidak ada permintaan struktur. Dokumentasi resmi 3Dmol.js diperiksa; viewer aplikasi kini memakai API lokal 2.5.5 dan SDF 3D PubChem.
+- `npm.cmd test`: **40 lulus**, 0 gagal. Empat uji katalog memeriksa nama/alias/rumus/CID, filter dan hasil kosong, pemulihan pilihan baru, serta manifest/checksum, CID, komposisi, koordinat, dan indeks ikatan seluruh berkas.
+- Proyek browser `learning` dijalankan pada **build produksi melalui Vite preview**: **25 lulus**, 0 gagal dalam 1,9 menit. Konfigurasi sementara di `.firebase/molecule-playwright.config.mjs` hanya memakai proyek learning dan melewati startup Auth/Firestore Emulator yang tidak diperlukan pada perubahan ini. Perintah: `$env:MOLECULE_TEST_BASE_URL='http://127.0.0.1:5176'; npx.cmd playwright test --config .firebase/molecule-playwright.config.mjs --project learning`.
+- Setelah kamera disesuaikan untuk layar sempit, **tujuh skenario molekul lulus**. Uji perpindahan seluruh katalog sempat mencapai timeout; trace menunjukkan seluruh pilihan telah dilaporkan siap, tetapi jeda panjang pada run tersebut belum dipastikan penyebabnya. Uji katalog yang sama dijalankan ulang dengan satu worker, tanpa perubahan timeout, dan **lulus dalam 24 detik**. Delapan skenario molekul pada kode akhir dengan demikian semuanya telah lulus, dalam dua run tersebut.
+- Seluruh **36 struktur benar-benar menggambar piksel atom**, termasuk warna oksigen/nitrogen pada tiga molekul awal, saat host 3dmol.org, PubChem, jQuery, dan CDN diblokir. Pengujian tidak mengganti pustaka WebGL atau struktur dengan mock. Rotasi keyboard/drag, zoom, reset, pergantian CID saat permintaan tertunda, reload, berkas 404/rusak, WebGL tidak tersedia, kehilangan context grafis, serta pemulihan tanpa menghapus catatan diperiksa.
+- Pencarian `ethanol`, `H₂O₂`, `CID: 311`, dan `aspirin`, filter kelompok, hasil kosong, dan pemulihan CID baru setelah reload lulus. CID `176` dicocokkan tepat, bukan sebagai substring dari `1176`.
+- Lebar **320, 390, 768, dan 1440 piksel** tidak melampaui lebar halaman. Piksel struktur asam sitrat tidak menyentuh tepi canvas pada semua lebar tersebut. axe WCAG 2 A/AA dan 2.1 AA tidak menemukan pelanggaran pada penampil yang dibuka. Pratinjau diperiksa secara visual.
+- `npm.cmd run build`: **lulus**. Chunk 3Dmol.js terpisah **164,02 KB gzip**, dimuat ketika viewer dibuka; main **295,68 KB gzip**, CSS **20,76 KB gzip**. Peringatan chunk >500 KB dan pemakaian `eval` pada distribusi upstream 3Dmol.js tetap ada. Format dan `git diff --check` lulus.
+- Smoke test build di subfolder `/chem/` berhasil memuat aplikasi, dokumen viewer, pustaka, dan struktur asam asetat tanpa error JavaScript. Server pengembangan utama tetap tersedia pada port 5173.
+
+Bukti: [katalog CID](docs/MOLECULE_CATALOGUE.md), [manifest sumber](public/molecules/sources.json), [pratinjau desktop](docs/preview-molecule.png), dan [pratinjau ponsel](docs/preview-molecule-mobile.png). Pemeriksaan memakai Edge desktop/headless dengan viewport ponsel; Safari/Firefox dan ponsel fisik tidak diuji. Tidak ada perubahan Rules atau pengujian ulang akun/penyimpanan produksi pada tahap ini.
+
 ## 10 November 2026 WIB — panel guru dengan akses terbatas
 
 - `npm.cmd test`: **36 lulus**, 0 gagal. Delapan uji baru memeriksa email guru terverifikasi, pengecualian guru/akun terhapus, data rusak, diagnostik pertama/asesmen terbaru, denominator dan skor nol, pencarian/filter, snapshot ekspor, serta formula CSV.
