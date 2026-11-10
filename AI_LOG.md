@@ -1,5 +1,11 @@
 # Log bantuan AI
 
+## 9 November 2026 WIB — feat/chapter-assessment
+
+Arahan pengajar: menambahkan branch asesmen akhir bab dengan baseline `feat/material-updates`. Branch dibuat dari `834ee59`, tanpa mengambil fitur akun/interaktif atau mengubah induk.
+
+Agent menyusun 15 soal baru yang dipetakan ke bacaan lengkap, penilaian pilihan/angka dengan toleransi, penguncian sebelum pembahasan, UUID/versi serta snapshot instrumen, riwayat/ekspor, dan pemulihan kompatibel data lama. Enam acuan numerik diperiksa secara independen. Build, 15 uji logika, dan 13 skenario browser lulus. Validasi formal isi dan penggunaan untuk nilai tetap memerlukan peninjauan pengajar. Rincian ada di `docs/CHAPTER_ASSESSMENT.md`.
+
 ## 7 November 2026 WIB — pembuatan demo
 
 **Permintaan:** membuat web demo kuliah di `ProyekContoh` dan meminta beberapa keputusan pengajar.
@@ -21,3 +27,7 @@
 **Perubahan:** menghapus badge demo, banner demonstrasi, dan narasi perkuliahan/implementasi dari antarmuka. Panduan menjelaskan cara belajar; footer, deskripsi halaman, referensi, serta tombol memakai bahasa produk. Panel guru memakai nama/kode siswa netral dan menyebut asal data latihan fiktif satu kali pada keterangan sumber. Konteks pengembangan tetap tersedia dalam dokumentasi proyek.
 
 **Pemeriksaan:** selector uji yang mengikuti nama tombol diperbarui; pemeriksaan halaman dan panduan pada skenario browser memastikan label/narasi demo tidak tampil. Hasil akhir dicatat di `TESTING.md`.
+
+## Pengembangan terpisah — feat/material-updates
+
+Berangkat dari `main` commit `30505f7`. Materi diperluas menjadi 24 bagian pada tiga ID bacaan yang sama; sumber penerbit ditelusuri melalui web dan dirujuk per bagian. Ditambahkan prasyarat, daftar isi, tabel, contoh hitung, ringkasan, serta refleksi. Tidak ada penggabungan fitur eksternal atau akun. Bank soal dan versi diagnostik dipertahankan. Build, enam uji logika, delapan skenario browser baseline, dan satu skenario bacaan mendalam lulus.

@@ -1,5 +1,13 @@
 # Backlog dan keputusan lanjutan
 
+## Selesai pada feat/chapter-assessment
+
+- [x] Branch turunan `feat/material-updates` dengan bacaan lengkap tetap tersedia.
+- [x] 15 soal akhir bab, skor per cakupan, dan pembahasan setelah konfirmasi pengumpulan.
+- [x] Draf lokal, riwayat terpisah dari diagnostik, snapshot instrumen per hasil, serta ekspor/reset.
+- [x] Uji hitungan, toleransi angka, migrasi data, alur browser, aksesibilitas, dan ponsel.
+- [ ] Peninjauan pengajar terhadap kisi-kisi, bobot, tingkat kesulitan, dan penggunaan untuk penilaian formal.
+
 ## Selesai pada demo lokal
 
 - [x] Beranda, tiga bagian materi, tujuan, refleksi, dan sumber.
