@@ -6,6 +6,10 @@ import SyncStatus from './components/SyncStatus.jsx';
 import { makeAttempt } from './lib/chemistry.js';
 import { Icon } from './components/Visuals.jsx';
 import Dialog from './components/Dialog.jsx';
+import OnboardingTour from './components/OnboardingTour.jsx';
+import ContextualHint from './components/ContextualHint.jsx';
+import { ContextualHelpProvider, useContextualHelp } from './contexts/ContextualHelpContext.jsx';
+import { dismissOnboarding, hasSeenOnboarding, restartOnboarding } from './lib/onboarding.js';
 import Home from './pages/Home.jsx';
 import Materials from './pages/Materials.jsx';
 import Laboratory from './pages/Laboratory.jsx';
@@ -35,7 +39,9 @@ const getRoute = () =>
 export default function App() {
   return (
     <AuthProvider>
-      <AccountSession />
+      <ContextualHelpProvider>
+        <AccountSession />
+      </ContextualHelpProvider>
     </AuthProvider>
   );
 }
@@ -51,6 +57,7 @@ function AccountSession() {
   return <LearningApp key={user?.uid || 'guest'} />;
 }
 function LearningApp() {
+  const help = useContextualHelp();
   const { user, error: authError, profileError, isTeacher } = useAuth();
   const {
     progress,
@@ -67,6 +74,10 @@ function LearningApp() {
   const [dialog, setDialog] = useState(null);
   const [query, setQuery] = useState('');
   const [announcement, setAnnouncement] = useState('');
+  const [onboardingPending, setOnboardingPending] = useState(() => !hasSeenOnboarding());
+  const [tourRequested, setTourRequested] = useState(false);
+  const tourButtonRef = useRef(null);
+  const searchInputRef = useRef(null);
   const mainRef = useRef(null);
   const firstRender = useRef(true);
   const page = route.split('/')[0].split('?')[0];
@@ -88,6 +99,19 @@ function LearningApp() {
     current?.label ||
     accountLabels[page] ||
     (page === 'guru' ? 'Panel guru' : 'Halaman tidak ditemukan');
+  const showOnboarding =
+    (tourRequested || (onboardingPending && !!current)) && !loadingProgress && !dialog;
+
+  function openTour() {
+    setMenuOpen(false);
+    setDialog(null);
+    setTourRequested(true);
+  }
+  function closeTour(outcome) {
+    dismissOnboarding(outcome);
+    setOnboardingPending(false);
+    setTourRequested(false);
+  }
 
   useEffect(() => {
     const onHash = () => {
@@ -109,6 +133,10 @@ function LearningApp() {
   }, [route, pageLabel]);
   useEffect(() => {
     const onKey = (e) => {
+      if (document.querySelector('dialog[open]')) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') e.preventDefault();
+        return;
+      }
       const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
       if (
         ((e.ctrlKey || e.metaKey) && e.key === 'k') ||
@@ -215,6 +243,20 @@ function LearningApp() {
     },
   ].filter((r) => `${r.title} ${r.description}`.toLowerCase().includes(query.toLowerCase().trim()));
 
+  useEffect(() => {
+    if (dialog !== 'search') return;
+    if (results.length) {
+      help.resolve('search');
+      return;
+    }
+    const term = query.trim().toLowerCase();
+    if (term.length < 3) return;
+    const timer = setTimeout(() => {
+      if (document.visibilityState === 'visible') help.signal('search', term);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [dialog, query, results.length, help.signal, help.resolve]);
+
   return (
     <div className="app-shell">
       <a
@@ -254,7 +296,12 @@ function LearningApp() {
         <div className="sidebar-label">RUANG BELAJAR</div>
         <nav aria-label="Navigasi utama">
           {navigation.map((n) => (
-            <a key={n.id} href={`#${n.id}`} aria-current={page === n.id ? 'page' : undefined}>
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              data-tour={n.id}
+              aria-current={page === n.id ? 'page' : undefined}
+            >
               <Icon name={n.icon} size={20} />
               <span>{n.label}</span>
               {n.id === 'materi' && <small>01</small>}
@@ -288,7 +335,7 @@ function LearningApp() {
               <br />
               untuk mulai belajar.
             </p>
-            <button onClick={() => setDialog('help')}>
+            <button onClick={openTour}>
               Kenali ruang belajarmu
               <Icon name="up" size={16} />
             </button>
@@ -343,6 +390,15 @@ function LearningApp() {
             <kbd>/</kbd>
           </button>
           <span className="topbar-divider" />
+          <button
+            className="topbar-tour"
+            ref={tourButtonRef}
+            onClick={openTour}
+            aria-label="Tur fitur"
+          >
+            <Icon name="help" size={19} />
+            <span>Tur fitur</span>
+          </button>
           <span className="topbar-tag">
             <span className="tiny-dot" />
             Asam & basa
@@ -416,6 +472,7 @@ function LearningApp() {
             />
           ) : page === 'eksplorasi' ? (
             <Exploration
+              onboardingReady={!showOnboarding && !dialog && !menuOpen}
               key={lessonId || 'phet'}
               activityId={lessonId}
               progress={progress}
@@ -471,12 +528,21 @@ function LearningApp() {
       <div className="sr-only" role="status">
         {announcement}
       </div>
+      {showOnboarding && (
+        <OnboardingTour
+          onDismiss={closeTour}
+          returnFocusRef={tourButtonRef}
+          signedIn={!!user}
+          storageOk={storageOk}
+        />
+      )}
       {dialog === 'search' && (
         <Dialog title="Temukan konsep" onClose={() => setDialog(null)}>
           <label className="search-field dialog-search">
             <Icon name="search" size={19} />
             <input
               autoFocus
+              ref={searchInputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Coba: pH, konsentrasi, netralisasi…"
@@ -503,6 +569,14 @@ function LearningApp() {
               </p>
             )}
           </div>
+          <ContextualHint
+            topic="search"
+            onAction={() => {
+              setQuery('pH');
+              searchInputRef.current?.focus();
+            }}
+            onReturnFocus={() => searchInputRef.current?.focus()}
+          />
           <p className="caption">Tekan Esc untuk kembali belajar.</p>
         </Dialog>
       )}
@@ -554,6 +628,36 @@ function LearningApp() {
             Siap bereksplorasi
             <Icon name="arrow" size={17} />
           </button>
+          <button
+            className="button outline full-width replay-tour"
+            onClick={() => {
+              help.restart();
+              restartOnboarding();
+              setOnboardingPending(true);
+              openTour();
+            }}
+          >
+            <Icon name="reset" size={17} />
+            Ulangi semua petunjuk
+          </button>
+          <p className="caption">
+            Mengulang tur dan petunjuk setiap aktivitas serta mengaktifkan kembali bantuan otomatis.
+            Progres belajar tetap tersimpan.
+          </p>
+          <label className="contextual-help-setting">
+            <input
+              type="checkbox"
+              checked={help.enabled}
+              onChange={(event) => help.setEnabled(event.target.checked)}
+            />
+            <span>
+              <strong>Bantuan otomatis saat menemui kendala</strong>
+              <small>
+                Saran singkat saat mulai memakai fitur atau setelah kendala berulang. Preferensi
+                berlaku di browser ini.
+              </small>
+            </span>
+          </label>
         </Dialog>
       )}
       {dialog === 'reset' && (

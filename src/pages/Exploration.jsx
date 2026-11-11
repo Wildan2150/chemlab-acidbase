@@ -1,16 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { activities, molecules } from '../data/activities.js';
 import { Icon } from '../components/Visuals.jsx';
 import ExternalResource from '../components/ExternalResource.jsx';
 import CompoundSearch from '../components/CompoundSearch.jsx';
 import MoleculeViewer from '../components/MoleculeViewer.jsx';
 import MoleculeChooser from '../components/MoleculeChooser.jsx';
+import ContextualHint from '../components/ContextualHint.jsx';
+import { useContextualHelp } from '../contexts/ContextualHelpContext.jsx';
 
-export default function Exploration({ activityId, progress, updateActivity, storageOk }) {
+export default function Exploration({
+  activityId,
+  progress,
+  updateActivity,
+  storageOk,
+  onboardingReady,
+}) {
+  const help = useContextualHelp();
+  const helpButtonRef = useRef(null);
+  const fallbackRef = useRef(null);
   const activity = activities.find((a) => a.id === activityId) || activities[0];
   const notes = progress.activityNotes?.[activity.id] || {};
   const [cid, setCid] = useState(notes.cid || 176);
   const molecule = molecules.find((m) => m.cid === cid) || molecules[2];
+  const helpTopic =
+    activity.id === 'phet'
+      ? 'phet-start'
+      : activity.id === 'molecules'
+        ? 'molecule-start'
+        : 'pubchem-start';
+  useEffect(() => {
+    if (onboardingReady) help.signal(helpTopic, undefined, { entry: true });
+  }, [onboardingReady, helpTopic, help.signal]);
   function saveField(field, value) {
     updateActivity(activity.id, {
       [field]: value,
@@ -32,6 +52,7 @@ export default function Exploration({ activityId, progress, updateActivity, stor
           <a
             key={a.id}
             href={`#eksplorasi/${a.id}`}
+            data-help={`exploration-${a.id}`}
             aria-current={activity.id === a.id ? 'page' : undefined}
           >
             <Icon name={a.icon} size={21} />
@@ -49,9 +70,40 @@ export default function Exploration({ activityId, progress, updateActivity, stor
             <li key={step}>{step}</li>
           ))}
         </ol>
+        <button className="button outline" ref={helpButtonRef} onClick={() => help.show(helpTopic)}>
+          <Icon name="help" size={18} />
+          Petunjuk fitur ini
+        </button>
       </section>
       <div className="exploration-layout">
         <div className="activity-content">
+          {onboardingReady && (
+            <ContextualHint
+              topic={helpTopic}
+              onAction={
+                activity.id === 'pubchem'
+                  ? () => document.getElementById('compound-query')?.focus()
+                  : () => document.getElementById('prediction')?.focus()
+              }
+              onReturnFocus={() => helpButtonRef.current?.focus()}
+            />
+          )}
+          {onboardingReady && activity.id === 'pubchem' && (
+            <ContextualHint
+              topic="pubchem-search"
+              onReturnFocus={() => document.getElementById('compound-query')?.focus()}
+            />
+          )}
+          {onboardingReady && activity.id === 'phet' && (
+            <ContextualHint
+              topic="phet-retry"
+              onAction={() => {
+                fallbackRef.current.open = true;
+                fallbackRef.current.focus();
+              }}
+              onReturnFocus={() => helpButtonRef.current?.focus()}
+            />
+          )}
           {activity.id === 'molecules' && (
             <section className="surface molecule-choice">
               <MoleculeChooser
@@ -100,7 +152,7 @@ export default function Exploration({ activityId, progress, updateActivity, stor
               license={activity.license}
             />
           )}
-          <details className="activity-fallback" open>
+          <details className="activity-fallback" ref={fallbackRef} tabIndex={-1} open>
             <summary>Bacaan pendamping</summary>
             <p>{activity.fallback}</p>
             <a

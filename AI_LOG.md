@@ -1,5 +1,35 @@
 # Log bantuan AI
 
+## 12 November 2026 WIB — petunjuk otomatis pada kunjungan Eksplorasi
+
+**Laporan pengajar:** membuka tab Eksplorasi untuk pertama kali belum memunculkan petunjuk. Pengajar mengasumsikan hard refresh dan clear cache membuat kunjungan dianggap baru.
+
+**Temuan:** pemicu sebelumnya menunggu klik Buka aktivitas, bukan kunjungan halaman. Jeda 60 detik/kuota saran kendala juga menahan pengenalan aktivitas berikutnya. Status sudah dilihat berada di localStorage, yang tetap ada ketika hanya cache HTTP dibersihkan atau halaman dimuat ulang.
+
+**Perbaikan:** kunjungan pertama ke tiap tab PhET, molekul, dan PubChem memicu petunjuk sebelum iframe dimuat. Pengenalan pertama menghormati pilihan nonaktif tetapi tidak memakai jeda/kuota bantuan kendala. App menunda pemicu selama tur/panduan/menu terbuka; target awal adalah tab aktif yang dapat dibawa ke viewport tanpa memindahkan fokus. Perpindahan rute menutup saran lama. Tombol Panduan belajar → Ulangi semua petunjuk mereset hanya status tur/bantuan dan mengaktifkan bantuan kembali, tanpa menghapus draf, catatan, akun, atau preferensi lain.
+
+**Dokumentasi:** PRD, alur pengguna, desain teknis, backlog, README, dan kontrak onboarding diperbarui dengan aturan kunjungan, pengulangan, serta perbedaan cache dan penyimpanan situs. Dokumen di luar ProyekContoh tidak diubah. Pemeriksaan aktual dicatat pada pembaruan terbaru TESTING.md.
+
+**Hasil koreksi:** build produksi, 43 uji logika, dan 19 skenario browser terkait pada kode akhir lulus. Uji CDP membuktikan penghapusan cache HTTP/hard reload tidak menghapus status petunjuk atau jawaban; pengulangan petunjuk melalui UI tetap mempertahankan progres serta kunci browser lain. Pratinjau pengenalan otomatis pada ponsel diperiksa. Run belajar awal melewati 43 dari 44 skenario; satu kegagalan berasal dari fixture yang otomatis melewati sambutan, lalu diperbaiki khusus skenario pengulangan sebelum run ulang terkait.
+
+## 11–12 November 2026 WIB — tur fitur dan bantuan kontekstual
+
+**Arahan pengajar:** tambahkan popup pengenalan pada kunjungan pertama; perbarui dokumen pengarah di ProyekContoh tanpa mengubah handout maupun panduan pembelajaran. Perluas menjadi contextual/behavior-triggered onboarding, termasuk simulasi pada Eksplorasi. Referensi gambar dari pengajar memperjelas pola coachmark yang menunjuk antarmuka nyata.
+
+**Implementasi:** sambutan dan tur tujuh langkah dengan sorotan menu, balon petunjuk, latar redup, Kembali/Lanjut/Lewati, Escape, penyimpanan status, serta buka ulang. Tur mempertahankan rute dan progres; alur akun/guru menundanya. Target menu ponsel ditampilkan selama diperlukan; posisi/tinggi balon mengikuti target, scroll, dan viewport. Native dialog memakai ID unik, fokus judul, pembatasan Tab/Shift+Tab, serta pengembalian fokus.
+
+**Bantuan kontekstual:** aturan murni dan provider terpisah mengamati pencarian tanpa hasil, pengumpulan jawaban belum lengkap, penggunaan pertama PhET/molekul, muat ulang simulasi, serta kegagalan PubChem. Petunjuk PhET/molekul menggunakan native popover nonmodal dengan panah pada kontrol; kendala formulir memakai saran di area kerja. Ada penutupan, pilihan nonaktifkan, pengaturan di Panduan belajar, dan petunjuk manual tiap aktivitas. Jeda 60 detik, maksimal tiga saran per sesi, dan satu topik per sesi membatasi gangguan. Tidak ada analitik atau pembacaan isi iframe; durasi membaca tidak dipakai sebagai diagnosis kebingungan.
+
+**Penyimpanan:** status tur dan preferensi bantuan memakai kunci UI tersendiri, terpisah dari UID/progres/Firestore/ekspor/reset. Kegagalan storage tetap membolehkan belajar dan mempertahankan pilihan sampai reload. Sumber soal, versi instrumen, dan Rules tidak diubah.
+
+**Dokumen:** PRD, USER_FLOW, DESAIN_TEKNIS, BACKLOG, README, AGENTS, dan kontrak/rasionalisasi baru `docs/ONBOARDING.md` diperbarui. Semua perubahan berada di ProyekContoh.
+
+**Verifikasi dan koreksi:** uji awal menemukan celah perpindahan Tab/shortcut dialog, visibilitas navigasi ponsel, dan target saran muat ulang yang sudah berada di luar layar; ketiganya diperbaiki. Skenario regresi menggunakan preferensi pengguna lama yang menonaktifkan saran, agar pemeriksaan piksel model mengukur struktur; skenario onboarding memakai konteks baru dan skenario bantuan mengaktifkan saran yang sebenarnya. Build produksi dan 43 uji logika lulus. Hasil browser, ukuran bundle, batas pengujian, serta pratinjau aktual dicatat di `TESTING.md`.
+
+Konteks browser tambahan pada uji dua perangkat/guru juga disiapkan sebagai pengguna lama setelah trace memperlihatkan tur pertama menahan klik otomatis. Tidak ada pelonggaran timeout atau perubahan perilaku sinkronisasi untuk melewatkan pengujian.
+
+**Hasil akhir:** 43 uji logika lulus, 39 skenario browser pembelajaran lulus, dan 14 skenario Auth/Firestore/panel guru lulus pada run ulang setelah perbaikan fixture. Build produksi, format, dan pemeriksaan diff lulus. Pratinjau serta batas verifikasi tersedia di `TESTING.md`; handout dan panduan pembelajaran tidak diubah.
+
 ## 10 November 2026 WIB — perbaikan model 3D dan perluasan katalog CID
 
 **Arahan pengajar:** perbaiki model molekul yang kosong, periksa dokumentasi 3dmol.org terbaru, kemudian perluas daftar CID dan tambahkan pencarian.

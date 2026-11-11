@@ -1,5 +1,17 @@
 # Backlog dan keputusan lanjutan
 
+## Onboarding dan bantuan kontekstual
+
+- [x] Sambutan pertama serta tur tujuh langkah dengan coachmark, sorotan menu nyata, latar redup, dan tampilan ponsel.
+- [x] Lewati/tutup, Kembali/Lanjut, status tersimpan, buka ulang, keyboard, dan fallback saat storage ditolak.
+- [x] Petunjuk PhET/molekul yang menunjuk kontrol; cara mulai, mengamati, menulis catatan, dan memakai alternatif saat simulasi kurang nyaman.
+- [x] Bantuan setelah pencarian tanpa hasil atau pengumpulan jawaban/pemuatan ulang simulasi berulang, dengan batas frekuensi dan pilihan nonaktifkan.
+- [x] Petunjuk manual pada semua aktivitas Eksplorasi dan preferensi bantuan melalui Panduan belajar.
+- [x] Pengenalan otomatis saat pertama mengunjungi setiap tab Eksplorasi, penundaan selama sambutan, pemisahan dari jeda/kuota kendala, serta Ulangi semua petunjuk tanpa menghapus progres. Perbedaan hard refresh/cache dengan status localStorage dijelaskan.
+- [ ] Uji pengguna bersama mahasiswa/siswa untuk menilai ketepatan waktu saran dan menyesuaikan ambang berdasarkan bukti. Tidak memakai durasi membaca sebagai kesimpulan kebingungan.
+
+Kontrak dan rasionalisasi UX: [ONBOARDING.md](docs/ONBOARDING.md).
+
 ## Model molekul dan katalog CID
 
 - [x] Memperbaiki struktur kosong akibat parameter URL viewer publik yang tidak didukung.

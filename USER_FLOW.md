@@ -1,5 +1,19 @@
 # Alur pengguna
 
+## Kunjungan pertama dan tur fitur
+
+Halaman belajar siap → sambutan → balon menunjuk Materi belajar → Laboratorium pH → Eksplorasi kimia → Kuis diagnostik → Asesmen akhir bab → Progres saya → selesai. Target menu disorot dan bagian lain diredupkan. Menu ponsel ditampilkan selama diperlukan. Tur mempertahankan halaman asal dan tidak mengubah progres.
+
+Di langkah mana pun: Kembali / Lanjut / Lewati tur / tutup / Escape. Selesai dan dilewati diingat per browser. Tur fitur pada bar atas → mulai kembali. Panduan belajar → Ulangi semua petunjuk → reset status tur/bantuan saja → sambutan → petunjuk tiap aktivitas saat pertama dibuka lagi. Halaman akun, pemulihan, konfirmasi email, dan guru menunda tur sampai halaman belajar dibuka. Hard refresh/clear cache HTTP tidak mengganti status kunjungan.
+
+## Bantuan dalam konteks
+
+Kunjungan pertama ke setiap tab PhET/model molekul/PubChem → balon menunjuk tab yang aktif → petunjuk mulai memakai fitur → tombol menuju catatan atau pencarian. Tidak perlu menekan Buka aktivitas terlebih dahulu; iframe belum dimuat. Tur/panduan yang sedang terbuka menunda petunjuk aktivitas. Pergantian ke tab yang belum dikenal memunculkan petunjuknya tanpa menunggu jeda kendala berulang. Dua kali muat ulang simulasi → saran tab baru/bacaan pendamping. Dua kegagalan pencarian senyawa → saran nama Inggris dan koneksi.
+
+Dua pencarian materi berbeda tanpa hasil → saran kata kunci → coba pH. Dua pengumpulan diagnostik/asesmen yang belum lengkap → petunjuk peta/ringkasan → menuju soal yang perlu dilengkapi. Saran tidak mengunci halaman atau memindahkan fokus secara otomatis.
+
+Tutup saran → lanjut bekerja. Nonaktifkan bantuan otomatis → preferensi tersimpan. Panduan belajar → checkbox → aktifkan kembali. Petunjuk fitur ini pada tiap aktivitas Eksplorasi tetap bisa diminta manual. Aturan jeda dan batas saran ada di [ONBOARDING.md](docs/ONBOARDING.md).
+
 ## Siswa tamu
 
 Beranda → kuis diagnostik awal (boleh sebelum materi) → pilih jawaban per butir → tinjau pilihan → kumpulkan lima jawaban → pembahasan dan tindak lanjut → materi/laboratorium → latihan ulang dengan ID baru → riwayat terpisah.

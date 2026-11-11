@@ -6,6 +6,7 @@ import './styles-reading.css';
 import './styles-assessment.css';
 import './styles-activities.css';
 import './styles-auth.css';
+import './styles-onboarding.css';
 import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(

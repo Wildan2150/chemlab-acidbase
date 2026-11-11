@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { searchCompounds, compoundUrl } from '../lib/pubchem.js';
 import { Icon } from './Visuals.jsx';
+import { useContextualHelp } from '../contexts/ContextualHelpContext.jsx';
 
 export default function CompoundSearch() {
+  const help = useContextualHelp();
   const [query, setQuery] = useState('');
   const [state, setState] = useState({ status: 'idle', result: [], term: '', message: '' });
   const controller = useRef(null);
@@ -29,10 +31,13 @@ export default function CompoundSearch() {
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
       if (aborter.signal.aborted) throw new Error('Pencarian dibatalkan.');
       const result = await searchCompounds(clean, aborter.signal);
-      if (sequence.current === request)
+      if (sequence.current === request) {
         setState({ status: 'success', result, term: clean, message: '' });
+        help.resolve('pubchem-search');
+      }
     } catch (error) {
-      if (sequence.current === request)
+      if (sequence.current === request) {
+        help.signal('pubchem-search');
         setState({
           status: 'error',
           result: [],
@@ -43,6 +48,7 @@ export default function CompoundSearch() {
               ? 'PubChem belum dapat dihubungi. Periksa jaringan dan coba kembali.'
               : error.message,
         });
+      }
     } finally {
       clearTimeout(timer);
     }

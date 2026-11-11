@@ -52,7 +52,7 @@ export default function MoleculeViewer({ molecule, source, attribution }) {
       className="external-resource molecule-resource"
       aria-label={`Model 3D ${molecule.name}`}
     >
-      <div className="external-controls">
+      <div className="external-controls" data-help="molecule-controls">
         <h2>Model 3D · {molecule.name}</h2>
         <a
           className="button outline"
@@ -68,7 +68,12 @@ export default function MoleculeViewer({ molecule, source, attribution }) {
           <Icon name="atom" size={37} />
           <h3>Amati bentuk molekul dari dekat</h3>
           <p>Buka model, lalu putar dan perbesar untuk mengamati susunan atomnya.</p>
-          <button className="button primary" onClick={() => setOpened(true)}>
+          <button
+            className="button primary"
+            onClick={() => {
+              setOpened(true);
+            }}
+          >
             Buka aktivitas <Icon name="arrow" size={16} />
           </button>
         </div>

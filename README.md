@@ -2,6 +2,10 @@
 
 `main` menggabungkan `feat/material-updates`, `feat/chapter-assessment`, `feat/interactive-activities`, dan `feat/login-page`.
 
+**Onboarding** menampilkan sambutan saat kunjungan pertama dan tur dengan balon yang menunjuk menu sebenarnya, sorotan target, serta latar redup. Tur bisa dilewati dan dibuka ulang lewat **Tur fitur**. **Bantuan kontekstual** muncul saat pertama membuka tab PhET, model molekul, atau PubChem, serta setelah kendala berulang pada pencarian, pengumpulan jawaban, dan muat ulang simulasi. Bantuan otomatis bisa dinonaktifkan melalui **Panduan belajar**; **Petunjuk fitur ini** di Eksplorasi tetap tersedia manual. Lihat [aturan dan alasan desain UX](docs/ONBOARDING.md).
+
+Petunjuk PhET, model molekul, dan PubChem muncul otomatis saat pertama membuka masing-masing tab Eksplorasi, sebelum menekan **Buka aktivitas**. Untuk menguji ulang dari awal, pilih **Panduan belajar → Ulangi semua petunjuk**; progres belajar tetap ada. Hard refresh dan clear cache HTTP tetap menyimpan status kunjungan di browser.
+
 **Materi belajar** memuat tiga bacaan dengan 24 bagian, contoh hitung, tabel, daftar isi, refleksi, dan sumber per bagian. Baca [peta materi dan sumber](docs/MATERIAL_SOURCES.md).
 
 **Asesmen akhir bab** menyediakan 15 soal (9 pilihan ganda dan 6 jawaban angka), draf tersimpan, tinjauan/konfirmasi pengumpulan, hasil per cakupan, pembahasan, riwayat, serta ekspor. Baca [kisi-kisi dan kontrak asesmen](docs/CHAPTER_ASSESSMENT.md). Buka `/#asesmen` melalui menu atau akhir bacaan ketiga.

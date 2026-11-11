@@ -7,6 +7,8 @@ import {
 import { answerComplete, parseDecimal, unansweredQuestions } from '../lib/chapterAssessment.js';
 import { Icon } from '../components/Visuals.jsx';
 import Dialog from '../components/Dialog.jsx';
+import ContextualHint from '../components/ContextualHint.jsx';
+import { useContextualHelp } from '../contexts/ContextualHelpContext.jsx';
 import { AssessmentHistory, AssessmentReview } from '../components/AssessmentResults.jsx';
 import { downloadJson, formatDate } from './Progress.jsx';
 
@@ -19,6 +21,7 @@ export default function ChapterAssessment({
   submitAttempt,
   storageOk,
 }) {
+  const help = useContextualHelp();
   const assessment = progress.assessment;
   const draft = assessment.draft;
   const requested = assessment.attempts.find((attempt) => attempt.id === resultId);
@@ -29,6 +32,9 @@ export default function ChapterAssessment({
   const [message, setMessage] = useState('');
   const focusRef = useRef(null);
   const step = draft?.position || 0;
+  useEffect(() => {
+    help.resolve('assessment');
+  }, [draft?.answers, help.resolve]);
   useEffect(() => {
     focusRef.current?.focus({ preventScroll: true });
   }, [step, review, submitted?.id, Boolean(draft)]);
@@ -47,6 +53,7 @@ export default function ChapterAssessment({
   function confirmSubmission() {
     const missing = unansweredQuestions(draft.answers);
     if (missing.length) {
+      help.signal('assessment');
       updatePosition(assessmentQuestions.findIndex((question) => question.id === missing[0].id));
       setReview(false);
       setMessage(
@@ -406,6 +413,11 @@ export default function ChapterAssessment({
             <p className="form-message" role="status">
               {message}
             </p>
+            <ContextualHint
+              topic="assessment"
+              onAction={() => focusRef.current?.focus()}
+              onReturnFocus={() => focusRef.current?.focus()}
+            />
             <div className="quiz-controls">
               <button
                 className="text-button"

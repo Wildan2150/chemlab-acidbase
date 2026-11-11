@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { questions } from '../data/chemData.js';
 import { Icon } from '../components/Visuals.jsx';
+import ContextualHint from '../components/ContextualHint.jsx';
+import { useContextualHelp } from '../contexts/ContextualHelpContext.jsx';
 
 export function AttemptReview({ attempt, answerLabel = 'Jawabanmu' }) {
   return (
@@ -43,6 +45,7 @@ export function AttemptReview({ attempt, answerLabel = 'Jawabanmu' }) {
 }
 
 export default function Quiz({ progress, updateAnswer, submitQuiz, newAttempt, storageOk }) {
+  const help = useContextualHelp();
   const [step, setStep] = useState(0);
   const [message, setMessage] = useState('');
   const draft = progress.draft;
@@ -56,6 +59,7 @@ export default function Quiz({ progress, updateAnswer, submitQuiz, newAttempt, s
   function finish() {
     const missing = questions.findIndex((item) => draft.answers[item.id] === undefined);
     if (missing !== -1) {
+      help.signal('quiz');
       setStep(missing);
       setMessage('Jawab kelima soal terlebih dahulu. Kamu diarahkan ke soal yang belum dijawab.');
       return;
@@ -162,6 +166,7 @@ export default function Quiz({ progress, updateAnswer, submitQuiz, newAttempt, s
                     checked={draft.answers[q.id] === i}
                     onChange={() => {
                       updateAnswer(q.id, i);
+                      help.resolve('quiz');
                       setMessage('');
                     }}
                   />
@@ -177,6 +182,11 @@ export default function Quiz({ progress, updateAnswer, submitQuiz, newAttempt, s
           <p className="form-message" role="status">
             {message}
           </p>
+          <ContextualHint
+            topic="quiz"
+            onAction={() => questionRef.current?.focus()}
+            onReturnFocus={() => questionRef.current?.focus()}
+          />
           <div className="quiz-controls">
             <button
               className="text-button"

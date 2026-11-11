@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, prepareReturningVisitor } from './fixtures.js';
 import AxeBuilder from '@axe-core/playwright';
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -134,6 +134,7 @@ test('only the designated verified teacher can list students and the teacher can
     ).status(),
   ).toBe(200);
   const other = await browser.newContext({ baseURL: 'http://127.0.0.1:5175' });
+  await prepareReturningVisitor(other);
   try {
     const student = await other.newPage();
     await register(student, `role-${randomUUID()}@example.com`, teacherEmail);
@@ -211,6 +212,7 @@ test('teacher sees live student results, snapshots, notes, filters and matching 
     const learnerPages = [];
     for (const name of ['Nadia', 'Raka', 'Sinta']) {
       const context = await browser.newContext({ baseURL: 'http://127.0.0.1:5175' });
+      await prepareReturningVisitor(context);
       contexts.push(context);
       const learner = await context.newPage();
       learnerPages.push(learner);

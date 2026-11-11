@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, prepareReturningVisitor } from './fixtures.js';
 import { randomUUID } from 'node:crypto';
 
 const password = 'Learning chemistry cloud 2026!';
@@ -90,6 +90,7 @@ test('Firestore restores readings, diagnostic results, assessment snapshots and 
   expect(saved.assessment.attempts[0].score).toBe(100);
   expect(saved.assessment.attempts[0].form.questions).toHaveLength(15);
   const other = await browser.newContext({ baseURL: 'http://127.0.0.1:5175' });
+  await prepareReturningVisitor(other);
   try {
     const fresh = await other.newPage();
     await login(fresh, email);
@@ -125,6 +126,7 @@ test('offline edits merge with another device and an account reset is not undone
   await register(page, email);
   const { uid } = await identity(page);
   const other = await browser.newContext({ baseURL: 'http://127.0.0.1:5175' });
+  await prepareReturningVisitor(other);
   try {
     const fresh = await other.newPage();
     await login(fresh, email);
@@ -168,6 +170,7 @@ test('Firestore rules reject guest access, another owner, listing, invalid write
   await register(page, address());
   const first = await identity(page);
   const other = await browser.newContext({ baseURL: 'http://127.0.0.1:5175' });
+  await prepareReturningVisitor(other);
   try {
     const fresh = await other.newPage();
     await register(fresh, address());

@@ -1,0 +1,378 @@
+.topbar-tour {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  border-radius: 9px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.topbar-tour:hover {
+  background: #edf2e4;
+}
+.replay-tour {
+  margin-top: 12px;
+}
+.contextual-hint {
+  background: #f0f5e9;
+  color: #304d36;
+  border: 1px solid #cbdabd;
+  border-radius: 13px;
+  padding: 17px;
+  margin: 16px 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.contextual-coachmark {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  width: min(380px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-shadow: 0 12px 45px #193d322b;
+  border-top: 4px solid var(--green);
+}
+.contextual-coachmark .coachmark-arrow {
+  background: #f0f5e9;
+}
+.contextual-coachmark[data-side='bottom'] .coachmark-arrow {
+  transform: rotate(135deg);
+}
+.contextual-coachmark[data-side='top'] .coachmark-arrow {
+  transform: rotate(-45deg);
+}
+.contextual-hint-heading,
+.contextual-hint-heading p {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.contextual-hint-heading {
+  justify-content: space-between;
+  align-items: start;
+}
+.contextual-hint-heading p > svg {
+  flex-shrink: 0;
+}
+.contextual-hint .icon-button {
+  min-width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+.contextual-hint-reason {
+  font-size: 12px;
+  margin-top: 7px;
+}
+.contextual-hint ol {
+  padding-left: 21px;
+  margin: 12px 0;
+}
+.contextual-hint li + li {
+  margin-top: 7px;
+}
+.contextual-hint-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.contextual-hint .button {
+  white-space: normal;
+  text-align: left;
+  min-height: 44px;
+  font-size: 12px;
+}
+.contextual-hint-disable {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 12px;
+  text-align: left;
+}
+.contextual-help-setting {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.7;
+  cursor: pointer;
+}
+.contextual-help-setting input {
+  min-width: 20px;
+  min-height: 20px;
+  accent-color: var(--green);
+}
+.contextual-help-setting small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #52634d;
+}
+.onboarding-dialog {
+  width: calc(100% - 32px);
+  max-width: 590px;
+  padding: 30px;
+  max-height: calc(100dvh - 32px);
+}
+.coachmark-dialog {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+  box-shadow: none;
+}
+.coachmark-dialog::backdrop {
+  background: transparent;
+  backdrop-filter: none;
+}
+.coachmark-shade {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.coachmark-card {
+  position: fixed;
+  width: min(540px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 28px;
+  border: 1px solid #cbdabd;
+  border-radius: 17px;
+  background: #fffefa;
+  box-shadow: 0 18px 70px #10291f40;
+}
+.coachmark-card.is-centered {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.coachmark-card.is-anchored {
+  border-top: 4px solid var(--green);
+}
+.coachmark-arrow {
+  position: fixed;
+  width: 15px;
+  height: 15px;
+  background: #fffefa;
+  border-left: 1px solid #cbdabd;
+  border-bottom: 1px solid #cbdabd;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.coachmark-card[data-side='right'] .coachmark-arrow {
+  transform: rotate(45deg);
+}
+.coachmark-card[data-side='bottom'] .coachmark-arrow {
+  transform: rotate(135deg);
+}
+.coachmark-card[data-side='top'] .coachmark-arrow {
+  transform: rotate(-45deg);
+}
+.onboarding-dialog .dialog-heading {
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: start;
+}
+.onboarding-dialog .dialog-heading h2 {
+  font-size: 27px;
+  line-height: 1.4;
+  letter-spacing: -0.9px;
+  padding-top: 3px;
+}
+.onboarding-dialog .dialog-heading h2:focus {
+  outline: none;
+}
+.onboarding-dialog .icon-button {
+  min-width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+.onboarding-progress p {
+  font-size: 12px;
+  font-weight: 650;
+  color: #52634d;
+}
+.onboarding-progress p > span {
+  margin: 0 4px;
+}
+.onboarding-segments {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0 22px;
+}
+.onboarding-segments > span {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: #e4e8df;
+}
+.onboarding-segments > .is-complete {
+  background: var(--green);
+}
+.onboarding-description {
+  color: #52634d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.onboarding-features {
+  list-style: none;
+  padding: 0;
+  margin: 22px 0;
+  display: grid;
+  gap: 18px;
+}
+.onboarding-features li {
+  display: flex;
+  gap: 14px;
+  align-items: start;
+}
+.onboarding-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  border: 1px solid #dbe5cc;
+  border-radius: 13px;
+  background: #edf3e1;
+  color: var(--green);
+}
+.onboarding-features h3 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.onboarding-features p {
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #52634d;
+}
+.onboarding-tip {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #eff4e6;
+  color: #3b5635;
+}
+.onboarding-tip > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.onboarding-tip p,
+.onboarding-replay-hint {
+  font-size: 12px;
+  line-height: 1.8;
+}
+.onboarding-replay-hint {
+  color: #52634d;
+  margin-top: 14px;
+}
+.onboarding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.onboarding-actions > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.onboarding-actions .button,
+.onboarding-skip {
+  min-height: 44px;
+  font-size: 13px;
+  padding: 10px 14px;
+}
+.onboarding-skip {
+  color: #52634d;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  border-radius: 8px;
+}
+@media (max-width: 1100px) {
+  .topbar-tour span {
+    display: none;
+  }
+}
+@media (max-width: 780px) {
+  body:has(.coachmark-dialog[data-targeted='true']) .sidebar {
+    transform: translateX(0);
+    visibility: visible;
+    transition: none;
+  }
+  body:has(.coachmark-dialog[data-targeted='true']) .sidebar::after {
+    content: '';
+    min-height: 70dvh;
+    flex-shrink: 0;
+  }
+  .topbar {
+    gap: 8px;
+  }
+  .breadcrumbs {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+  .breadcrumbs strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .global-search,
+  .topbar-account,
+  .mobile-menu {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 540px) {
+  .onboarding-dialog .coachmark-card {
+    padding: 22px 18px;
+  }
+  .onboarding-dialog .dialog-heading h2 {
+    font-size: 23px;
+  }
+  .onboarding-features li {
+    gap: 11px;
+  }
+  .onboarding-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .onboarding-actions > div {
+    flex-wrap: nowrap;
+  }
+  .onboarding-actions .button {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .onboarding-skip {
+    align-self: center;
+  }
+}

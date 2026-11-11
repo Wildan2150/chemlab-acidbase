@@ -6,6 +6,26 @@ Perkembangan `main`: materi mendalam, aktivitas interaktif, asesmen akhir bab, F
 
 Siswa kelas XI sering membaca pH secara linear dan menyamakan kuat/lemah dengan pekat/encer. Demo menghubungkan representasi partikel, persamaan, skala pH, dan jawaban diagnostik. Mahasiswa Pendidikan Kimia memakainya sebagai contoh produk kuliah; guru melihat contoh pemanfaatan bukti per butir.
 
+## Pengenalan fitur dan bantuan kontekstual — 11 November 2026 WIB
+
+Pengguna baru perlu memahami lokasi fitur dan langkah pertama untuk memakainya. Sediakan sambutan otomatis dan **guided product tour** dengan balon petunjuk yang menunjuk menu nyata, sorotan target, serta latar redup sesuai referensi pengajar. Tur mencakup materi, laboratorium, eksplorasi, diagnostik, asesmen, dan progres. Siswa tetap bebas menentukan urutan belajar.
+
+Tambahkan **contextual / behavior-triggered onboarding**: petunjuk penggunaan pertama PhET dan model molekul, serta bantuan setelah pencarian atau pengumpulan jawaban menemui kendala berulang. Bantuan menjelaskan tindakan konkret dan tidak memberi label bahwa pengguna bingung. Waktu membaca saja bukan sinyal. Di Eksplorasi, petunjuk menunjuk kontrol simulasi dan mencakup pengamatan serta pencatatan hasil.
+
+Kriteria penerimaan tambahan:
+
+- Tur muncul pada kunjungan pertama di halaman belajar; alur akun dan panel guru tidak disela. Tujuh langkah termasuk sambutan, tanpa perpindahan langkah otomatis.
+- Pengguna dapat kembali, melewati, menutup dengan Escape, dan mengulang melalui Tur fitur/Panduan belajar. Selesai atau dilewati diingat pada browser yang sama.
+- Sorotan dan balon menunjuk elemen sebenarnya, menyesuaikan viewport dan navigasi ponsel, serta memiliki fallback bila target tidak tersedia.
+- Dua kendala sejenis memicu bantuan pencarian, diagnostik, asesmen, pemuatan ulang simulasi, atau PubChem. Petunjuk khusus PhET, molekul, dan PubChem muncul saat pertama membuka masing-masing tab, sebelum tombol aktivitas ditekan. Jika sambutan terbuka, petunjuk aktivitas menunggu tanpa ditandai sudah dilihat.
+- Maksimal tiga saran kendala berulang per sesi, satu per topik, jeda minimal 60 detik; pencarian tanpa hasil menunggu kata kunci stabil 1,5 detik dan dua kata berbeda. Pengenalan aktivitas baru tidak tertahan kuota/jeda tersebut, tetap menghormati preferensi bantuan otomatis.
+- Panduan belajar menyediakan Ulangi semua petunjuk untuk mengulang tur dan pengenalan aktivitas tanpa menghapus progres. Hard refresh/clear cache HTTP mempertahankan status yang disimpan di browser.
+- Bantuan kontekstual tidak mengunci halaman atau mengambil fokus. Pengguna dapat menutup/menonaktifkannya dan tetap membuka petunjuk eksplorasi secara manual.
+- Preferensi UI terpisah dari progres belajar/UID/Firestore; kegagalan storage tidak menghalangi belajar. Tidak ada pengiriman analitik atau pembacaan isi iframe PhET.
+- Keyboard, layar 320 piksel, serta aksesibilitas otomatis diperiksa. Efektivitas UX tetap memerlukan uji pengguna tersendiri.
+
+Aturan lengkap, alasan desain, kontrak penyimpanan, dan titik implementasi: [ONBOARDING.md](docs/ONBOARDING.md).
+
 ## Keputusan pengajar, 7 November 2026 WIB
 
 1. Bentuk produk: aplikasi pembelajaran kimia untuk siswa.

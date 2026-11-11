@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
 test('deep reading provides navigable sections, worked examples and reflection without losing lesson progress', async ({
   page,

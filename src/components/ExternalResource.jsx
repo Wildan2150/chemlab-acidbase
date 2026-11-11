@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Icon } from './Visuals.jsx';
+import { useContextualHelp } from '../contexts/ContextualHelpContext.jsx';
 
 export default function ExternalResource({ title, src, source, attribution, license }) {
+  const help = useContextualHelp();
   const [attempt, setAttempt] = useState(0);
   const [slow, setSlow] = useState(false);
   useEffect(() => {
@@ -16,7 +18,7 @@ export default function ExternalResource({ title, src, source, attribution, lice
   }, [attempt]);
   return (
     <section className="external-resource" aria-label={title}>
-      <div className="external-controls">
+      <div className="external-controls" data-help="phet-controls">
         <h2>{title}</h2>
         <a className="button outline" href={src} target="_blank" rel="noopener noreferrer">
           Buka di tab baru
@@ -28,7 +30,12 @@ export default function ExternalResource({ title, src, source, attribution, lice
           <Icon name="flask" size={37} />
           <h3>Siap mengamati lebih dekat?</h3>
           <p>Buka aktivitas, lalu gunakan petunjuk dan catatan pengamatan di halaman ini.</p>
-          <button className="button primary" onClick={() => setAttempt(1)}>
+          <button
+            className="button primary"
+            onClick={() => {
+              setAttempt(1);
+            }}
+          >
             Buka aktivitas
             <Icon name="arrow" size={16} />
           </button>
@@ -46,13 +53,19 @@ export default function ExternalResource({ title, src, source, attribution, lice
             referrerPolicy="strict-origin-when-cross-origin"
             onError={() => setSlow(true)}
           />
-          <div className="resource-retry">
+          <div className="resource-retry" data-help="phet-retry">
             <p role="status">
               {slow
                 ? 'Tampilan belum terlihat? Buka di tab baru atau lanjutkan dengan bacaan pendamping di bawah.'
                 : 'Gunakan tampilan ini untuk melakukan pengamatan sesuai petunjuk.'}
             </p>
-            <button className="text-button" onClick={() => setAttempt((n) => n + 1)}>
+            <button
+              className="text-button"
+              onClick={() => {
+                setAttempt((n) => n + 1);
+                help.signal('phet-retry');
+              }}
+            >
               <Icon name="reset" size={15} />
               Muat ulang aktivitas
             </button>

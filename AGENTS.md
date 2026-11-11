@@ -15,5 +15,7 @@
 - Jangan memakai `localStorage.clear()`. Perubahan soal memerlukan keputusan versi dan migrasi data.
 - Asesmen memiliki versi sendiri dan salinan instrumen per hasil. Hasil yang sudah dikumpulkan tidak boleh berubah saat draf atau bank aktif berubah. Pemulihan field asesmen tidak boleh menghapus progres materi/diagnostik yang masih valid.
 - Pertahankan akses keyboard, label, kontras teks, dan tampilan ponsel; angka/label harus mendampingi warna.
+- Tur fitur memakai coachmark pada elemen nyata; pertahankan status terpisah dari progres dan penundaan pada alur akun. Bantuan kontekstual mengikuti ambang, jeda, batas sesi, serta pilihan nonaktifkan pada `docs/ONBOARDING.md`; jangan menyimpulkan kebingungan hanya dari waktu membaca atau mengklaim membaca interaksi iframe PhET.
+- Pengenalan tiap tab Eksplorasi harus muncul saat kunjungan pertama, sebelum Buka aktivitas ditekan, dan menunggu sambutan menutup. Jeda/kuota kendala tidak menahan pengenalan fitur baru. Pertahankan Ulangi semua petunjuk tanpa reset progres; hard refresh/clear cache HTTP tidak dianggap menghapus status localStorage.
 - Untuk perubahan logika data atau kuis, jalankan uji relevan. Sebelum menyerahkan perubahan aplikasi, jalankan build dan cek alur yang terkena.
 - Isi `AI_LOG.md` dan `TESTING.md` sesuai hasil nyata, tanpa mengklaim validasi pengajar atau pengujian produksi yang belum dilakukan.

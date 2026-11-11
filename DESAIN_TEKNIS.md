@@ -21,6 +21,16 @@ Font Plus Jakarta Sans dipaketkan melalui Fontsource; ikon Lucide diimpor berdas
 - Target Lighthouse lanjutan: aksesibilitas ≥ 95, performa ≥ 90; belum dijalankan dan tidak diklaim tercapai.
 - Target aksesibilitas implementasi: WCAG 2.1 AA pada aturan otomatis yang diuji. Penanggung jawab pemeriksaan teknis versi ini: Codex; penerimaan isi dan uji pengguna oleh pengajar menyusul. Audit otomatis bukan sertifikasi penuh WCAG.
 
+## Tur fitur dan bantuan kontekstual
+
+`OnboardingTour.jsx` menggunakan `Dialog.jsx` dengan sorotan SVG dan `useCoachmark.js` untuk menunjuk elemen menu sebenarnya. Native modal menahan interaksi latar; fokus judul, pembatasan Tab/Shift+Tab, Escape, dan pengembalian fokus ditangani eksplisit. Target pada menu ponsel ditampilkan tanpa berpindah halaman. `ResizeObserver` serta listener resize/scroll menjaga posisi balon. Sorotan tidak mengubah progres atau memuat sumber eksternal.
+
+`ContextualHelpProvider` membungkus sesi akun agar penghitung bantuan tidak dimulai ulang saat UID berubah. `contextualHelp.js` di data berisi salinan, selector, dan ambang; modul lib menjalankan aturan murni dan batas tiga saran/60 detik. `ContextualHint.jsx` memakai native Popover API nonmodal untuk petunjuk PhET/molekul dan elemen inline untuk kendala formulir/pencarian. Bantuan otomatis tidak mengambil fokus; permintaan manual boleh menggulir ke kontrolnya.
+
+Pengenalan PhET/molekul/PubChem dipicu dari efek kunjungan di `Exploration.jsx`, dengan `onboardingReady` dari App untuk menunggu sambutan/panduan/menu menutup. `entryTarget` menunjuk tab aktif di atas layar; `target` tetap menunjuk kontrol untuk petunjuk manual. Pengenalan pertama tidak memakai jeda/kuota saran kendala berulang. Ulangi semua petunjuk mereset sesi bantuan, preferensi UI, serta status tur tanpa mengganti progres atau menghapus seluruh localStorage.
+
+Status tur pada `chemlab:onboarding:v1` serta preferensi bantuan pada `chemlab:contextual-help:v1` merupakan preferensi UI per origin, bukan data belajar. Jangan memasukkannya ke schema progres, ekspor, reset belajar, atau Firestore. Penghitung dan deduplikasi hanya dalam memori; tidak ada analitik. Fallback storage dan daftar pemicu lengkap: [ONBOARDING.md](docs/ONBOARDING.md).
+
 ## Batas model kimia
 
 Skala pH 0–14 merupakan rentang eksplorasi, bukan batas mutlak pH. H₃O⁺ dan OH⁻ memakai pendekatan ideal pada 25 °C; angka ditampilkan bersama klasifikasi teks. Indikator dan gelembung bersifat ilustratif. Sampel sehari-hari adalah nilai contoh, bukan hasil pengukuran.
