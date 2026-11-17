@@ -15,9 +15,13 @@
   --lime: #d8edaa;
   --paper: #fff;
   --radius: 17px;
+  --topbar-height: 79px;
 }
 * {
   box-sizing: border-box;
+}
+html {
+  scroll-padding-top: var(--topbar-height);
 }
 body {
   margin: 0;
@@ -465,7 +469,10 @@ svg {
   flex-direction: column;
 }
 .topbar {
-  height: 79px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--topbar-height);
   border-bottom: 1px solid var(--line);
   padding: 0 39px;
   display: flex;
@@ -1652,6 +1659,9 @@ svg {
   }
 }
 @media (max-width: 780px) {
+  :root {
+    --topbar-height: 66px;
+  }
   .sidebar {
     width: 252px;
     transform: translateX(-100%);
@@ -1690,7 +1700,6 @@ svg {
     display: none;
   }
   .topbar {
-    height: 66px;
     padding: 0 20px;
     gap: 14px;
   }

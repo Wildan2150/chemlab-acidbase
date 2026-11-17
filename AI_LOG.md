@@ -1,5 +1,21 @@
 # Log bantuan AI
 
+## 17 November 2026 WIB — perluasan header sticky ke desktop
+
+**Arahan lanjutan:** header desktop juga harus tetap menempel saat halaman digulir.
+
+**Perubahan:** aturan sticky dipindahkan ke header bersama untuk semua ukuran layar. Variabel `--topbar-height` menyamakan tinggi header dan ruang scroll atas: 79 piksel pada desktop dan 66 piksel pada ponsel. Posisi sticky panel Isi modul mengikuti tinggi header ditambah 25 piksel agar tidak tertutup.
+
+**Hasil nyata:** build produksi, format kedua CSS, dan tujuh skenario browser terkait lulus. Pemeriksaan langsung pada tujuh ukuran layar memverifikasi header saat scroll, daftar isi bacaan, pencarian, sidebar desktop, serta menu ponsel. Pratinjau desktop setelah scroll diperiksa secara visual. Catatan lengkap tersedia pada pembaruan desktop di TESTING.md.
+
+## 17 November 2026 WIB — header tetap terlihat pada ponsel
+
+**Laporan pengajar:** header ikut tergulir pada tampilan ponsel.
+
+**Penyebab dan perubahan:** pada lebar 390 piksel, header memakai posisi `static` dan berpindah dari y=0 menjadi y=-650 setelah halaman digulir 650 piksel. Aturan ponsel hingga 780 piksel kini memakai `position: sticky`, `top: 0`, dan lapisan di bawah backdrop/menu navigasi. `scroll-padding-top: 66px` memberi ruang untuk header saat melompat ke bagian bacaan. Perubahan aplikasi terbatas pada CSS.
+
+**Hasil nyata:** build produksi lulus. Pemeriksaan Microsoft Edge melalui Playwright pada lima ukuran ponsel/tablet memverifikasi posisi header saat scroll, menu, pencarian, dan daftar isi bacaan; dua ukuran desktop juga diperiksa. Tujuh skenario browser terkait navigasi ponsel, bacaan, dan tur fitur lulus terhadap build produksi. Pratinjau setelah scroll diperiksa secara visual. Rincian dan batas pengujian dicatat di TESTING.md.
+
 ## 12 November 2026 WIB — petunjuk otomatis pada kunjungan Eksplorasi
 
 **Laporan pengajar:** membuka tab Eksplorasi untuk pertama kali belum memunculkan petunjuk. Pengajar mengasumsikan hard refresh dan clear cache membuat kunjungan dianggap baru.

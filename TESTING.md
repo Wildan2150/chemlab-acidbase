@@ -1,5 +1,25 @@
 # Hasil pengujian demo
 
+## 17 November 2026 WIB — header desktop dan ponsel
+
+- **Arahan lanjutan:** terapkan header yang tetap menempel juga pada desktop. Aturan sticky kini berlaku pada semua ukuran layar, dengan tinggi/ruang scroll atas 79 piksel pada desktop dan 66 piksel pada ponsel. Panel Isi modul diberi jarak 25 piksel di bawah header.
+- Pemeriksaan langsung build produksi melalui Playwright/Microsoft Edge lulus pada **320 × 568, 390 × 844, 780 × 900, 781 × 900, 1024 × 768, 1366 × 768, dan 1440 × 1050**. Pada beranda dan bacaan, posisi header tetap y=0 saat scroll ke tengah, paling bawah, dan kembali ke atas; isi awal tidak tertutup serta tidak ada overflow horizontal pada halaman yang diperiksa.
+- Daftar isi memindahkan fokus ke judul bacaan sekitar y=104 pada desktop dan y=91 pada ponsel. Pada 1366 dan 1440 piksel, panel Isi modul tetap di bawah header pada y=104. Header tidak bertumpuk dengan sidebar utama; scroll sidebar desktop diperiksa pada 1366 × 768. Menu ponsel serta dialog pencarian sesudah scroll tetap berfungsi. Tidak ada `pageerror` selama pemeriksaan ini. Pratinjau desktop setelah scroll diperiksa secara visual.
+- **7 skenario browser terkait lulus**, 0 gagal dalam **29,7 detik**, memakai perintah dan preview build produksi yang sama dengan pemeriksaan awal ponsel di bawah. Cakupan: navigasi ponsel, responsivitas/pencarian aksesibel, empat skenario tur fitur, serta bacaan mendalam.
+- `npm.cmd run build`, Prettier kedua berkas CSS, dan `git diff --check` lulus. Peringatan upstream 3Dmol/ukuran chunk tetap sama. Suite logika, akun/emulator, Safari/Firefox, dan ponsel fisik tidak dijalankan ulang untuk perubahan CSS ini.
+
+## 17 November 2026 WIB — perbaikan awal pada ponsel
+
+- di tampilan ponsel header tidak menempel di atas halaman, tapi ikut tergulir (scroll)
+
+- **Reproduksi:** pada 390 × 844, posisi header berubah dari y=0 menjadi y=-650 setelah scroll 650 piksel; computed style menunjukkan `position: static`.
+- **Perbaikan:** header menjadi sticky pada lebar hingga 780 piksel. Ruang scroll atas 66 piksel menjaga judul tujuan daftar isi tetap terlihat; lapisan header berada di bawah menu dan backdrop.
+- Pemeriksaan langsung terhadap build produksi melalui Playwright/Microsoft Edge lulus pada **320 × 568, 390 × 844, 740 × 360, 768 × 1024, dan 780 × 900**. Header tetap y=0 saat scroll ke tengah, paling bawah, dan kembali ke atas pada beranda serta bacaan. Tingginya tetap 66 piksel, isi awal tidak tertutup, dan tidak ada overflow horizontal pada halaman yang diperiksa.
+- Menu dan backdrop tampil di atas header; menu serta dialog pencarian bisa dibuka setelah scroll dan ditutup dengan Escape. Daftar isi memindahkan fokus ke judul bacaan sekitar y=91, di bawah header. Tidak ada `pageerror` pada pemeriksaan ini. Pratinjau 390 piksel setelah scroll diperiksa secara visual.
+- Pada lebar **781 dan 1440 piksel**, aturan desktop tetap memakai header setinggi 79 piksel dan posisi `static`.
+- **7 skenario browser terkait lulus**, 0 gagal dalam **22,2 detik**: navigasi ponsel, responsivitas/pencarian aksesibel, empat skenario tur fitur, serta bacaan mendalam. Perintah: `npx.cmd playwright test --config .firebase/molecule-playwright.config.mjs --project=learning onboarding.spec.js reading.spec.js app.spec.js --grep 'first visit|account flows|tour contains|denied storage keeps|deep reading|mobile navigation|narrow phones'`, dengan `MOLECULE_TEST_BASE_URL=http://127.0.0.1:4173` menuju preview build produksi.
+- `npm.cmd run build` lulus; peringatan ukuran chunk dan `eval` dari upstream 3Dmol tetap ada. Prettier CSS lulus. Suite logika, akun/emulator, Safari/Firefox, dan ponsel fisik tidak dijalankan ulang untuk perubahan CSS ini.
+
 ## 12 November 2026 WIB — koreksi pemicu kunjungan pertama Eksplorasi
 
 - **Reproduksi:** pemicu lama berada pada tombol Buka aktivitas. Membuka tab saja tidak memunculkan petunjuk. Jeda/kuota bantuan kendala juga bisa menahan pengenalan fitur berikutnya.
