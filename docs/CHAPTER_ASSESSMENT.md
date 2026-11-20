@@ -1,5 +1,7 @@
 # Asesmen akhir bab — Asam & Basa
 
+Asesmen akhir bab adalah pengembangan khas ChemLab setelah fondasi kuis diagnostik. Lima soal diagnostik tetap memenuhi tahap Bab 3; 15 soal tambahan ini tidak wajib disalin oleh semua kelompok. [Panduan membaca contoh](PANDUAN_REPLIKASI.md) menunjukkan hubungan isian dokumen pengarah, urutan handout, dan hasil fitur pada web.
+
 Asesmen dikembangkan pada `feat/chapter-assessment` dari `feat/material-updates` commit `834ee59`, kemudian digabungkan ke `main` bersama fitur akun dan interaktif pada 10 November 2026 WIB. Seluruh 24 bagian bacaan tetap tersedia; hasil dan draf asesmen mengikuti penyimpanan per UID/tamu.
 
 ## Alur siswa
@@ -37,15 +39,17 @@ Draf asesmen memiliki UUID stabil, versi `asam-basa-akhir-bab-v1`, waktu mulai, 
 
 Hasil menyimpan jawaban, waktu, versi, serta salinan instrumen dan domain yang dipakai. Saat dipulihkan, skor dihitung kembali dari salinan instrumen tersebut, sehingga hasil lama tidak dinilai dengan bank soal aktif yang berbeda. Format instrumen divalidasi; hasil yang masih valid dipertahankan bila catatan lain rusak. Draf dengan versi yang tidak dapat dilanjutkan diberi pemberitahuan; kebijakan migrasi draf perlu ditentukan sebelum mengganti versi aktif. Tidak ada penghapusan diam-diam seluruh progres hanya karena field asesmen rusak.
 
-Hasil dapat dilihat kembali melalui `#asesmen/<ID>`, halaman Progres, atau ekspor JSON per hasil/seluruh progres. Reset berkonfirmasi menghapus asesmen bersama progres browser. Simpan ekspor sebelum berpindah ke versi aplikasi/branch yang lebih lama; versi lama belum mengenali field asesmen baru.
+Hasil dapat dilihat kembali melalui `#asesmen/<ID>`, halaman Progres, atau ekspor JSON per hasil/seluruh progres. Reset berkonfirmasi menghapus asesmen bersama progres identitas aktif. Pada akun, reset turut dikirim ke Firestore dan perangkat lain; pada tamu, reset hanya lokal. Dampak reset ini mengikuti keputusan yang diisi pada DATABASE dan USER_FLOW ChemLab. Simpan ekspor sebelum berpindah ke versi aplikasi/branch yang lebih lama; versi lama belum mengenali field asesmen baru.
 
 ## Batas penggunaan
 
-Bank soal, kunci, dan penilaian berada pada client. Fitur ini adalah asesmen belajar, bukan sistem ujian dengan integritas penilaian server. Hasil akhir bab dan diagnostik awal disimpan terpisah; selisih skor keduanya tidak otomatis menjadi bukti efektivitas pembelajaran. Panel guru baseline masih memakai data latihan diagnostik fiktif. Pengiriman hasil asesmen nyata, login, dan dashboard guru per akun belum ditambahkan pada branch ini.
+Bank soal, kunci, dan penilaian berada pada client. Fitur ini adalah asesmen belajar, bukan sistem ujian dengan integritas penilaian server. Hasil akhir bab dan diagnostik awal disimpan terpisah; selisih skor keduanya tidak otomatis menjadi bukti efektivitas pembelajaran. Pada `main`, hasil asesmen akun sudah disinkronkan ke Firestore dan dapat dibaca guru terverifikasi melalui [panel guru](TEACHER_PANEL.md). Tamu tetap lokal. Panel memakai data akun tersinkron, tanpa hasil fiktif; rekap asesmen per cakupan, rincian jawaban per soal, dan hasil terbaru per siswa dijelaskan pada panduan panel.
 
 Validasi isi, tingkat kesulitan, bobot, dan kesesuaian instrumen tetap menjadi keputusan pengajar sebelum digunakan untuk penilaian formal.
 
-## Verifikasi dan pratinjau
+## Riwayat verifikasi branch dan pratinjau
+
+Angka berikut adalah hasil tahap branch asesmen sebelum penggabungan, bukan jumlah uji terbaru `main`. Rangkaian integrasi dan pemeriksaan terbaru dicatat pada [TESTING.md](../TESTING.md).
 
 - 15 uji logika lulus: 6 baseline dan 9 khusus asesmen.
 - 13 skenario browser lulus: 8 baseline, 1 bacaan mendalam, dan 4 asesmen.

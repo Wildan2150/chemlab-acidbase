@@ -1,5 +1,7 @@
 # Firebase Auth dan manajemen akun
 
+Gunakan [panduan replikasi](PANDUAN_REPLIKASI.md) untuk urutan Bab 1–7 dan latihan emulator. Login/kirim/baca hasil merupakan fondasi Bab 4; email/password serta pengelolaan akun lengkap adalah tambahan ChemLab. Bukti produksi pada bagian riwayat berikut bertanggal 10 November 2026 dan tidak diperiksa ulang pada revisi dokumen 20 November. Mahasiswa memakai project sendiri atau emulator, tanpa menyalin konfigurasi/akses pengajar.
+
 Fitur akun dikembangkan pada `feat/login-page` dari `main` commit `30505f7`, kemudian digabungkan ke `main` bersama materi, asesmen, dan aktivitas interaktif pada 10 November 2026 WIB. Penyedia yang dipilih pengajar adalah Firebase Auth. Konfigurasi proyek `chemlab-web`, provider Email/Password dan Google, serta domain `localhost`/`127.0.0.1` sudah terverifikasi melalui API produksi. Bukti: [pemeriksaan produksi](firestore-production-check.json).
 
 ## Fitur
@@ -33,7 +35,7 @@ Untuk mencoba Google, klik tombol Google lalu **Add new account** pada jendela p
 
 Pemasangan dan pengujian di Windows diverifikasi dengan `--ignore-scripts`; SDK Auth dan emulator ini memakai berkas JavaScript yang sudah dipaketkan. Cara ini tidak memerlukan kompilasi dependency native opsional milik fitur Firebase CLI lain.
 
-Sambungan emulator dibatasi untuk mode development pada host loopback. Build produksi menolak konfigurasi emulator. Jangan memakai token emulator untuk mengakses layanan produksi.
+Sambungan emulator dibatasi untuk mode development pada host loopback. Pada mode produksi, konfigurasi emulator membuat layanan akun dinonaktifkan; proses build sendiri tetap dapat berhasil. Jangan memakai token emulator untuk mengakses layanan produksi.
 
 ## Menghubungkan proyek Firebase sendiri
 
@@ -58,13 +60,15 @@ Pembatalan pop-up mengembalikan pengguna ke halaman masuk dan tombol dapat dicob
 
 ## Data dan batas akses
 
-`chemlab:guest:v1` tetap menyimpan progres tamu. Akun menggunakan `chemlab:user:<UID>:v1`. Pergantian identitas me-remount state belajar dari key milik identitas baru sebelum menyimpan perubahan. Logout memulihkan progres tamu. Tidak ada penyalinan otomatis progres tamu ke akun lain.
+`chemlab:guest:v1` tetap menyimpan progres tamu. Akun menggunakan `chemlab:user:<UID>:v1`. Pergantian identitas me-remount state belajar dari key milik identitas baru sebelum menyimpan perubahan. Logout memulihkan progres tamu. Tidak ada penyalinan otomatis maupun pemilihan hasil tamu untuk dipindah ke akun. Keputusan ini diterangkan pada USER_FLOW dan DATABASE; untuk mencoba sinkronisasi ChemLab, masuk dahulu lalu kerjakan aktivitas sebagai akun.
 
 Progres akun disinkronkan ke Firestore dengan antrean lokal dan pemulihan lintas perangkat. Profil nama/email pemilik disimpan pada `learnerProfiles/{UID}`. Menghapus akun meminta autentikasi ulang, mengosongkan payload cloud dan menghapus profil, lalu menghapus identitas Firebase serta cache akun pada browser yang dipakai. Salinan perangkat lain yang offline tidak dapat dihapus dari browser ini. Guru terverifikasi yang ditetapkan dapat membaca data siswa sesuai [TEACHER_PANEL.md](TEACHER_PANEL.md). Kontrak dan pemasangan Rules ada di [FIRESTORE_SETUP.md](FIRESTORE_SETUP.md).
 
-Manajemen akun berarti pengelolaan akun sendiri. Administrasi seluruh pengguna, pengangkatan guru, dan pencabutan seluruh sesi dari server memerlukan backend/admin policy dan bukan bagian branch ini.
+Manajemen akun berarti pengelolaan akun sendiri. Cakupan siswa ChemLab adalah seluruh akun Auth aplikasi yang dapat menyimpan progres sendiri; belum ada daftar anggota kelas. Cakupan ini diisi pada PRD dan DATABASE. Administrasi seluruh pengguna, panel pengangkatan guru, dan pencabutan seluruh sesi dari server bukan bagian fitur akun ini.
 
 ## Pengujian dan keamanan
+
+Status pada paragraf berikut merujuk pemeriksaan pengembangan yang dicatat di [TESTING.md](../TESTING.md), bukan audit dependency atau layanan produksi baru pada tanggal revisi dokumen.
 
 `npm run test:e2e` menyalakan server baseline dan satu stack Auth/Firestore Emulator dengan aplikasi pada port 5175. Kredensial fixture bersifat fiktif dan unik per skenario. Pengujian memanggil SDK serta endpoint emulator sesungguhnya; tidak mengganti autentikasi atau penulisan database dengan mock keberhasilan.
 

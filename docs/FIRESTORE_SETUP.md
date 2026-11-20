@@ -1,8 +1,10 @@
 # Penyimpanan progres dengan Cloud Firestore
 
-Aplikasi memakai proyek yang sama dengan Firebase Auth pada `.env.local`. Konfigurasi proyek yang ditemukan saat integrasi adalah `chemlab-web`. Tidak diperlukan service account atau kredensial admin pada frontend.
+Aplikasi memakai proyek yang sama dengan Firebase Auth pada `.env.local`. Untuk latihan, mulai dari [panduan replikasi](PANDUAN_REPLIKASI.md) dan emulator; untuk pemasangan baru, gunakan project kelompok sendiri. `chemlab-web` di bawah adalah identitas lingkungan pengajar pada bukti historis, bukan project yang harus dipakai mahasiswa. Tidak diperlukan service account atau kredensial admin pada frontend.
 
-## Status konfigurasi produksi
+Dokumen ini merinci penerapan isian Sumber data, Akses dan aturan, serta Sinkronisasi pada [DATABASE.md](../DATABASE.md). ChemLab memilih snapshot seluruh progres per UID; contoh umum hasil per percobaan pada Lampiran B dipadankan ke array riwayat dalam payload. Service dan Rules harus mengikuti skema yang sama.
+
+## Bukti historis konfigurasi pengajar — 10 November 2026
 
 Pada 10 November 2026 WIB, database `(default)` proyek `chemlab-web` di region `asia-southeast2` telah diperiksa melalui API produksi. Rules aktif cocok dengan `firestore.rules`; pengecualian indeks `learningProgress.payload` juga sudah terpasang. Empat belas skenario terhadap Rules aktif, termasuk hak guru terverifikasi, lulus melalui Rules API. Koneksi baca dengan izin CLI berhasil mencapai database dan akses tanpa login ditolak.
 
@@ -13,12 +15,11 @@ Alur browser menulis, memulihkan lintas perangkat, reset, hapus akun, dan panel 
 ## Menghubungkan database
 
 1. Pastikan Cloud Firestore sudah tersedia pada proyek Firebase yang dipakai Auth. Aplikasi memakai database `(default)`. Jika menggunakan database bernama khusus, isi `VITE_FIRESTORE_DATABASE_ID` di `.env.local` dan jalankan ulang Vite.
-2. Rules dari `firestore.rules` serta pengecualian indeks dari `firestore.indexes.json` sudah terpasang dan terverifikasi untuk proyek ini. Untuk pemasangan pada lingkungan baru atau setelah perubahan Rules, gunakan:
+2. Pada root aplikasi yang memuat `package.json`, periksa `firestore.rules` dan `firestore.indexes.json`. Untuk memasang pada project baru yang Anda kelola, ganti `ID_PROJECT_KELOMPOK` dengan ID project sendiri:
 
 ```powershell
-cd ProyekContoh
 npx.cmd firebase login
-npx.cmd firebase deploy --only "firestore:rules,firestore:indexes" --project chemlab-web
+npx.cmd firebase deploy --only "firestore:rules,firestore:indexes" --project ID_PROJECT_KELOMPOK
 ```
 
 Perintah di atas memakai database `(default)`. Untuk database bernama khusus, sesuaikan konfigurasi multi-database Firebase CLI sebelum deploy. Jika database sudah melayani fitur lain, gabungkan blok `learningProgress` dengan Rules yang sudah ada agar izin koleksi lain tetap sesuai kebutuhan.
@@ -57,7 +58,9 @@ Satu dokumen memuat seluruh progres akun. Ukuran payload dibatasi **850.000 byte
 
 ## Aturan akses
 
-Siswa hanya boleh membaca dokumen milik UID yang sedang masuk. Email terverifikasi `wildannashihin@gmail.com` boleh membaca daftar profil/progres untuk panel guru, tanpa hak menulis hasil akun lain. Penulisan progres pemilik tetap harus memakai revisi berikutnya, metadata yang diizinkan, serta timestamp server. Tamu, siswa yang mengakses akun lain, field role/admin buatan, dan penghidupan kembali progres yang dihapus ditolak.
+Siswa hanya boleh membaca dokumen milik UID yang sedang masuk. Email terverifikasi `wildannashihin@gmail.com` boleh membaca daftar profil/progres untuk panel guru, tanpa hak menulis hasil akun lain. Untuk adaptasi source pada project sendiri, tetapkan guru secara konsisten pada UI dan Rules mengikuti [panduan panel](TEACHER_PANEL.md). Perubahan tersebut belum menyediakan daftar anggota kelas.
+
+Penulisan progres pemilik harus memakai revisi berikutnya, metadata yang diizinkan, serta timestamp server. Tamu, siswa yang mengakses akun lain, field role/admin buatan, dan penghidupan kembali progres yang dihapus ditolak. Akun yang bukan anggota kelas belum dibatasi karena daftar anggota tidak tersedia. Rules memvalidasi payload sebagai string dengan batas ukuran, bukan keutuhan jawaban/hasil di dalam JSON; pemilik masih dapat mengubah payload. `updatedAt` adalah waktu seluruh dokumen diperbarui, bukan `receivedAt` per hasil. Reset akun mereset cloud juga. Cakupan izin serta dampak reset tersebut dicatat sebagai keputusan dan batas ChemLab pada DATABASE.
 
 Nilai dihitung pada client dan tetap merupakan sarana belajar. Rules melindungi akses data; keaslian nilai untuk ujian formal tetap memerlukan validasi tambahan. Kontrak profil, hak baca guru, dan batas pengelolaan siswa dijelaskan pada [TEACHER_PANEL.md](TEACHER_PANEL.md).
 

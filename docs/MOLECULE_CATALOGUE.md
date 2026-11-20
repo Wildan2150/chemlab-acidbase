@@ -1,5 +1,7 @@
 # Katalog model molekul
 
+Katalog ini adalah pengayaan ChemLab untuk F07/I-05 Lampiran F. Mahasiswa dapat memulai dari satu struktur valid beserta kegiatan pengamatan; 36 model tidak diwajibkan sekaligus. Pertahankan atribusi, manifest sumber/checksum, serta verifikasi identitas dan struktur ketika mengadaptasi katalog. Lihat [panduan replikasi](PANDUAN_REPLIKASI.md).
+
 Katalog memuat **36 senyawa** dengan identitas dan rekaman SDF 3D PubChem yang diperiksa pada **10 November 2026 WIB**. Ini pilihan untuk eksplorasi struktur asam–basa dan perbandingan gugus fungsi; bukan seluruh database PubChem. Pencarian katalog bekerja lokal dan menerima nama Indonesia/Inggris, alias, rumus seperti H₂O₂ atau H2O2, dan CID. Filter kelompok dapat digabungkan dengan pencarian.
 
 Model 3D tersedia setelah memilih **Buka aktivitas**. Memutar model hanya mengubah kamera. Molekul tunggal tidak menampilkan seluruh spesies dalam larutan, derajat ionisasi, atau pH. pH memerlukan konsentrasi dan kondisi larutan.

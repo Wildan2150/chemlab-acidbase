@@ -1,35 +1,53 @@
-# Alur pengguna
+# Alur Pengguna
 
-## Kunjungan pertama dan tur fitur
+Isian USER_FLOW pada Lampiran A diterapkan pada menu dan perilaku ChemLab. Urutan di bawah memberi satu jalur yang dapat didemonstrasikan; siswa tetap bebas membuka materi atau diagnostik lebih dahulu.
 
-Halaman belajar siap → sambutan → balon menunjuk Materi belajar → Laboratorium pH → Eksplorasi kimia → Kuis diagnostik → Asesmen akhir bab → Progres saya → selesai. Target menu disorot dan bagian lain diredupkan. Menu ponsel ditampilkan selama diperlukan. Tur mempertahankan halaman asal dan tidak mengubah progres.
+## Alur inti
 
-Di langkah mana pun: Kembali / Lanjut / Lewati tur / tutup / Escape. Selesai dan dilewati diingat per browser. Tur fitur pada bar atas → mulai kembali. Panduan belajar → Ulangi semua petunjuk → reset status tur/bantuan saja → sambutan → petunjuk tiap aktivitas saat pertama dibuka lagi. Halaman akun, pemulihan, konfirmasi email, dan guru menunda tur sampai halaman belajar dibuka. Hard refresh/clear cache HTTP tidak mengganti status kunjungan.
+1. Pengguna membaca sasaran dan tujuan asam–basa/pH pada beranda.
+2. Pengguna membuka Modul 1 melalui Materi belajar, lalu memilih **Kenali asam & basa**, **Membaca skala pH**, atau **Kimia di sekitar kita**.
+3. Pengguna membaca materi, contoh hitung, dan representasi; menulis/menjawab refleksi serta menandai bacaan selesai. Untuk skala pH, pengguna membandingkan pH 3 dan 5 di Laboratorium pH.
+4. Pengguna membuka Kuis diagnostik, memilih jawaban q1–q5, meninjau pilihan, dan mengumpulkan lima jawaban lengkap. Pilihan/ID draf disimpan selama pengerjaan.
+5. Pengguna membaca skor, jawaban per soal, pembahasan, dan tindak lanjut ke bacaan/laboratorium. Diagnostik awal tetap terpisah dari latihan ulang dengan ID baru.
+6. Pengguna membuka Progres saya untuk melihat materi, aktivitas lab, serta riwayat hasil; dapat mengekspor JSON atau meminta reset berkonfirmasi.
+7. Pengguna dapat masuk dengan Google atau email/password. Pada ChemLab, hasil tamu tetap di ruang tamu; aktivitas yang dikerjakan sesudah masuk menggunakan progres UID akun tersebut. Belum ada pemilihan hasil tamu untuk dipindah.
+8. Perubahan akun disimpan lokal dan diantrekan sebagai pemilik. Aplikasi membaca server sebelum menulis dan baru menampilkan **Progres tersimpan di akun** setelah konfirmasi server.
+9. Siswa memulihkan riwayat/progres sendiri pada perangkat lain. Guru terverifikasi membuka Panel guru untuk membaca hasil akun tersinkron; akun siswa tidak dapat membaca data siswa lain.
+10. Guru memilih diagnostik awal atau asesmen terbaru, melihat rekap/rincian jawaban dan catatan, menafsirkan kesulitan, lalu memilih tindak lanjut belajar. Contoh q2: pilihan rasio 2 ditindaklanjuti dengan perbandingan 10⁻³/10⁻⁵, bukan langsung menyimpulkan miskonsepsi tanpa alasan siswa.
 
-## Bantuan dalam konteks
+## Keadaan lain
 
-Kunjungan pertama ke setiap tab PhET/model molekul/PubChem → balon menunjuk tab yang aktif → petunjuk mulai memakai fitur → tombol menuju catatan atau pencarian. Tidak perlu menekan Buka aktivitas terlebih dahulu; iframe belum dimuat. Tur/panduan yang sedang terbuka menunda petunjuk aktivitas. Pergantian ke tab yang belum dikenal memunculkan petunjuknya tanpa menunggu jeda kendala berulang. Dua kali muat ulang simulasi → saran tab baru/bacaan pendamping. Dua kegagalan pencarian senyawa → saran nama Inggris dan koneksi.
+- Login batal/akun di luar daftar kelas: pembatalan mengembalikan alur masuk tanpa memindahkan progres. ChemLab belum mempunyai daftar anggota kelas; akun Auth boleh menyimpan progres sendiri. Hak guru tetap diperiksa terpisah.
+- Hasil belum ada atau menunggu kirim: tampilkan kosong/belum mengumpulkan atau status menunggu; hasil yang belum diterima tidak dianggap skor nol pada rekap.
+- Jaringan gagal/antrean bertahan setelah refresh: belajar dapat dilanjutkan setelah halaman dimuat; antrean tetap di ruang UID dan dicoba kembali. Izin/jaringan gagal tidak dianggap tersimpan.
+- Pergantian akun dan hasil lokal belum terkirim: hentikan sesi/listener lama; muat key identitas baru. Logout kembali ke progres tamu. Antrean akun A tidak dikirim sebagai akun B.
+- Akses panel ditolak: tamu diarahkan masuk; siswa biasa mendapat penjelasan akses khusus guru; email guru yang belum terverifikasi diarahkan memeriksa verifikasi. Rules tetap menolak pembacaan tanpa token yang sesuai.
+- Progres lokal tidak tersedia/rusak: latihan dapat berjalan sementara dengan penjelasan batas simpan dan ekspor. Pemulihan skema inti yang gagal memulai progres baru dengan pemberitahuan; field asesmen memiliki pemulihan tersendiri.
+- Reset dibatalkan: dialog ditutup dan data tetap ada. Reset dikonfirmasi: hanya identitas aktif diganti; reset tamu lokal, reset akun juga mengosongkan progres cloud/perangkat lain. Identitas lain tetap terpisah.
+- Sumber eksternal gagal: pesan kegagalan, muat ulang/tab baru atau bacaan pendamping tersedia; siswa tetap dapat menyimpan catatan pengamatan sendiri.
 
-Dua pencarian materi berbeda tanpa hasil → saran kata kunci → coba pH. Dua pengumpulan diagnostik/asesmen yang belum lengkap → petunjuk peta/ringkasan → menuju soal yang perlu dilengkapi. Saran tidak mengunci halaman atau memindahkan fokus secara otomatis.
+## Jalur fitur kelompok
 
-Tutup saran → lanjut bekerja. Nonaktifkan bantuan otomatis → preferensi tersimpan. Panduan belajar → checkbox → aktifkan kembali. Petunjuk fitur ini pada tiap aktivitas Eksplorasi tetap bisa diminta manual. Aturan jeda dan batas saran ada di [ONBOARDING.md](docs/ONBOARDING.md).
+### Laboratorium pH
 
-## Siswa tamu
+Menu Laboratorium pH → ubah slider/sampel → amati angka pH, klasifikasi, [H₃O⁺], [OH⁻], dan pOH → bandingkan dua kondisi → jelaskan. Model HCl hanya menawarkan tiga konsentrasi dalam rentang yang ditetapkan; kondisi 25 °C dan asumsi ideal menyertai interpretasi.
 
-Beranda → kuis diagnostik awal (boleh sebelum materi) → pilih jawaban per butir → tinjau pilihan → kumpulkan lima jawaban → pembahasan dan tindak lanjut → materi/laboratorium → latihan ulang dengan ID baru → riwayat terpisah.
+### Eksplorasi kimia
 
-Jalur belajar lain: beranda → materi 01/02/03 → refleksi → tandai selesai → laboratorium pH → kuis → progres. Materi tidak dikunci; siswa bebas berpindah.
+Menu Eksplorasi → pilih PhET/model molekul/PubChem → petunjuk pertama tab → Buka aktivitas atau pencarian → tulis prediksi, pengamatan, dan penjelasan → simpan catatan. Katalog lokal menyediakan 36 model; pencarian/filter tidak membuang pilihan atau catatan. Klik pada iframe PhET tidak dianggap jawaban yang otomatis terekam.
 
-## Keberlanjutan lokal
+### Asesmen akhir bab
 
-Pilihan jawaban/perubahan aktivitas → state React → tulis penyimpanan browser → muat ulang → validasi skema dan versi → pulihkan draf, ID percobaan, progres, serta riwayat.
+Menu/akhir bacaan ketiga → pengantar → mulai → jawab 15 soal → tinjau/lengkapi → konfirmasi → hasil per cakupan/pembahasan → riwayat atau ekspor → percobaan baru. Hasil membawa snapshot instrumen dan terpisah dari diagnostik; bacaan tidak dikunci oleh status selesai.
 
-Storage ditolak → aktivitas berjalan dalam sesi → status menjelaskan batas penyimpanan → siswa dapat mengekspor JSON. Data rusak → sesi baru dengan pemberitahuan.
+### Tur dan bantuan
 
-Progres → ekspor → unduh JSON. Progres → reset → dialog penjelasan → batal mempertahankan data / konfirmasi mengganti hanya data ChemLab dengan sesi baru.
+Kunjungan pertama → sambutan → Materi → Laboratorium → Eksplorasi → Diagnostik → Asesmen → Progres. Di setiap langkah tersedia Kembali/Lanjut/Lewati/tutup/Escape. Tur menunda tampilan pada alur akun/guru dan mempertahankan halaman asal.
 
-## Guru dengan akun terverifikasi
+Kunjungan pertama tiap tab Eksplorasi → petunjuk tab setelah tur menutup, sebelum Buka aktivitas. Kendala berulang → saran kontekstual dengan jeda/kuota. Pengguna dapat menonaktifkan bantuan otomatis dan meminta petunjuk manual. **Panduan belajar → Ulangi semua petunjuk** mengulang tur/pengenalan tanpa reset progres; hard refresh/cache HTTP tetap menyimpan status localStorage. Ambang dan aturan lengkap ada pada [ONBOARDING.md](docs/ONBOARDING.md).
 
-Masuk dengan akun terverifikasi `wildannashihin@gmail.com` → menu **Panel guru** → muat profil dan progres siswa dari Firestore → pilih diagnostik awal atau asesmen terbaru → tinjau rekap per konsep → cari/filter siswa → buka riwayat jawaban dan catatan eksplorasi → ekspor JSON/CSV sesuai filter.
+### Akun dan guru
 
-Tamu yang membuka tautan langsung diminta masuk. Akun biasa mendapat penjelasan akses khusus guru; akun guru yang belum terverifikasi diarahkan ke halaman akun untuk memeriksa email. Firestore Rules tetap memeriksa token Auth saat UI diubah atau API dipanggil langsung. Logout menutup panel, listener, dan cache memori pembacaan kelas.
+Masuk/daftar → kelola profil/verifikasi/pemulihan → belajar sebagai UID → sinkronisasi. Menghapus akun meminta konfirmasi dan autentikasi ulang dengan provider yang sesuai; penghapusan tidak menghapus akun Google.
+
+Guru terverifikasi → Panel guru → muat profil/progres dari server → rekap diagnostik pertama/asesmen terbaru → cari/filter → buka jawaban/catatan → ekspor JSON/CSV. Menutup panel, mengganti akun, atau logout membuang listener dan cache memori pembacaan kelas. Kontrak akses/rekap: [TEACHER_PANEL.md](docs/TEACHER_PANEL.md).

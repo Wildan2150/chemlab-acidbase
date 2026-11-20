@@ -1,6 +1,12 @@
 # Panel guru dan data siswa
 
-Guru ditetapkan untuk akun Firebase Auth dengan email **wildannashihin@gmail.com** yang sudah terverifikasi. Akun produksi tersebut sudah ditemukan, aktif, terverifikasi, dan terhubung Google. Masuk dengan akun itu lalu pilih **Panel guru**. Setelah pembaruan aplikasi, muat ulang halaman bila panel masih menampilkan pesan izin dari sesi sebelumnya.
+Guru pada source ditetapkan untuk akun Firebase Auth dengan email **wildannashihin@gmail.com** yang sudah terverifikasi. Bukti 10 November 2026 mencatat akun pengajar tersebut aktif, terverifikasi, dan terhubung Google; status akun tidak diperiksa ulang pada revisi dokumen 20 November. Untuk mencoba sendiri, gunakan fixture terverifikasi pada emulator mengikuti [panduan replikasi](PANDUAN_REPLIKASI.md), bukan meminta akses akun pengajar.
+
+## Adaptasi pada project kelompok
+
+Panel ini menerapkan rancangan penilaian pada PRD serta alur siswa–guru Bab 4–5. ChemLab menetapkan satu guru terverifikasi untuk seluruh akun siswa aplikasi; belum ada daftar anggota kelas terpisah. Cakupan dan batas tersebut diisi pada DATABASE.
+
+Jika mengadaptasi source ChemLab ke project sendiri, ubah email guru pada `src/lib/teacherAccess.js` dan fungsi `teacher()` di `firestore.rules` secara konsisten. Fixture email pada `tests/browser/teacher.spec.js` serta acuan pengujian perlu disesuaikan dan diuji ulang. Pertahankan pemeriksaan token email terverifikasi di server; nama/profil/localStorage tidak menetapkan hak. Gunakan akun guru yang Anda kelola dan terverifikasi, pasang Rules pada project sendiri, lalu uji siswa/tamu/guru belum terverifikasi dan larangan guru menulis hasil akun lain. Revisi dokumentasi ini tidak melakukan perubahan tersebut.
 
 ## Hak akses
 
@@ -10,11 +16,11 @@ Guru ditetapkan untuk akun Firebase Auth dengan email **wildannashihin@gmail.com
 - Data kelas dibaca dengan sesi Firebase terpisah yang hanya memakai memori. Sesi tersebut beserta listener-nya dibuang saat panel ditutup, akses gagal, akun berganti, atau pengguna keluar. Data kelas tidak dimasukkan ke cache client progres siswa maupun localStorage.
 - Seluruh akun siswa pada proyek aplikasi yang memiliki profil/progres tersinkron dapat muncul; belum ada pembagian kelas atau guru kedua.
 
-Rules ini sudah dipasang ke proyek `chemlab-web`. Bukti sumber Rules, akun guru, dan simulasi izin produksi tersedia di [firestore-production-check.json](firestore-production-check.json).
+Rules ini tercatat dipasang ke proyek pengajar `chemlab-web` pada 10 November 2026. Bukti sumber Rules, akun guru, dan simulasi izin ada di [firestore-production-check.json](firestore-production-check.json); bukti itu bukan verifikasi domain hosting atau project kelompok baru.
 
 ## Data dan rekap
 
-Panel menggabungkan `learnerProfiles/{UID}` dengan `learningProgress/{UID}`. Profil memuat nama tampilan, email dari Firebase Auth, dan timestamp server. Profil dibuat/diperbarui saat siswa masuk atau mengubah nama/email. Dua profil akun lama yang sudah memiliki progres produksi dilengkapi dari metadata Firebase Auth; tidak ada hasil belajar yang diubah. Bukti migrasi hanya memuat jumlah, tanpa identitas siswa: [teacher-profile-backfill.json](teacher-profile-backfill.json).
+Panel menggabungkan `learnerProfiles/{UID}` dengan `learningProgress/{UID}`. Profil memuat nama tampilan, email dari Firebase Auth, dan timestamp server. Profil ini lebih luas daripada alias minimum pada handout; jangan menyalin data tersebut ke repo, log, atau screenshot publik. Profil dibuat/diperbarui saat siswa masuk atau mengubah nama/email. Dua profil akun lama yang sudah memiliki progres produksi dilengkapi dari metadata Firebase Auth; tidak ada hasil belajar yang diubah. Bukti migrasi hanya memuat jumlah, tanpa identitas siswa: [teacher-profile-backfill.json](teacher-profile-backfill.json).
 
 Dokumen progres yang sudah ditandai terhapus dan akun guru tidak dimasukkan ke daftar siswa. Akun lama tanpa profil tetap dapat ditampilkan menggunakan ID sebagai pengenal. Catatan yang rusak ditandai untuk diperiksa dan dikeluarkan dari perhitungan skor; tidak diganti dengan siswa/hasil contoh.
 

@@ -1,53 +1,85 @@
-# Kontrak data — progres lokal dan Firestore
+# Database Hasil Belajar — ChemLab
 
-## Penyimpanan akun di Firestore
+Isian DATABASE mengikuti Lampiran A dan menjelaskan kontrak data yang benar-benar dipakai ChemLab. Kontrak ini menghubungkan draf/jawaban pada [USER_FLOW](USER_FLOW.md), penyimpanan pada [DESAIN_TEKNIS](DESAIN_TEKNIS.md), dan laporan guru pada [PRD](PRD.md). Rincian layanan: [Firestore](docs/FIRESTORE_SETUP.md), [Auth](docs/FIREBASE_AUTH_SETUP.md), dan [panel guru](docs/TEACHER_PANEL.md).
 
-Progres akun disimpan pada `learningProgress/{UID}` di proyek yang sama dengan Firebase Auth, dengan database `(default)` kecuali `VITE_FIRESTORE_DATABASE_ID` diisi. Dokumen memuat `version`, `revision`, `resetId`, `deleted`, `payload` JSON, dan `updatedAt` timestamp server. Payload memakai kontrak progres di bawah, termasuk snapshot hasil asesmen. Skema, batas 850.000 byte, aturan akses, antrean, kebijakan perubahan bersamaan, serta pemasangan Rules dijelaskan di [FIRESTORE_SETUP.md](docs/FIRESTORE_SETUP.md).
+## Lingkup dan pengelola
 
-Cloud dibaca sebelum penulisan pertama. Snapshot akun dipulihkan pada perangkat baru; perubahan lokal yang belum dikirim digabung lewat transaksi. Reset berkonfirmasi membuat generasi baru agar antrean dari sebelum reset tidak menghidupkan kembali hasil lama. Penghapusan akun mengosongkan payload dan menutup penulisan selanjutnya melalui penanda `deleted`, sebelum identitas Auth dihapus.
+- Satu materi / label kelas / ID produk: Asam–Basa dan pH / satu ruang siswa ChemLab / namespace produk `chemlab`. Bagian bacaan ber-ID `kenali`, `skala`, `kehidupan`.
+- Provider: **Firebase Auth + Cloud Firestore**, jalur Firebase pada handout; tidak memasang Supabase pada contoh ini.
+- Nama/ID project dan pengelola: bukti lingkungan pengajar merujuk `chemlab-web`, database `(default)`; pengelolaan repo contoh berada pada akun GitHub Wildan2150. Hak admin dashboard tidak disimpulkan dari akun guru aplikasi. Latihan memakai project emulator `demo-chemlab`; kelompok membuat project sendiri.
+- Akun guru tunggal dan cara penetapan: email `wildannashihin@gmail.com` harus terverifikasi, ditetapkan pada `src/lib/teacherAccess.js` serta fungsi `teacher()` di `firestore.rules`. Nama tampilan, profil client, dan localStorage tidak memberikan hak.
+- Daftar ID siswa melalui dashboard: pada kontrak ChemLab saat ini tidak ada koleksi anggota kelas; ruang siswa mencakup seluruh akun aplikasi yang menyinkronkan profil/progres. Keputusan ini dicatat agar pembaca tidak mencari koleksi kelas yang belum dibuat.
+- Penanggung jawab serah-terima/penghapusan: pengelola layanan masing-masing project; serah-terima kepada kelompok mahasiswa belum dicatat pada [TEAM.md](TEAM.md).
 
-## Integrasi pada main
+## Sumber data
 
-Materi, diagnostik, asesmen akhir bab, dan catatan eksplorasi memakai satu objek progres per identitas. Field `activityNotes` menyimpan prediksi, pengamatan, penjelasan, pilihan molekul, serta waktu pencatatan per aktivitas; data lama tanpa field ini dipulihkan sebagai catatan kosong. Ekspor menyertakan kedua fitur tambahan. Reset berkonfirmasi menimpa progres identitas aktif saja, sehingga catatan tamu dan akun lain tetap tersimpan.
+- Materi, soal, tag konsep, kunci, dan pembahasan: `src/data/chemData.js`, `readingContent.js`, `chapterAssessment.js`; aktivitas/katalog pada `activities.js` dan `molecules.js`.
+- Versi bank soal untuk riwayat: diagnostik aktif `asam-basa-v1`; asesmen `asam-basa-akhir-bab-v1` dengan snapshot instrumen per hasil. Arsip diagnostik lintas versi belum tersedia.
+- Draf/jawaban/progres/antrean lokal: `chemlab:guest:v1`, `chemlab:user:<UID>:v1`, dan `chemlab:sync:<UID>:v1`; data tamu dan UID lain dipisahkan.
+- Profil: `learnerProfiles/{UID}` memuat `displayName`, `email`, serta `updatedAt` timestamp server. Email sesuai token Auth; tidak ada password/token admin dalam profil atau progres.
+- Riwayat: diagnostik di `attempts`; asesmen di `assessment.attempts`. Tiap percobaan mempunyai ID, jenis, versi, waktu, jawaban dan skor; diagnostik memuat rincian hasil per butir, asesmen memuat snapshot instrumen/domain.
+- Progres cloud: seluruh objek progres disimpan pada `learningProgress/{UID}`. Riwayat berbentuk array hasil yang dibedakan ID, bukan satu skor terakhir yang menimpa semua percobaan.
+- Perbedaan nama field dari contoh umum handout: UID pemilik ada pada path dokumen, pilihan diagnostik berupa indeks 0–3, jenis aktivitas terlihat dari lokasi array/`kind`, dan tidak ada `receivedAt` per hasil. `updatedAt` adalah waktu server memperbarui seluruh dokumen.
 
-## Tambahan asesmen akhir bab
+### Dokumen cloud dan payload progres
 
-Progres memiliki field opsional `assessment: { draft, attempts }`. Draf mencatat UUID, versi asesmen, waktu, posisi, serta jawaban pilihan/angka. Hasil mencatat salinan instrumen dan domain, jawaban terkunci, skor, serta waktu selesai. Data lama tanpa field asesmen tetap valid. Pemulihan format asesmen dilakukan terpisah dari progres inti; riwayat yang valid dipertahankan jika ada entri rusak. Skor hasil lama diturunkan dari instrumen tersimpan, bukan bank aktif. Ekspor progres menyertakan asesmen; reset berkonfirmasi mengosongkannya. Kontrak lengkap: [CHAPTER_ASSESSMENT.md](docs/CHAPTER_ASSESSMENT.md).
+| Field `learningProgress/{UID}` | Isi |
+| --- | --- |
+| `version` | Versi dokumen cloud, saat ini 1 |
+| `revision` | Bilangan naik setiap penulisan yang diterima |
+| `resetId` | Identitas generasi progres; berubah saat reset dikonfirmasi |
+| `deleted` | Penanda penghapusan akun yang mencegah penulisan ulang |
+| `payload` | String JSON seluruh progres, atau null setelah penghapusan akun |
+| `updatedAt` | Timestamp server untuk pembaruan dokumen |
 
-## Tambahan branch akun
+Payload memuat `schemaVersion: 1`, `completedLessons`, `labVisited`, `ph`, `draft`, `attempts`, `assessment`, serta `activityNotes`. Draf diagnostik mempunyai `id`, `questionVersion`, `kind`, `startedAt`, dan `answers`. Catatan aktivitas menyimpan prediksi, pengamatan, penjelasan, pilihan molekul, dan waktu.
 
-Firebase Auth mengelola identitas dan sesi. Tamu menggunakan `chemlab:guest:v1`; salinan akun menggunakan `chemlab:user:<UID>:v1` dan antrean memakai `chemlab:sync:<UID>:v1`. State belajar di-remount saat UID berubah agar draf tidak tersalin ke akun lain. Logout kembali ke data tamu. Profil/email/password dikelola SDK, bukan dimasukkan ke objek progres. Detail akun: [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
+Contoh **ilustrasi jawaban**, bukan rekaman siswa atau bukti pengujian produksi: `answers: { q1: 1, q2: 2, q3: 0, q4: 3, q5: 2 }` memperoleh 100 pada bank aktif. Pada q2, indeks 2 adalah “100 kali lebih besar”. Data itu dapat ditelusuri dari PRD → kuis → `chemistry.js` → riwayat → rekap guru.
 
-Key `chemlab:guest:v1` menyimpan satu objek JSON untuk tamu pada origin aplikasi. Reset tamu menimpa key ini saja, tanpa `localStorage.clear()`. Reset akun juga disinkronkan ke Firestore, tanpa memengaruhi tamu atau UID lain.
+Ukuran payload dibatasi aplikasi/Rules pada 850.000 byte. Payload dikecualikan dari indeks. Jika terlalu besar, tampilkan kegagalan, pertahankan lokal/antrean, dan tawarkan ekspor; jangan memangkas riwayat diam-diam.
 
-```text
-schemaVersion: 1
-completedLessons: array ID materi unik
-labVisited: boolean; true setelah input pH/model HCl diubah
-ph: angka 0–14
-draft:
-  id: UUID stabil sepanjang satu percobaan
-  questionVersion: asam-basa-v1
-  kind: diagnostic | practice
-  startedAt: ISO timestamp
-  answers: { q1: selectedIndex, ... }  # 0–3; boleh belum lengkap
-attempts: array hasil lengkap
-  id, questionVersion, kind, startedAt, completedAt
-  answers: salinan lima jawaban
-  items: { questionId, concept, selectedIndex, correctIndex, isCorrect }[]
-  score: jumlah tepat × 20
-```
+## Akses dan aturan
 
-Percobaan disimpan hanya setelah lima butir lengkap. Pengumpulan ID yang sama tidak menambah hasil duplikat. Latihan baru memakai UUID dan `kind: practice`, tanpa mengubah diagnostik awal. Timestamp disimpan ISO dan ditampilkan sebagai WIB.
+- Tamu: belajar lokal dan tidak membaca/menulis cloud. Akun Auth: membuat/memperbarui progres sendiri dan membaca riwayat sendiri; belum ada pembatasan nonanggota kelas.
+- Siswa yang meminta data UID lain atau daftar siswa ditolak oleh database. Guru terverifikasi boleh membaca profil/progres seluruh siswa aplikasi, tanpa menulis hasil akun lain.
+- Profil pemilik harus memakai email yang sesuai token. Penulisan progres memeriksa field/tipe metadata, revisi berikutnya, ukuran payload, dan timestamp server.
+- ID percobaan tetap mencegah duplikasi pada pengumpulan/merge aplikasi; hasil dengan ID yang sudah diterima dipertahankan oleh kebijakan transaksi.
+- Batas keutuhan: Rules memeriksa kepemilikan dan metadata string payload, bukan jawaban di dalam JSON. Larangan siswa mengubah hasil lama belum ditegakkan sebagai aturan per record server. Skor client bukan nilai ujian terverifikasi server.
+- Akun guru dan progres bertanda terhapus dikeluarkan dari rekap; hasil yang tidak terbaca ditandai untuk diperiksa, bukan diganti data fiktif atau nol.
+- Password, service account, token admin, dan hasil siswa nyata tidak dimasukkan ke repo/log/screenshot.
 
-Pemulihan memeriksa skema, ID materi, ID/versi draf, waktu, tipe data, rentang opsi, hasil lengkap, dan duplikasi ID. Skor/item diturunkan kembali dari bank soal versi aktif. JSON rusak atau skema/versi tidak cocok memulai sesi baru dengan pemberitahuan. Versi ini belum mempunyai migrasi data; jangan gunakan kebijakan ini untuk hasil siswa nyata tanpa rancangan migrasi.
+## Sinkronisasi
 
-Ekspor progres membawa isi state, versi soal, dan waktu ekspor. Ekspor JSON panel guru memakai `type: hasil-belajar-siswa` dan mengikuti pencarian/filter, dengan pilihan CSV untuk rekap. Tidak ada impor atau transfer otomatis data tamu ke akun. Sinkronisasi antar-tab/perangkat hanya tersedia untuk akun yang sama melalui Firestore.
+- Kapan hasil tamu ditawarkan untuk dimasukkan ke akun: pada ChemLab belum ada penawaran/transfer. Login memuat ruang UID; logout mengembalikan ruang tamu. Ekspor JSON adalah salinan untuk dibaca, belum ada impor.
+- Kapan antrean dicoba dan cara menjaga pemilik: perubahan akun disimpan bersama base/revisi dan dikirim sesudah baca server; debounce 700 ms; retry ketika koneksi pulih atau diminta. Pergantian identitas membuang sesi lama dan tidak mengirim antrean sebagai akun lain.
+- Arti lokal / menunggu kirim / terkirim / gagal: tamu lokal; akun memuat/menunggu/menyimpan sampai transaksi dikonfirmasi; setelah itu **Progres tersimpan di akun**. Offline/izin gagal tetap mempertahankan perubahan dengan status yang sesuai.
+- Penanganan refresh: draf/ID dan antrean UID dipulihkan. Server dibaca sebelum penulisan awal; perangkat baru memuat progres termasuk draf, riwayat, dan catatan.
+- Perubahan bersamaan: transaksi membaca dokumen terbaru; materi/hasil ber-ID berbeda digabung. Field yang sama memakai perubahan yang dikomit terakhir. Draf aktif dapat diganti, hasil terkumpul dipertahankan oleh merge.
+- Logout/perangkat bersama: hentikan sesi akun, kembali ke tamu; penyimpanan browser bukan enkripsi dan dapat diperiksa pada origin tersebut. Sesi akun mengikuti pilihan Ingat saya; ekspor/hapus data dilakukan secara sadar.
+- Reset: konfirmasi tamu menimpa key tamu saja; konfirmasi akun membuat generasi baru dan mengosongkan progres cloud juga. Antrean sebelum reset tidak menghidupkan hasil lama; UID lain tidak ikut direset.
+- Penghapusan akun: autentikasi ulang sesuai provider → hentikan sinkronisasi → kosongkan payload dengan tombstone `deleted: true` dan hapus profil → hapus identitas Auth/cache lokal yang bersangkutan. Salinan perangkat lain yang offline tidak dapat dihapus dari jauh.
+- Storage/versi rusak: skema inti/versi diagnostik tidak cocok memulai progres baru dengan pemberitahuan. Field asesmen dipulihkan tersendiri dan hasil valid dipertahankan bila kerusakannya terbatas pada field itu. Jangan mengganti bank diagnostik tanpa rancangan arsip/migrasi.
 
-## Panel guru
+## Konfigurasi dan hasil uji
 
-Panel membaca `learningProgress/{UID}` dan `learnerProfiles/{UID}` dari Firestore. Profil memuat `displayName`, `email`, serta `updatedAt` timestamp server; pengguna hanya dapat menyimpan profil miliknya dengan email yang sama seperti token Auth. Penghapusan akun juga menghapus profil tersebut dan penanda penghapusan progres mencegah profil dihidupkan kembali.
+- Nama variabel tanpa nilai: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`, `VITE_FIRESTORE_DATABASE_ID`, `VITE_FIREBASE_USE_EMULATOR`. Nama/default nonrahasia ada di `.env.example`; nilai client diperoleh dari pengelola project sendiri.
+- Domain login/redirect: domain lokal dan hosting harus diizinkan pada Firebase Auth. URL tindakan akun mengikuti origin/path aplikasi. Pada produksi, konfigurasi emulator aktif menonaktifkan layanan akun meskipun build dapat berhasil.
+- Identitas aturan/policy: source `firestore.rules` dan `firestore.indexes.json`. Bukti 10 November mencatat pemasangan pada project pengajar; tidak berarti project kelompok atau domain hosting baru sudah diuji.
+- Acuan pemeriksaan terbaru: source aplikasi `c26d58c`, Windows/Edge, Node 24.20.0, Java 21.0.13, Auth/Firestore Emulator `demo-chemlab`, Codex, 20 November 2026. Rincian lengkap pada [TESTING.md](TESTING.md).
 
-Hanya token Auth dengan email terverifikasi `wildannashihin@gmail.com` yang boleh membaca daftar profil/progres. Siswa tetap hanya dapat membaca/menulis data sendiri. Guru membaca hasil siswa tanpa hak mengubahnya. Sesi pembacaan kelas memakai cache memori terpisah yang dibuang saat keluar dari panel.
+| Lingkungan/commit/penguji | Skenario | Aktual/bukti | Status/issue |
+| --- | --- | --- | --- |
+| Emulator / `c26d58c` / Codex | Siswa A simpan/baca progres sendiri | Suite akun/Firestore memulihkan jawaban, bacaan, asesmen, dan catatan | PASS, 20 November |
+| Emulator / `c26d58c` / Codex | Siswa A meminta progres B | Akses pemilik lain ditolak oleh Rules | PASS, 20 November |
+| Emulator / `c26d58c` / Codex | Guru membaca jawaban dan ringkasan | Fixture tersinkron terbaca, rekap/filter/ekspor cocok | PASS, 20 November |
+| Emulator / `c26d58c` / Codex | Tamu mengakses cloud | Permintaan tanpa Auth ditolak | PASS, 20 November; pembatasan anggota bukan bagian skema contoh |
+| Emulator / `c26d58c` / Codex | Offline, refresh, pulih, kirim ulang | Antrean UID/merge/reset lintas perangkat bekerja | PASS, 20 November |
+| Hosting produksi | Siswa/guru pada URL rilis | Identitas URL/deployment belum dicatat | BELUM DIUJI, REL-01 |
 
-Rekap memakai diagnostik awal pertama atau asesmen terbaru per siswa. Belum mengumpulkan dan catatan tidak terbaca tidak dihitung sebagai skor nol. Ambang pendampingan dapat diubah guru. Akun guru dan progres terhapus dikeluarkan dari daftar. Kontrak akses, rincian, dan migrasi profil ada di [TEACHER_PANEL.md](docs/TEACHER_PANEL.md). `demoStudents` hanya tersisa sebagai fixture uji logika lama, bukan sumber data panel.
+## Batas dan tindak lanjut
+
+- Skor dan kunci client dapat diperiksa/diubah; guru mencocokkan bukti jawaban dan versi instrumen. Penilaian formal memerlukan validasi tambahan.
+- ChemLab belum mempunyai daftar anggota kelas, pemilihan hasil tamu, penyimpanan per percobaan yang immutable di server, impor, atau arsip diagnostik lintas versi. Ini menjelaskan batas kontrak contoh; perluasan memerlukan keputusan desain tersendiri.
+- Pembukaan pertama offline dan ujian khusus belum didukung; sinkron draf lintas perangkat sudah menjadi bagian progres akun ChemLab.
+- Waktu retensi data layanan belum ditetapkan pada dokumen ini. Pada perangkat bersama, jelaskan sesi dan penyimpanan lokal; gunakan ekspor serta penghapusan akun/data latihan dengan persetujuan dan prosedur pengelola.
+- Guru tidak mempunyai administrasi banyak kelas atau penghapusan hasil akun lain. Pemakaian pada siswa sekolah memerlukan validasi/izin dan prosedur penelitian yang sesuai.

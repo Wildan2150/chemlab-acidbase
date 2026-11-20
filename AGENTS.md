@@ -1,21 +1,53 @@
-# Panduan perubahan ProyekContoh
+# AGENTS.md — Aturan Kerja Proyek ChemLab
 
-- Ini demo React + Vite berbahasa Indonesia untuk topik asam–basa/pH.
-- Main menggabungkan materi, asesmen, aktivitas interaktif, Firebase Auth, Firestore, serta panel guru dengan progres siswa nyata sesuai arahan pengajar. Pisahkan asesmen akhir bab dari diagnostik. Progres akun disinkronkan per UID; tamu tetap lokal.
-- Simpan data di `src/data/`: metadata dan diagnostik di `chemData.js`, bacaan di `readingContent.js`, instrumen asesmen di `chapterAssessment.js`, aktivitas di `activities.js`, dan katalog model 3D di `molecules.js`. Pisahkan perhitungan dan penyimpanan dari komponen tampilan.
-- Katalog molekul memakai rekaman SDF 3D PubChem lokal dengan manifest sumber/checksum pada `public/molecules/sources.json`. Periksa identitas/komposisi sebelum menambah CID; jangan menggantikan rekaman 3D yang tidak tersedia dengan koordinat buatan atau data 2D. Uji viewer perlu memeriksa struktur yang benar-benar tergambar, bukan hanya HTTP 200 atau keberadaan iframe.
-- Jangan mengubah dokumen mata kuliah di luar `ProyekContoh` untuk perubahan demo.
-- Jangan menyebut login/cloud berhasil tanpa integrasi dan bukti aktual. Panel guru membaca data akun yang tersinkron; jangan memasukkan siswa/hasil fiktif ke panel produksi.
-- Guru ditetapkan hanya untuk email terverifikasi `wildannashihin@gmail.com`. Pemeriksaan UI harus didampingi Firestore Rules dari token Auth; nama tampilan, profil client, dan localStorage tidak boleh memberi hak guru. Hak guru hanya membaca profil/progres siswa, tanpa menulis hasil akun lain.
-- Uji akun dan penyimpanan menggunakan Auth/Firestore Emulator dengan project ID `demo-chemlab`; jangan memakai akun/proyek produksi untuk uji yang membuat atau menghapus pengguna. Jangan mengklaim Rules sudah terpasang atau produksi terverifikasi tanpa bukti aktual.
-- Baca progres cloud sebelum menulis. Pertahankan isolasi UID, antrean perubahan, revisi/reset lintas perangkat, dan hasil asesmen tersimpan. Status tersinkron hanya setelah konfirmasi server; kegagalan izin/jaringan tidak boleh menghapus antrean. Perubahan Rules memerlukan uji pemilik, tamu, dan akun lain.
-- Google memakai Firebase SDK; pertahankan urutan persistensi local/session yang konsisten antar-tab. Akun khusus Google tidak diminta password ChemLab untuk penghapusan; lakukan autentikasi ulang dengan provider yang sama dan tetap minta konfirmasi hapus.
-- Teks antarmuka berbicara langsung kepada siswa/guru sebagai pengguna aplikasi. Jangan menampilkan label demo atau narasi tentang kuliah, prototipe, maupun implementasi. Asal data latihan dijelaskan singkat pada keterangan sumber panel guru, bukan banner atau label pada setiap elemen.
-- Pertahankan draf per pilihan, ID percobaan stabil, pemisahan diagnostik awal dan latihan ulang, serta reset berkonfirmasi.
-- Jangan memakai `localStorage.clear()`. Perubahan soal memerlukan keputusan versi dan migrasi data.
-- Asesmen memiliki versi sendiri dan salinan instrumen per hasil. Hasil yang sudah dikumpulkan tidak boleh berubah saat draf atau bank aktif berubah. Pemulihan field asesmen tidak boleh menghapus progres materi/diagnostik yang masih valid.
-- Pertahankan akses keyboard, label, kontras teks, dan tampilan ponsel; angka/label harus mendampingi warna.
-- Tur fitur memakai coachmark pada elemen nyata; pertahankan status terpisah dari progres dan penundaan pada alur akun. Bantuan kontekstual mengikuti ambang, jeda, batas sesi, serta pilihan nonaktifkan pada `docs/ONBOARDING.md`; jangan menyimpulkan kebingungan hanya dari waktu membaca atau mengklaim membaca interaksi iframe PhET.
-- Pengenalan tiap tab Eksplorasi harus muncul saat kunjungan pertama, sebelum Buka aktivitas ditekan, dan menunggu sambutan menutup. Jeda/kuota kendala tidak menahan pengenalan fitur baru. Pertahankan Ulangi semua petunjuk tanpa reset progres; hard refresh/clear cache HTTP tidak dianggap menghapus status localStorage.
-- Untuk perubahan logika data atau kuis, jalankan uji relevan. Sebelum menyerahkan perubahan aplikasi, jalankan build dan cek alur yang terkena.
-- Isi `AI_LOG.md` dan `TESTING.md` sesuai hasil nyata, tanpa mengklaim validasi pengajar atau pengujian produksi yang belum dilakukan.
+Aturan 1–15 mengikuti urutan templat Lampiran A dan diisi untuk ChemLab. Ketentuan khusus di bawah menjaga perilaku fitur contoh yang sudah ada.
+
+1. Gunakan React/Vite pada proyek ChemLab yang sudah ada; jangan membuat ulang aplikasi. Bahasa utama JavaScript dan CSS biasa.
+2. Baca PRD, backlog, USER_FLOW, desain, dan kontrak data yang terkait sebelum mengedit. Dokumen pengarah memakai susunan Lampiran A dan berisi keputusan ChemLab yang nyata.
+3. Kerjakan satu tugas/issue dengan perubahan terarah. Jelaskan berkas yang berubah, alasan, dan hasil yang perlu diperiksa.
+4. Materi/soal berada di `src/data/`. Urutan belajar handout ialah simpan lokal pada Pertemuan 3, lalu satu provider akun/database pada Pertemuan 4. Provider ChemLab yang sudah dipilih adalah Firebase Auth/Firestore.
+5. Pertahankan ID materi, versi instrumen, navigasi, diagnostik, asesmen, progres, fitur pilihan, dan reset sesuai kontrak di PRD/DATABASE.
+6. Antrean terikat pemilik UID; ID percobaan tetap; simpan jawaban awal sebelum pembahasan. Percobaan ulang tidak menimpa diagnostik awal atau hasil asesmen yang dikumpulkan.
+7. Database menolak tamu dan pembacaan/penulisan hasil akun lain oleh siswa; hanya satu guru terverifikasi boleh membaca data siswa. Profil/ruang siswa mengikuti DATABASE; jangan masukkan password atau hasil siswa ke repo/log.
+8. Jangan membaca/menyalin `.env.local`, token sesi, atau kredensial ke jawaban, log, repo, maupun screenshot. Gunakan nama variabel dari `.env.example` saat menjelaskan konfigurasi.
+9. Jangan memakai token admin, service-role key, service account, atau password database pada frontend.
+10. Materi, notasi, satuan, kunci, pembahasan dan batas model harus ditelusuri ke sumber serta diperiksa manusia. Jangan mengklaim validasi pengajar telah selesai tanpa catatan aktual.
+11. Gunakan HTML semantik, label, heading runtut, fokus terlihat, serta feedback yang tidak hanya memakai warna. Pertahankan akses keyboard dan tampilan ponsel.
+12. Konten eksternal mempunyai sumber/atribusi dan alternatif ketika gagal. Interaksi di dalam iframe PhET tidak boleh diklaim otomatis terbaca.
+13. Jangan commit, push, merge, menghapus riwayat, atau deploy otomatis tanpa instruksi eksplisit pelaksana yang berwenang.
+14. Setelah mengedit, jelaskan diff, langkah uji, hasil aktual dan keterbatasan; catat pada AI_LOG/TESTING. Jangan mengarang PASS, checkpoint, kontribusi mahasiswa, atau verifikasi produksi.
+15. Baca skill desain yang benar-benar dipilih dari path yang tersedia. Arah desain mengikuti PRD/kebutuhan belajar; jangan mengganti stack atau menambah layanan/dependency hanya untuk mengikuti contoh skill.
+
+## Ketentuan khusus ChemLab
+
+### Lingkup dan isi
+
+- Ini aplikasi berbahasa Indonesia untuk asam–basa/pH. Jangan mengubah dokumen mata kuliah di luar `ProyekContoh` untuk perubahan contoh.
+- `main` menggabungkan materi, diagnostik, asesmen, aktivitas, akun/cloud, serta panel guru. Jangan menjelaskan keadaan aktif sebagai versi lokal/data fiktif awal.
+- Data dipisahkan: metadata/diagnostik `chemData.js`, bacaan `readingContent.js`, asesmen `chapterAssessment.js`, aktivitas `activities.js`, katalog `molecules.js`. Perhitungan/penyimpanan terpisah dari tampilan.
+- Teks aplikasi berbicara langsung kepada siswa/guru. Konteks kuliah, contoh, dan implementasi berada pada dokumentasi, bukan banner/label di alur produk.
+
+### Akun, progres, dan guru
+
+- Progres akun disinkronkan per UID; tamu tetap lokal dan terpisah dari akun. Reset akun turut mereset progres cloud sesuai DATABASE; jangan mengubah kontrak ini diam-diam.
+- Baca progres server sebelum menulis. Pertahankan antrean, revisi, generasi reset lintas perangkat, dan hasil asesmen. Status tersimpan hanya setelah konfirmasi server; kegagalan izin/jaringan tidak menghapus antrean.
+- Guru hanya email terverifikasi `wildannashihin@gmail.com`. UI harus didampingi Rules dari token Auth; nama tampilan, profil client atau localStorage tidak memberi hak guru. Guru tidak menulis hasil akun lain.
+- Panel membaca profil/progres akun tersinkron; jangan memasukkan siswa/hasil fiktif sebagai pengganti data produksi. Hak baca guru tidak sama dengan administrasi dashboard.
+- Uji akun dan penyimpanan pada Auth/Firestore Emulator `demo-chemlab`; jangan membuat/menghapus pengguna produksi untuk fixture. Jangan mengklaim Rules terpasang atau produksi terverifikasi tanpa bukti.
+- Google memakai Firebase SDK; pertahankan urutan persistensi local/session antar-tab. Akun khusus Google tidak diminta password ChemLab ketika dihapus; autentikasi ulang dengan provider sama dan konfirmasi tetap diperlukan.
+- Jangan memakai `localStorage.clear()`. Perubahan bank diagnostik memerlukan keputusan versi dan migrasi/arsip sebelum diterbitkan. Rules yang berubah memerlukan uji pemilik, tamu, akun lain, dan guru.
+- Asesmen mempunyai versi/snapshot instrumen sendiri. Hasil terkumpul tidak berubah ketika draf/bank aktif berubah; pemulihan field asesmen tidak menghapus progres inti yang masih valid.
+
+### Model molekul dan bantuan
+
+- Katalog memakai rekaman SDF 3D PubChem lokal dengan manifest sumber/checksum di `public/molecules/sources.json`. Periksa identitas/komposisi sebelum menambah CID. Jangan mengarang koordinat atau menyebut rekaman 2D sebagai 3D.
+- Uji viewer memeriksa struktur yang benar-benar tergambar, bukan hanya iframe/canvas/HTTP 200.
+- Tur memakai coachmark pada elemen nyata; statusnya terpisah dari progres dan menunggu alur akun selesai. Bantuan mengikuti ambang, jeda, kuota, dan nonaktifkan pada `docs/ONBOARDING.md`; waktu membaca saja bukan bukti kendala.
+- Pengenalan tiap tab Eksplorasi muncul saat kunjungan pertama sebelum Buka aktivitas, setelah sambutan menutup. Kuota/jeda kendala tidak menahan pengenalan fitur baru.
+- Pertahankan Ulangi semua petunjuk tanpa reset progres. Hard refresh/clear cache HTTP tidak menghapus status localStorage.
+
+### Pemeriksaan dan dokumentasi
+
+- Perubahan logika data/kuis menjalankan uji relevan. Sebelum menyerahkan perubahan aplikasi, jalankan build dan cek alur yang terkena.
+- Perubahan dokumen diperiksa terhadap judul/urutan/isian Lampiran A, source aktual, kontrak fitur, tautan dan Markdown. Gunakan PRD, alur, desain, data, backlog, serta bukti uji sebagai satu rangkaian yang dapat ditelusuri mahasiswa.
+- Riwayat pengembangan pengajar/agent tidak boleh diklaim sebagai kontribusi individual mahasiswa atau checkpoint pertemuan yang tidak pernah dibuat.

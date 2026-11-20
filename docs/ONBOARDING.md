@@ -1,5 +1,7 @@
 # Onboarding dan bantuan kontekstual ChemLab
 
+Tur dan bantuan merupakan pengembangan khas ChemLab. Mahasiswa menuntaskan materi/kuis/data dahulu; panduan manual dapat menjadi versi minimum sebelum menambah tur otomatis. [Panduan replikasi](PANDUAN_REPLIKASI.md) menghubungkan keputusan ini dengan handout dan [PRD](../PRD.md). Aturan UX rinci di bawah tetap dipertahankan pada `main`; hasil uji pengguna belum dinyatakan selesai.
+
 ## Tujuan dan pola interaksi
 
 Pengguna baru perlu menemukan fitur, memahami kapan memakai diagnostik dan asesmen, serta mengetahui cara menyimpan pekerjaan. Referensi visual dari pengajar adalah tur dengan **coachmark**: balon petunjuk menunjuk elemen antarmuka yang diterangkan. Implementasi mengikuti pola tersebut dengan tema ChemLab.

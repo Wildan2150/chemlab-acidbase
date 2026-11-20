@@ -1,4 +1,6 @@
-# Aktivitas eksternal asam–basa
+# Aktivitas eksplorasi asam–basa
+
+PhET, model molekul, dan PubChem adalah pilihan pengembangan sesuai kebutuhan belajar, bukan seluruhnya syarat fondasi. Mulai dari satu aktivitas dengan pertanyaan pendamping, ikuti Lampiran F, dan gunakan [panduan replikasi](PANDUAN_REPLIKASI.md) untuk memasukkannya ke tahap yang tepat. Model molekul ChemLab dipaketkan lokal; PhET serta pencarian properti PubChem memakai layanan luar.
 
 Aktivitas dikembangkan pada `feat/interactive-activities` dari `main` commit `30505f7`, kemudian digabungkan ke `main` bersama materi, asesmen, dan akun pada 10 November 2026 WIB. Catatan eksplorasi mengikuti penyimpanan progres per UID/tamu.
 
@@ -14,7 +16,7 @@ Viewer menjalankan `createViewer → addModel('sdf') → setStyle → zoomTo →
 
 Katalog dicari secara lokal menggunakan nama Indonesia/Inggris, alias, rumus Unicode/ASCII, serta CID. Angka CID dicocokkan tepat, sehingga `176` tidak memilih urea dengan CID `1176`. Pencarian/filter tidak mengganti model sampai pengguna memilih hasil. Pilihan saat ini tetap ditampilkan jika tidak sesuai filter; hasil kosong tidak membuang pilihan atau catatan. Lihat [daftar lengkap katalog](MOLECULE_CATALOGUE.md).
 
-Catatan prediksi, pengamatan, penjelasan, dan pilihan CID tersimpan pada `activityNotes` di progres tamu. Versi skema tetap menerima data lama yang belum mempunyai catatan. Reset menghapus catatan bersama progres; ekspor membawa catatan. Menyimpan catatan lengkap adalah tindakan pengguna, bukan disimpulkan dari klik pada iframe. Aktivitas tambahan tidak mengubah makna lima langkah progres baseline.
+Catatan prediksi, pengamatan, penjelasan, dan pilihan CID tersimpan pada `activityNotes` di progres identitas aktif: tamu lokal, akun disinkronkan bersama progres per UID. Versi skema tetap menerima data lama yang belum mempunyai catatan. Reset menghapus catatan bersama progres identitas aktif, termasuk cloud jika sedang memakai akun; ekspor membawa catatan. Tamu tidak dipindahkan ke akun saat login. Menyimpan catatan lengkap adalah tindakan pengguna, bukan disimpulkan dari klik pada iframe. Aktivitas tambahan tidak mengubah makna lima langkah progres baseline.
 
 PubChem diminta saat pencarian dikirim, bukan setiap ketikan. Nama di-encode, permintaan mempunyai batas waktu 12 detik, pembatalan, perlindungan hasil usang, serta jeda antarmulai pencarian minimal 700 ms. Status kosong, memuat, ditemukan, 404, layanan sibuk, respons rusak, dan jaringan gagal dibedakan. Tidak ada hasil lama yang ditampilkan sebagai hasil permintaan baru. Tidak ada pengulangan otomatis tanpa batas.
 

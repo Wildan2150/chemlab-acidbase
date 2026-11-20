@@ -1,4 +1,125 @@
-# Hasil pengujian demo
+# Pengujian Produk — ChemLab
+
+Contoh isian TESTING dari Lampiran A. Nomor TC dipertahankan; langkah/harapan diisi untuk kontrak ChemLab pada PRD dan DATABASE. Cakupan pengujian selalu disebut agar kelulusan satu skenario tidak dianggap kelulusan seluruh aplikasi.
+
+## Identitas pemeriksaan
+
+- Tanggal/penguji dan kelompok penguji: 20 November 2026, Codex; pemeriksaan teknis contoh pengajar, bukan uji kelompok mahasiswa.
+- Branch/commit source: `main`, `c26d58c3cdf823df353150313605dccc9c97876c`.
+- Apakah masih ada perubahan source belum di-commit: perubahan working tree pada dokumen; source aplikasi, dependency/lockfile dan Rules tidak diubah oleh penataan dokumen.
+- Lingkungan: development emulator dan build/preview lokal pada salinan bersih tanpa `.env.local`; bukan URL hosting produksi.
+- URL, perangkat, browser, ukuran layar: emulator `http://127.0.0.1:5174`, suite akun `5175`, preview `4173`; Windows, Node 24.20.0, Java 21.0.13, Microsoft Edge headless. Walkthrough preview memakai sampel 375 × 812; suite akun/guru mencakup viewport ponsel.
+- Provider dan identitas aturan/policy yang diuji: Auth/Firestore Emulator `demo-chemlab` dengan source `firestore.rules`; metadata akses produksi hanya merujuk bukti historis 10 November.
+- Sumber bukti: 43 uji logika, 14 skenario akun/cloud/guru, build dan walkthrough preview pada 20 November; rincian perintah/hasil pada riwayat pemeriksaan di bawah. Penyusunan ulang dokumen tidak mengulang atau mengubah hasil run tersebut.
+- Pemeriksaan dokumen setelah koreksi pengajar: 10 dokumen pengarah cocok dengan urutan bagian Lampiran A; AGENTS memuat aturan 1–15 dan catatan AI memuat 16 field templat. Sebanyak 45 judul bagian juga cocok pada Word mahasiswa Revisi 03. Pemeriksaan 19 dokumen mencakup 237 tautan, 28 tabel, 41 rujukan path source dan tujuh tautan bab terhadap sumber handout; tidak ditemukan kesalahan. Sebanyak 154 berkas tracked non-Markdown tetap sama dengan source acuan. Contoh jawaban menghasilkan 100; rasio [H₃O⁺] pH 3/5 adalah 100 dan kunci q2 adalah indeks 2, sesuai source. Laporan lokal berada pada `.firebase/document-template-qa-20261120.json` (artefak pemeriksaan, tidak ikut repo).
+
+## Arti status
+
+- BELUM DIUJI: skenario/cakupan yang dimaksud belum dijalankan lengkap pada lingkungan yang dicatat.
+- PASS: hasil aktual sesuai harapan untuk langkah, cakupan, tanggal dan lingkungan yang disebut.
+- FAIL: ada perbedaan terhadap harapan; catat perbaikan dan uji ulang.
+- TERBLOKIR: kondisi awal pengujian belum tersedia; jelaskan penyebabnya.
+- N/A: hanya untuk fitur pilihan yang tidak diimplementasikan, dengan alasan; bukan pengganti hasil pemeriksaan.
+
+## Matriks
+
+Nomor TC mengikuti Lampiran A. Isian spesifik yang mengikuti kontrak contoh: TC-07 menguji pemilik/tamu karena belum ada daftar anggota; TC-08 menguji izin panel dan larangan menulis hasil akun lain; TC-18 menguji pembatalan serta pemisahan tamu/akun karena belum ada transfer hasil. Perlindungan hasil lama di server, keanggotaan dan pemilihan hasil tamu pada contoh umum handout dijelaskan sebagai batas pada DATABASE, tidak diklaim telah diuji/tersedia.
+
+| ID | Skenario/langkah | Hasil harapan | Hasil aktual/bukti | Status | Issue/penguji/uji ulang |
+| --- | --- | --- | --- | --- | --- |
+| TC-01 | Buka beranda, bacaan langsung, refresh | Halaman benar dan penanda bacaan pulih | Walkthrough preview berhasil pada rute hash bacaan | PASS | Codex, 20 November; host publik diuji tersendiri |
+| TC-02 | Validasi kelengkapan/skor; kumpulkan lima jawaban acuan | Tolak belum lengkap; skor 100 dan pembahasan setelah pengumpulan | Uji logika kelengkapan/skor lulus; walkthrough memberi 100 dan lima pembahasan | PASS | Codex, 20 November; variasi UI lengkap ada pada riwayat suite belajar |
+| TC-03 | Refresh draf, batal reset, reset identitas aktif | ID/pilihan pulih; batal mempertahankan; reset sesuai cakupan | Walkthrough dan suite akun/Firestore lulus; reset akun juga cloud | PASS | Codex, 20 November; kontrak reset pada DATABASE |
+| TC-04 | Periksa fitur khas yang ditugaskan pada backlog | Kriteria fitur yang diperiksa terpenuhi | Riwayat 17 November mencatat tujuh skenario header/navigasi/tur lulus | PASS | Codex, 17 November; bukan run ulang seluruh MVP-03 |
+| TC-05 | Periksa seluruh isi kimia/notasi dengan sumber oleh manusia | Rumus, satuan, kunci dan alasan sesuai sumber | Uji hitungan acuan lulus; validasi manusia seluruh isi belum dicatat selesai | BELUM DIUJI | QA-01, pengajar |
+| TC-06 | Akun A simpan lalu pulihkan progres sendiri | Jawaban, riwayat dan catatan cocok | Suite Firestore memulihkan pada konteks browser baru | PASS | Codex, 20 November; skema progres UID |
+| TC-07 | A meminta progres B; tamu meminta cloud | Database menolak akses | Suite Rules menolak UID lain, tamu dan list siswa tanpa hak | PASS | Codex, 20 November; tidak menguji keanggotaan yang belum dibuat |
+| TC-08 | Guru membaca; siswa mencoba panel/peran buatan; guru menulis hasil siswa | Baca guru berhasil; akses/penulisan di luar izin ditolak | Tiga skenario guru menguji token terverifikasi, manipulasi client, dan larangan menulis akun lain | PASS | Codex, 20 November; keutuhan payload pemilik bukan kontrak Rules per hasil |
+| TC-09 | Offline, refresh, pulih, kirim ulang | Antrean milik UID; hasil ber-ID sama tidak terduplikasi oleh merge | Uji logika/Firestore offline, transaksi dan reset lintas perangkat lulus | PASS | Codex, 20 November |
+| TC-10 | Sampel 375 px: bacaan, laboratorium, kuis | Tidak ada overflow horizontal pada halaman diperiksa | Walkthrough preview 375 × 812 berhasil | PASS | Codex, 20 November; belum ponsel fisik/seluruh variasi tabel |
+| TC-11 | Keyboard manual seluruh navigasi/kuis | Semua kontrol terjangkau dan fokus terlihat | Suite guru memeriksa keyboard; pemeriksaan manual menyeluruh belum dicatat | BELUM DIUJI | QA-03; hasil otomatis terpisah |
+| TC-12 | Heading/label/kontras/feedback manual seluruh halaman | Struktur dan feedback terbaca | Axe pada akun/panel/detail lulus; pemeriksaan manual seluruh tampilan belum dicatat | BELUM DIUJI | QA-03 |
+| TC-13 | Regresi logika dan akun pada source acuan | Kontrak data/akun/guru tidak gagal | 43 uji logika dan 14 skenario akun/cloud/guru lulus | PASS | Codex, 20 November; suite learning penuh tidak diulang pada revisi dokumen |
+| TC-14 | Build dan jalankan preview | Build berhasil, alur sampel berfungsi | Build/preview, draf, pembahasan dan batal reset berhasil | PASS | Codex, 20 November; peringatan bundle dicatat di riwayat |
+| TC-15 | Periksa tracked source, env lokal dan batas diff | Tanpa env lokal pada salinan; perubahan dokumen tidak mengubah aplikasi | Salinan 173 berkas dibuat tanpa env lokal; diff non-Markdown kosong | PASS | Codex, 20 November; staging rilis diperiksa lagi oleh pelaksana |
+| TC-16 | Buka hash bacaan langsung dan refresh | Rute/penanda bertahan pada preview | Walkthrough preview berhasil | PASS | Codex, 20 November; REL-01 untuk host publik |
+| TC-17 | Jalankan PhET/3D/PubChem dan seluruh kegagalannya | Fungsi, alternatif dan catatan benar | Uji katalog/logika serta riwayat browser tersedia; semua layanan/fallback belum diulang pada sesi ini | BELUM DIUJI | MVP-03; lihat riwayat aktivitas/viewer |
+| TC-18 | Batalkan login; bandingkan data tamu dan akun | Tamu tetap lokal; UID memuat ruangnya sendiri | Suite Google/akun menguji batal/pop-up diblokir serta ruang tamu/akun terpisah | PASS | Codex, 20 November; tidak mengklaim transfer/pemilihan hasil |
+| TC-19 | Logout/ganti akun dengan antrean | Tidak mengirim/menampilkan data sebagai UID lain | Suite akun/Firestore dan uji logika disposal/sesi lulus | PASS | Codex, 20 November |
+| TC-20 | Login pada konteks browser baru | Progres akun pulih termasuk draf sesuai keputusan ChemLab | Suite Firestore memulihkan materi, diagnostik, asesmen dan catatan | PASS | Codex, 20 November |
+| TC-21 | Percobaan ulang dan perubahan versi diagnostik | Riwayat tepat dan tetap terbaca sesuai versi | Ulang/asesmen snapshot lulus; arsip/migrasi diagnostik lintas versi belum tersedia | BELUM DIUJI | DATA-01 sebelum menerbitkan diagnostik baru |
+| TC-22 | Guru menafsirkan jawaban dan memilih tindak lanjut | Rekap cocok dan tindak lanjut beralasan | Rekap/ekspor cocok fixture pada suite guru; penafsiran pedagogik manusia belum divalidasi | BELUM DIUJI | QA-01; jangan menyamakan cek agregat dengan validasi pedagogik |
+| TC-23 | JSON rusak atau storage ditolak pada logika penyimpanan | Tidak crash/mengaku berhasil; pemulihan memberi penjelasan | Uji logika data rusak, validasi dan gagal storage lulus | PASS | Codex, 20 November; UI kegagalan lengkap merujuk riwayat suite belajar |
+
+## Rilis/produksi
+
+- URL produksi dan commit sumber deployment: belum ada identitas rilis hosting yang dicatat.
+- Hasil akses tanpa login hosting: belum diverifikasi pada URL publik.
+- Hasil uji cloud dan aturan akses di produksi: bukti 10 November memeriksa konfigurasi/Rules project pengajar; bukan run penuh alur publik 20 November.
+- Hasil kuis/progres/reset di origin publik: belum diuji pada identitas rilis hosting yang dicatat.
+- Hasil ponsel nyata dan keyboard: viewport Edge/otomatis tersedia; ponsel fisik dan pemeriksaan manual menyeluruh belum dicatat selesai.
+- Hasil smoke test setelah deployment final: belum ada deployment final yang dicatat.
+- Keterbatasan yang masih terbuka: REL-01, QA-01–03, PERF-01 dan DATA-01 pada [BACKLOG.md](BACKLOG.md); batas kontrak data pada [DATABASE.md](DATABASE.md).
+
+## Riwayat pemeriksaan dan hasil terperinci
+
+Catatan di bawah dipertahankan sebagai bukti bertanggal. Bagian awal 20 November merekam audit sebelum pengajar memperjelas bentuk contoh yang diinginkan; istilah GAP pada catatan lama bukan instruksi perubahan fitur otomatis. Dokumen aktif di atas dan PRD/DATABASE menjelaskan keputusan ChemLab yang dipertahankan.
+
+
+## 20 November 2026 WIB — dokumen dan replikasi pada salinan bersih
+
+**Pelaksana:** Codex. **Source aplikasi:** `c26d58c3cdf823df353150313605dccc9c97876c`; perubahan belum di-commit hanya berupa dokumentasi Markdown. Source, dependency/lockfile, Rules, dan konfigurasi aplikasi dipertahankan. Pemeriksaan memakai Windows, Node.js 24.20.0, Microsoft Edge headless, serta Temurin Java 21.0.13. PATH awal terminal menunjuk Java 8; Java 21 portabel yang sudah tersedia dipakai hanya pada sesi uji. Panduan meminta mahasiswa memeriksa versi Java pada terminal yang sama.
+
+Salinan uji dibuat dari 173 berkas source/dokumen (berkas terlacak dan panduan baru), tanpa `.git`, `.env.local`, cache, atau data produksi. Lokasi kerja sementara: `.firebase/docs-replica-20261120/`, diabaikan Git. Ini memeriksa isi salinan repo, bukan mencoba ulang autentikasi/unduhan GitHub pada komputer mahasiswa. Panduan yang diperiksa: [PANDUAN_REPLIKASI.md](docs/PANDUAN_REPLIKASI.md).
+
+| Pemeriksaan yang dijalankan | Hasil aktual |
+| --- | --- |
+| `npm.cmd ci --ignore-scripts` pada salinan bersih | Berhasil memasang 736 paket dari lockfile; npm melaporkan 14 advisory moderate pada keseluruhan dependency. Audit produksi tersendiri tidak dijalankan pada revisi dokumen ini |
+| `npm.cmd test` | 43 lulus, 0 gagal; hitungan, draf/versi, penyimpanan, penggabungan progres, laporan guru, katalog, dan bantuan |
+| `npm.cmd run build` | Berhasil; entry utama JS 301,45 KB gzip, CSS 22,02 KB gzip, chunk 3Dmol terpisah 164,02 KB gzip. Ada peringatan chunk besar dan `eval` upstream 3Dmol; anggaran awal JS 200 KB gzip belum terpenuhi |
+| `npm.cmd run dev:emulator` | Stack lokal berjalan pada project `demo-chemlab`, aplikasi 5174, Auth 9099, Firestore 8080. Browser memeriksa project ID, kunjungan pertama/tur, pilihan tamu dan ID tetap setelah refresh |
+| `npm.cmd run test:e2e -- --project=firebase-auth` | 14 lulus, 0 gagal dalam 3,0 menit. Mencakup 5 skenario akun, 3 Google emulator, 3 Firestore, dan 3 guru; fixture hanya pada emulator |
+| `npm.cmd run preview` dan walkthrough browser | Alamat 4173 terbuka tanpa konfigurasi cloud; tautan hash bacaan/refresh mempertahankan selesai; draf/ID pulih; lima jawaban acuan memberi skor 100 serta lima pembahasan; batal reset mempertahankan hasil |
+| Sampel layar 375 × 812 pada preview | Bacaan, laboratorium, dan kuis tidak overflow horizontal; tidak ada `pageerror` pada walkthrough tersebut |
+| Pemeriksaan dokumen | 19 dokumen, 224 tautan, dan 27 tabel diperiksa; tidak ada target lokal hilang, pagar kode tidak berpasangan, atau lebar kolom tabel tidak konsisten. Tujuh tautan bab handout cocok dengan nama sumber lokal; tujuh pertemuan, GAP-01–04, dan TC-01–TC-23 terpetakan. Ketersediaan URL eksternal tidak diperiksa ulang |
+| `git diff --check` dan batas perubahan | Tidak ada kesalahan whitespace; 154 berkas terlacak selain Markdown sama dengan HEAD. Perubahan untuk diserahkan hanya 18 Markdown yang diperbarui dan satu panduan baru dalam ProyekContoh |
+
+Suite akun mengeluarkan peringatan SDK ketika mensimulasikan jaringan putus dan ketika sesi baca guru dibuang (`app/app-deleted`); seluruh 14 skenario tetap lulus. Hasil tersebut tidak menyatakan konsol seluruh alur bebas peringatan. Server preview/emulator yang dijalankan untuk pemeriksaan sudah dihentikan.
+
+Laporan mesin walkthrough dan pemeriksaan tautan disimpan pada folder uji sementara di atas; ringkasan hasil yang ikut repo berada pada dokumen ini. Suite guru menghasilkan ulang dua PNG pratinjau hanya pada salinan uji, tanpa mengubah gambar repo kerja. Semua bukti pengembangan terdahulu di bawah tetap merupakan riwayat bertanggal, bukan hasil uji ulang penuh pada 20 November.
+
+**Batas pemeriksaan:** suite `learning` lengkap, OAuth/email sungguhan, project/Rules produksi, deployment publik, ponsel fisik, pembaca layar manual, Lighthouse, validasi kimia/pedagogik manusia, serta keberhasilan mahasiswa pemula belum diuji ulang/dinyatakan selesai. Tidak ada akun atau hasil belajar produksi yang dibuat, diubah, atau dihapus. GAP-01–04 dan REL-01 pada [backlog](BACKLOG.md) tetap terbuka meskipun suite kontrak ChemLab lulus.
+
+## Pemetaan TC-01–TC-23 dari Lampiran A — 20 November 2026
+
+Tabel ini memetakan bukti dan batas cakupan, bukan menyatakan seluruh TC handout lulus. Untuk proyek sendiri, isi matriks eksekusi Lampiran A dengan langkah, harapan, aktual, lingkungan/commit, penguji, status PASS/FAIL/BELUM DIUJI/TERBLOKIR, dan hasil uji ulang. N/A hanya untuk fitur pilihan yang tidak dibuat. Kekurangan fondasi yang sudah diketahui tetap dicatat sebagai ketidaksesuaian.
+
+| ID | Bukti yang tersedia pada ChemLab | Batas atau tindak lanjut terhadap handout |
+| --- | --- | --- |
+| TC-01 | Walkthrough preview membuka beranda dan bacaan langsung; refresh bacaan berhasil | Pemeriksaan seluruh jalur navigasi mengacu riwayat suite belajar; ulangi pada proyek/URL sendiri |
+| TC-02 | Walkthrough lima jawaban benar memberi 100 dan pembahasan; uji logika memeriksa kelengkapan/skor | Seluruh variasi jawaban lewat UI belum diulang pada sesi ini |
+| TC-03 | Draf/ID pulih; batal reset menjaga hasil; suite akun menguji reset identitas aktif | Reset akun ikut menghapus cloud, berbeda dari reset draf/perangkat handout: GAP-03 |
+| TC-04 | Riwayat issue/perbaikan lama tersedia di log | Belum ada penerimaan issue sprint kelompok mahasiswa; isi berdasarkan tugas nyata |
+| TC-05 | Uji logika acuan pH/toleransi lulus; sumber materi dan instrumen tersedia | Validasi manusia seluruh isi, notasi, dan pedagogik belum dicatat selesai |
+| TC-06 | Suite Firestore memulihkan materi, jawaban, asesmen, dan catatan pada browser baru | Teruji pada skema progres UID ChemLab; bukan koleksi hasil per percobaan Lampiran B |
+| TC-07 | Suite emulator menolak tamu dan akses UID lain | Nonanggota kelas belum ditolak: GAP-01; tidak boleh dianggap PASS penuh |
+| TC-08 | Suite guru memeriksa akses terverifikasi dan larangan menulis hasil akun lain | Rules belum menolak pemilik mengubah payload hasil sendiri: GAP-03 |
+| TC-09 | Uji logika/Firestore: perubahan offline, antrean, gabung, ID, reset lintas perangkat | Keutuhan/idempotensi pada kontrak hasil per record handout perlu diuji pada implementasinya |
+| TC-10 | Preview 375 px: bacaan/lab/kuis; suite akun/guru memakai viewport ponsel | Belum semua tabel/opsi panjang pada 375 px atau perangkat fisik diperiksa ulang |
+| TC-11 | Suite guru memeriksa keyboard; riwayat suite belajar mencakup kontrol inti | Uji keyboard manual seluruh aplikasi oleh pembaca belum dicatat selesai |
+| TC-12 | Pemeriksaan axe pada form akun/panel/rincian guru lulus | Tidak menggantikan pemeriksaan manual heading, kontras, dan seluruh feedback |
+| TC-13 | Source aplikasi tetap; 43 uji logika, 14 akun/cloud/guru, dan smoke preview lulus | Suite belajar lengkap dan merge baru tidak dilakukan pada revisi dokumen |
+| TC-14 | Build dan walkthrough preview lokal lulus | Ukuran/peringatan build dicatat; uji hosting tetap terpisah |
+| TC-15 | Salinan bersih tanpa env lokal; audit diff hanya Markdown | Kelompok tetap memeriksa staging/source, data contoh, dan variabel build rilisnya |
+| TC-16 | Rute hash bacaan dibuka langsung dan di-refresh pada preview | Perlu diulang pada URL hosting produksi: REL-01 |
+| TC-17 | Uji logika memverifikasi katalog/struktur; bukti uji jaringan/3D lama tersedia | PhET/PubChem/viewer dan kegagalan jaringan tidak diulang seluruhnya; fitur dipilih pada backlog |
+| TC-18 | Suite Google menguji pembatalan dan pemisahan tamu/akun | Pemilihan hasil tamu belum tersedia: GAP-02; bukan N/A |
+| TC-19 | Suite akun/Firestore: dua akun/tamu, perubahan sesi, antrean, dan logout | Teruji pada skema ChemLab; ulangi jika memakai kontrak/layanan handout |
+| TC-20 | Suite Firestore memulihkan progres pada konteks browser baru | ChemLab menyinkronkan draf juga; jelaskan bedanya dari draf lokal handout |
+| TC-21 | Uji asesmen membuktikan hasil memakai snapshot; percobaan baru terpisah | Diagnostik versi lama belum diarsipkan/dimigrasikan: GAP-04 |
+| TC-22 | Suite guru mencocokkan rekap/ekspor dengan jawaban fixture, penyebut tanpa siswa belum mengumpulkan | Penafsiran/tindak lanjut manusia belum divalidasi; rekap asesmen per cakupan, diagnostik per butir |
+| TC-23 | Uji logika memeriksa JSON rusak, storage ditolak, dan hasil asesmen rusak; riwayat browser tersedia | Pemulihan inti/versi diagnostik dapat memulai progres baru; jelaskan risiko GAP-04 |
+
 
 ## 17 November 2026 WIB — header desktop dan ponsel
 

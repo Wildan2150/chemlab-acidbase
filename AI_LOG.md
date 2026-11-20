@@ -1,4 +1,44 @@
-# Log bantuan AI
+# Catatan Bantuan AI dan Verifikasi
+
+Contoh isian AI_LOG mengikuti Lampiran A. Catatan terbaru memakai kolom yang sama; riwayat lama dipertahankan. Contoh pengajar/agent tidak diklaim sebagai kontribusi individual mahasiswa.
+
+## Lintas Pertemuan 1–7 — Codex: penataan dokumen pengarah ChemLab
+
+- Tanggal dan tugas/issue: 20 November 2026; isi dokumen pengarah dengan susunan templat Lampiran A agar penerapan pada web dapat dilihat konkret. Ini pekerjaan dokumentasi lintas bab, bukan tujuh sesi kuliah yang diklaim berlangsung.
+- Branch/commit/PR/review: source `main` pada `c26d58c`; perubahan dokumen pada working tree, belum commit/PR/review mahasiswa.
+- Agent atau sumber bantuan yang digunakan: Codex; source aplikasi, handout Markdown, dan hasil pengujian yang sudah dicatat.
+- Skill yang digunakan, sumber/versi, serta path SKILL.md yang dibaca: `natural-writing`, versi tidak dinyatakan; `D:/Downloads/Vibe Coding React untuk Web Pembelajaran Kimia/.agents/skills/natural-writing/SKILL.md`, telah dibaca pada tahap audit.
+- Referensi media sosial dan repo sumber jika dipakai: tidak memakai referensi media sosial baru; sumber utama templat adalah Lampiran A handout. Repo ChemLab tetap source produk contoh.
+- Prompt/tujuan permintaan: pengajar meminta PRD dan dokumen pengarah menjadi contoh isian handout yang cocok dengan hasil ChemLab; keunikan dan kontrak fitur dipertahankan.
+- Berkas yang berubah: PRD, AGENTS, TEAM, BACKLOG, USER_FLOW, DESAIN_TEKNIS, DATABASE, README, TESTING, AI_LOG, panduan membaca contoh, serta rujukan kontrak yang terkait. Source/Rules/dependency aplikasi tetap.
+- Penjelasan agent yang saya periksa: judul, urutan bagian dan kolom isian dicocokkan dengan templat; hubungan tujuan skala pH → lab 3/5 → q2 → jawaban → rekap/tindak lanjut ditelusuri ke source.
+- Pemeriksaan konten kimia dan sumber: pilihan/kunci q1–q5 dan persamaan rasio 10⁻³/10⁻⁵ diperiksa terhadap data/hitungan; sumber materi dan kontrak asesmen/aktivitas dipertahankan. Tidak mengklaim validasi seluruh isi oleh pengajar.
+- Langkah uji/ID uji yang saya lakukan: periksa struktur templat, field terisi, rujukan source/tautan, pagar kode/tabel, serta diff non-Markdown; bukti run aplikasi sebelumnya dipetakan pada matriks TC-01–TC-23.
+- Hasil aktual: 10 dokumen mengikuti urutan templat Lampiran A; AGENTS memiliki aturan 1–15 dan entri AI memiliki 16 field. Sebanyak 45 judul bagian juga dicocokkan dengan Word mahasiswa Revisi 03. Pemeriksaan 19 dokumen, 237 tautan, 28 tabel, 41 path source, dan tujuh rujukan bab selesai tanpa kesalahan. Contoh q1–q5 memberi 100 dan rasio pH 3/5 memberi 100 sesuai source; 154 berkas non-Markdown tetap. Source aplikasi memakai bukti 43 uji logika, 14 skenario emulator, build dan walkthrough 20 November; run tersebut tidak diklaim diulang untuk penataan teks.
+- Jika tugas desain: arah visual, perbandingan sebelum/sesudah, dan uji akses: tidak mengubah UI; tema hijau, tiga bacaan, lab, asesmen, PhET/36 molekul/PubChem, tur dan panel dipertahankan. Perubahan dokumen dari susunan audit ke susunan isian templat.
+- Jalur Git yang dipakai: terminal untuk pemeriksaan status/diff; tidak melakukan commit/push/merge/deploy.
+- Koreksi atau keputusan manusia: pengajar memperjelas bahwa kesamaan pola dokumen pengarah dengan handout adalah tujuan utama; daftar perbedaan fitur tidak menjadi pusat dokumen. Kontrak khas ChemLab tetap disetujui untuk dipertahankan.
+- Hal yang belum selesai/keterbatasan: review pembaca/pengajar, validasi pedagogik, uji manual dan identitas rilis hosting tetap dicatat menurut bukti. Tidak membuat nama anggota, checkpoint kelas, hasil siswa, atau PASS yang tidak ada.
+- Tautan bukti yang bebas kredensial/data pribadi: [PRD](PRD.md), [panduan membaca contoh](docs/PANDUAN_REPLIKASI.md), [TESTING](TESTING.md).
+
+## Riwayat catatan sebelum penataan templat
+
+Catatan audit awal di bawah menjelaskan pekerjaan yang benar-benar dilakukan sebelum koreksi pengajar. Keputusan aktif mengikuti PRD/DATABASE dan isian terbaru di atas; riwayat ini tidak menjadi tugas perubahan fitur otomatis.
+
+
+## 20 November 2026 WIB — penyelarasan dokumen dan panduan replikasi
+
+**Tugas:** membandingkan dokumen pengembangan ChemLab dengan panduan/handout, mempertahankan fitur khas, dan membantu mahasiswa membangun bertahap. Pengguna menyetujui pelaksanaan rencana dokumentasi; validasi isi/pedagogik oleh pengajar belum dinyatakan selesai. Source aplikasi merujuk `c26d58c3cdf823df353150313605dccc9c97876c`; perubahan dokumentasi belum di-commit, tanpa PR/review kelompok yang diklaim.
+
+**Agent/skill:** Codex, memakai `natural-writing` dari `D:/Downloads/Vibe Coding React untuk Web Pembelajaran Kimia/.agents/skills/natural-writing/SKILL.md` yang telah dibaca pada tahap audit. Berkas skill tidak menyatakan versi. Tidak memasang skill/dependency baru untuk revisi ini. Referensi isi ialah indeks kurikulum, Bab 1–7, Lampiran A/B/E/F, Word mahasiswa Revisi 03, source, dan bukti uji yang sudah tersedia.
+
+**Perubahan:** README menjadi pintu masuk ke `docs/PANDUAN_REPLIKASI.md`; panduan memuat matriks kesesuaian, peta kode, tahapan/prosedur/prompt/checkpoint, clone/emulator, adaptasi layanan, dan troubleshooting. PRD, alur, desain, kontrak data, backlog, TEAM, AGENTS, delapan panduan fitur, serta TESTING diselaraskan. Keputusan lokal/data fiktif dibatasi pada riwayat awal. Tidak ada perubahan source/Rules/konfigurasi, deployment, atau dokumen mata kuliah di luar ProyekContoh.
+
+**Keputusan yang dipertahankan:** topik asam–basa/pH, kelas XI, desain hijau, tiga bacaan/24 bagian, lab pH, diagnostik, asesmen 15 soal, PhET, 36 model lokal, PubChem, catatan, tur/bantuan, akun dan panel guru. Fitur tambahan dipisahkan dari fondasi wajib. Perbedaan terhadap handout dicatat sebagai GAP-01 (anggota/profil kelas), GAP-02 (pemilihan hasil tamu), GAP-03 (hasil per percobaan/reset lokal), GAP-04 (arsip diagnostik), dan rilis hosting REL-01.
+
+**Hasil nyata:** instalasi pada salinan bersih tanpa `.env.local` berhasil; 43 uji logika serta 14 skenario akun/Google emulator/Firestore/guru lulus. Stack emulator 5174 dan preview build 4173 diperiksa melalui Edge; draf/ID tetap, skor/pembahasan, batal reset, rute hash, serta sampel 375 px berhasil. Tautan dan struktur Markdown diperiksa. Build lulus dengan peringatan ukuran chunk/`eval` upstream; entry utama 301,45 KB gzip melebihi target awal 200 KB. npm melaporkan advisory dependency tanpa dilakukan perbaikan paket. Rincian lingkungan, perintah, dan pemetaan TC-01–TC-23 ada pada [TESTING.md](TESTING.md).
+
+**Batas:** pemeriksaan agent bukan uji mandiri oleh mahasiswa pemula, validasi pengajar, uji efektivitas, atau verifikasi ulang layanan produksi. Perbedaan fungsional tetap terbuka; hasil suite ChemLab tidak digunakan untuk mengklaim seluruh kontrak handout lulus. Tidak membuat, mengubah, atau menghapus akun/hasil produksi; fixture berada pada project emulator `demo-chemlab`. Seluruh server pemeriksaan dihentikan.
 
 ## 17 November 2026 WIB — perluasan header sticky ke desktop
 

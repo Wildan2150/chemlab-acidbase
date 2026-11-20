@@ -1,120 +1,84 @@
-# ChemLab — demo pembelajaran asam–basa dan pH
+# ChemLab — Contoh Pengajar
 
-`main` menggabungkan `feat/material-updates`, `feat/chapter-assessment`, `feat/interactive-activities`, dan `feat/login-page`.
+Contoh isian README dari Lampiran A handout **Vibe Coding React untuk Web Pembelajaran Kimia**. Dokumen pengarah di repo memakai bagian/urutan templat yang sama, lalu diisi dengan keputusan ChemLab. Mulai dari [PRD](PRD.md), lalu ikuti [alur pengguna](USER_FLOW.md), [desain teknis](DESAIN_TEKNIS.md), dan [kontrak data](DATABASE.md) sambil membuka web.
 
-**Onboarding** menampilkan sambutan saat kunjungan pertama dan tur dengan balon yang menunjuk menu sebenarnya, sorotan target, serta latar redup. Tur bisa dilewati dan dibuka ulang lewat **Tur fitur**. **Bantuan kontekstual** muncul saat pertama membuka tab PhET, model molekul, atau PubChem, serta setelah kendala berulang pada pencarian, pengumpulan jawaban, dan muat ulang simulasi. Bantuan otomatis bisa dinonaktifkan melalui **Panduan belajar**; **Petunjuk fitur ini** di Eksplorasi tetap tersedia manual. Lihat [aturan dan alasan desain UX](docs/ONBOARDING.md).
+## Tujuan dan pengguna
 
-Petunjuk PhET, model molekul, dan PubChem muncul otomatis saat pertama membuka masing-masing tab Eksplorasi, sebelum menekan **Buka aktivitas**. Untuk menguji ulang dari awal, pilih **Panduan belajar → Ulangi semua petunjuk**; progres belajar tetap ada. Hard refresh dan clear cache HTTP tetap menyimpan status kunjungan di browser.
+ChemLab membantu siswa kelas XI mempelajari asam–basa dan pH melalui bacaan, representasi, perhitungan, dan diagnostik. Guru menggunakan jawaban per butir serta catatan siswa untuk menentukan tindak lanjut. Mahasiswa Pendidikan Kimia membaca repo ini untuk melihat penerapan dokumen handout pada produk.
 
-**Materi belajar** memuat tiga bacaan dengan 24 bagian, contoh hitung, tabel, daftar isi, refleksi, dan sumber per bagian. Baca [peta materi dan sumber](docs/MATERIAL_SOURCES.md).
+Modul 1 adalah satu materi Asam–Basa dan pH. Tiga bacaan **Kenali asam & basa**, **Membaca skala pH**, dan **Kimia di sekitar kita** adalah bagian materi tersebut. ChemLab memilih tema hijau, JavaScript/CSS biasa, serta fitur pendamping berikut.
 
-**Asesmen akhir bab** menyediakan 15 soal (9 pilihan ganda dan 6 jawaban angka), draf tersimpan, tinjauan/konfirmasi pengumpulan, hasil per cakupan, pembahasan, riwayat, serta ekspor. Baca [kisi-kisi dan kontrak asesmen](docs/CHAPTER_ASSESSMENT.md). Buka `/#asesmen` melalui menu atau akhir bacaan ketiga.
+| Kebutuhan di PRD | Hasil pada web |
+| --- | --- |
+| Mengenali teori dan contoh | Tiga bacaan/24 bagian dengan sumber, refleksi, tabel dan contoh hitung |
+| Memahami skala logaritmik | Laboratorium pH, [H₃O⁺]/[OH⁻], pOH, serta model HCl tiga konsentrasi pada 25 °C |
+| Mengumpulkan bukti awal | Lima soal diagnostik, draf, pembahasan sesudah pengumpulan, latihan ulang terpisah |
+| Mengumpulkan bukti setelah belajar | Asesmen akhir bab 15 soal, tinjauan, konfirmasi dan snapshot instrumen |
+| Mengeksplorasi konsep | PhET, 36 model molekul lokal, PubChem dan catatan prediksi/pengamatan/penjelasan |
+| Melanjutkan dan mendampingi belajar | Akun/progres Firestore, panel guru, pencarian, tur/bantuan, tampilan ponsel |
 
-**Eksplorasi kimia** mencakup PhET asam–basa, 36 model molekul 3Dmol dengan pencarian nama/rumus/CID dan filter kelompok, pencarian properti PubChem, serta catatan pengamatan yang ikut tersimpan/diekspor bersama progres. Pustaka dan rekaman struktur 3D dipaketkan lokal; model dimuat saat dibuka. Lihat [pemetaan Lampiran F dan sumber](docs/INTERACTIVE_ACTIVITIES.md) serta [katalog CID](docs/MOLECULE_CATALOGUE.md).
+Contoh hubungan konkret: tujuan skala pH → aktivitas pH 3/5 → q2 dengan jawaban rasio 100 → jawaban tersimpan → rekap guru → tindak lanjut. [Panduan membaca contoh](docs/PANDUAN_REPLIKASI.md) menunjukkan dokumen/berkas dan tahap handoutnya. Seluruh pengembangan ChemLab tidak menjadi kewajiban seragam mahasiswa.
 
-**Firebase Auth** menyediakan masuk/daftar dengan email atau Google, verifikasi email, pemulihan password, pengelolaan profil/email/password, logout, dan hapus akun. Seluruh progres belajar, termasuk asesmen dan catatan eksplorasi, dipisahkan per akun/tamu di browser. Panduan lengkap ada di [FIREBASE_AUTH_SETUP.md](docs/FIREBASE_AUTH_SETUP.md).
+## Tautan
 
-**Cloud Firestore** menyimpan progres akun, memulihkannya pada perangkat lain, dan menyinkronkan perubahan yang menunggu koneksi. Tamu tetap lokal. Pasang aturan akses mengikuti [panduan Firestore](docs/FIRESTORE_SETUP.md); konfigurasi memakai proyek Firebase yang sama dengan Auth.
+- Repo: [Wildan2150/chemlab-acidbase](https://github.com/Wildan2150/chemlab-acidbase).
+- URL produksi: belum dicatat sebagai rilis hosting terverifikasi pada repo.
+- Commit sumber rilis yang diuji: pemeriksaan lokal/emulator 20 November memakai `c26d58c3cdf823df353150313605dccc9c97876c`; rilis hosting belum dicatat.
+- Identitas deployment: belum dicatat; tindak lanjut REL-01 pada [BACKLOG.md](BACKLOG.md).
+- Catatan jawaban contoh/aturan cloud yang diuji: [TESTING.md](TESTING.md), `firestore.rules`, [DATABASE.md](DATABASE.md). [Bukti Rules/konfigurasi project pengajar](docs/firestore-production-check.json) bertanggal 10 November.
+- Backlog/Issues dan PR/review: [BACKLOG.md](BACKLOG.md), [AI_LOG.md](AI_LOG.md), dan riwayat Git. Kontribusi/PR mahasiswa tidak direka.
+- Handout: [repo handout pengajar](https://github.com/Wildan2150/handout-web-based-learning-kimia); Lampiran A berisi templat yang diisi pada dokumen-dokumen ini.
 
-**Panel guru** menampilkan progres siswa nyata dari akun yang tersinkron. Hanya akun terverifikasi `wildannashihin@gmail.com` yang dapat membukanya. Rekap diagnostik/asesmen, rincian percobaan, catatan eksplorasi, serta ekspor JSON/CSV tersedia. Aturan akses guru sudah dipasang ke produksi; lihat [panduan panel guru](docs/TEACHER_PANEL.md).
+## Menjalankan source
 
-Contoh produk yang dapat dikembangkan mahasiswa dalam kuliah **Vibe Coding React untuk Web Pembelajaran Kimia**. Sasaran contoh: siswa kelas XI. Dibuat dengan React, Vite, JavaScript, dan CSS biasa agar data, tampilan, dan interaksinya mudah dipelajari.
+1. Clone lewat Source Control IDE/terminal, lalu buka folder dengan `package.json`: `ProyekContoh` pada bundel kuliah atau `chemlab-acidbase` pada clone terpisah.
+2. Gunakan Node ≥22.12.0 sesuai `package.json`. Pasang dependency dari lockfile dengan `npm.cmd ci --ignore-scripts`. `npm.cmd`/`npx.cmd` adalah bentuk Windows; gunakan `npm`/`npx` jika sesuai terminal/OS.
+3. Pada salinan bersih, jalankan `npm.cmd run dev`; buka Local Vite, biasanya **http://127.0.0.1:5173**. Materi/lab/kuis tamu berjalan tanpa konfigurasi cloud. Jangan membuka `index.html` langsung.
+4. Untuk akun/cloud lokal, sediakan Java 21+ pada PATH lalu jalankan `npm.cmd run dev:emulator`. Buka **http://127.0.0.1:5174**. Script memakai `demo-chemlab`, Auth 9099, Firestore 8080 dan hub 4400. Google memakai identitas fiktif emulator; tautan verifikasi/reset tersedia di emulator/terminal. Data sementara selama proses hidup.
+5. Untuk project sendiri, salin `.env.example` ke `.env.local` dan isi konfigurasi Web App dari pengelola layanan Anda. Ikuti [Auth](docs/FIREBASE_AUTH_SETUP.md), [Firestore](docs/FIRESTORE_SETUP.md), dan [penetapan guru](docs/TEACHER_PANEL.md); restart Vite setelah perubahan.
+6. Hentikan dengan Ctrl + C. Tutup stack manual sebelum suite browser agar port tidak bertabrakan.
 
-## Jalankan
+Clone tidak membawa `.env.local` atau akses pengajar. Petunjuk clone, emulator, dan troubleshooting lengkap ada pada panduan membaca contoh.
 
-Prasyarat: Node.js 22.12+ atau Node.js 24. Lingkungan pembuatan memakai Node.js 24.20.0. Dari folder mata kuliah:
+## Build
 
-```powershell
-cd ProyekContoh
-npm.cmd ci --ignore-scripts
-npm.cmd run dev
-```
+- Perintah build: `npm.cmd run build`.
+- Output yang dipakai hosting: `dist/`, termasuk `molecule-viewer.html`, aset molekul, pustaka dan font lokal.
+- Cara preview paket: `npm.cmd run preview`, buka alamat tercetak, biasanya **http://127.0.0.1:4173**.
+- Navigasi hash seperti `/#materi/kenali` dan `base: './'` tidak memerlukan rewrite history; uji tautan langsung/refresh tetap dilakukan pada hosting.
+- Origin/port berbeda mempunyai localStorage berbeda. Konfigurasi emulator aktif pada produksi menonaktifkan akun; build berhasil saja belum membuktikan login bekerja.
+- Uji logika: `npm.cmd test`. Uji browser: `npm.cmd run test:e2e`, memakai Edge pada Windows atau Chromium Playwright pada OS lain. Suite menyiapkan server 5173 dan stack emulator/aplikasi 5175; Java 21+ diperlukan.
+- Pemeriksaan 20 November: 43 uji logika, 14 skenario akun/cloud/guru, build dan walkthrough preview lulus. Cakupan serta peringatan ada di TESTING.
 
-Konfigurasi produksi lokal sudah mengarah ke proyek `chemlab-web`, dengan Firestore `(default)`, Rules/indeks terpasang, serta Email/Password dan Google aktif. Jalankan aplikasi lalu masuk untuk menyinkronkan progres akun. Untuk instalasi baru, isi `.env.local` mengikuti `.env.example` dan [panduan Firestore](docs/FIRESTORE_SETUP.md). Tombol Google juga dapat dicoba dengan identitas fiktif melalui Auth Emulator.
+## Data dan konfigurasi
 
-Untuk mencoba alur akun sepenuhnya tanpa proyek produksi:
+- Provider, nama variabel tanpa nilai, dan dokumen DATABASE: Firebase Auth/Firestore; `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`, `VITE_FIRESTORE_DATABASE_ID`, `VITE_FIREBASE_USE_EMULATOR`. Lihat [DATABASE.md](DATABASE.md) dan `.env.example`.
+- Batas akses siswa/guru dan daftar akun kelas: siswa hanya progres sendiri; satu guru terverifikasi yang ditetapkan pada UI/Rules membaca seluruh akun siswa aplikasi. Daftar keanggotaan kelas terpisah belum dibuat.
+- Data belajar: materi/soal di `src/data`; tamu di `chemlab:guest:v1`; akun/antrean pada key UID; cloud di `learningProgress/{UID}` dan `learnerProfiles/{UID}`.
+- Keputusan khas: seluruh progres akun, termasuk draf/riwayat/materi/catatan, disinkronkan. Tamu tetap terpisah; reset akun juga mereset cloud. Ekspor belum mempunyai impor.
+- Guru tidak menulis hasil siswa lain. Skor/kunci berada di client; Rules menjaga kepemilikan/metadata, bukan keutuhan tiap jawaban di payload.
+- Font/ikon/SDF/3Dmol lokal; PhET, pencarian PubChem dan Firebase memakai layanan luar. Gagal memuat aktivitas tidak menghalangi catatan.
 
-```powershell
-npm.cmd run dev:emulator
-```
+## Status produk
 
-Buka **http://127.0.0.1:5174**. Auth dan Firestore Emulator berjalan lokal; Firestore Emulator memerlukan Java 21+. Tautan verifikasi/reset tersedia melalui emulator/terminal, bukan email sungguhan.
+- MVP yang sudah diuji: materi/diagnostik/progres, hitungan pH, akun/Firestore, panel guru; fitur pengembangan memiliki kontrak dan bukti di `docs/` serta TESTING.
+- Lingkungan dan tanggal uji: Windows, Node 24.20.0, Edge headless, Java 21.0.13; salinan bersih, preview dan emulator `demo-chemlab`, 20 November 2026.
+- Keterbatasan/issue terbuka: validasi isi/pedagogik, uji mahasiswa pemula, aksesibilitas manual, evaluasi bundle, serta identitas/uji rilis hosting. Arsip diagnostik perlu dirancang sebelum bank diganti; belum PWA/ujian dengan penilaian server.
+- Checkpoint terakhir: source contoh `c26d58c` di `main`; checkpoint kelas tidak direka. Pada proyek mahasiswa isi checkpoint dan H−1 sesuai pekerjaan nyata.
+- Keunikan dan kontrak ChemLab dipertahankan; PRD, alur, desain, data dan uji menjelaskan keputusan yang sama.
 
-Buka alamat yang dicetak Vite, biasanya **http://127.0.0.1:5173**. `npm.cmd` bisa diganti `npm` jika PowerShell mengizinkan skrip npm. Jangan membuka `index.html` langsung dengan klik ganda.
+## Portofolio
 
-```powershell
-npm.cmd run build
-npm.cmd run preview
-```
+| Dokumen sesuai handout | Isian konkret dalam repo |
+| --- | --- |
+| [TEAM](TEAM.md) | Proyek bersama, pelaksana/peran, kesepakatan dan layanan |
+| [PRD](PRD.md) | Pengguna, tujuan, cakupan, rancangan penilaian, desain, sumber dan batas |
+| [USER_FLOW](USER_FLOW.md) | Alur inti, keadaan lain dan jalur fitur yang terlihat di web |
+| [DESAIN_TEKNIS](DESAIN_TEKNIS.md) | Berkas, navigasi, data, perilaku, keputusan dan risiko |
+| [DATABASE](DATABASE.md) | Lingkup, data/akses, sinkronisasi, konfigurasi dan hasil uji |
+| [AGENTS](AGENTS.md) | Aturan kerja 1–15 dari templat dan ketentuan khusus ChemLab |
+| [BACKLOG](BACKLOG.md) | MVP, alasan/kriteria, rincian fitur, temuan dan tindak lanjut |
+| [AI_LOG](AI_LOG.md) | Tugas, bantuan, keputusan, aktual, bukti dan keterbatasan |
+| [TESTING](TESTING.md) | Identitas/lingkungan, matriks langkah–harapan–aktual–status, dan rilis |
 
-Build siap hosting tersedia di `dist/`. Aplikasi menggunakan URL hash, sehingga tautan seperti `/#laboratorium` tidak memerlukan aturan rewrite di hosting statis. `base: './'` mendukung penempatan di subfolder.
-
-## Yang dapat dicoba
-
-- Beranda dengan jalur belajar dan eksperimen pH langsung.
-- Tiga bagian materi, tujuan belajar, pertanyaan refleksi, dan penanda selesai.
-- Laboratorium pH 0–14 pada 25 °C: indikator skematis, [H₃O⁺], [OH⁻], pOH, contoh sehari-hari, dan model HCl terbatas.
-- Lima soal diagnostik. Setiap pilihan disimpan; pembahasan baru dibuka setelah seluruh jawaban dikumpulkan.
-- Percobaan awal dan latihan ulang memiliki ID berbeda. Riwayat menyimpan jawaban per butir, konsep, versi soal, dan skor.
-- Progres tamu, ekspor JSON, serta reset dengan konfirmasi.
-- Panel guru khusus akun yang ditetapkan: rekap siswa tersinkron, diagnostik awal/asesmen terbaru, pencarian/filter, rincian jawaban dan catatan, serta ekspor JSON/CSV.
-- Pencarian konsep, navigasi keyboard, dialog, dan tampilan ponsel.
-- Login/registrasi Firebase, verifikasi email, pemulihan password, pengelolaan akun, serta pemisahan progres tiap UID dan tamu.
-
-Nama **ChemLab**, desain hijau, dan sasaran kelas XI adalah keputusan awal yang dapat disesuaikan. Versi awal lokal telah dikembangkan menjadi akun tersinkron dan panel guru terbatas sesuai arahan pengajar.
-
-Antarmuka menggunakan bahasa aplikasi belajar untuk siswa dan guru, tanpa narasi proses pembuatan. Panel guru menjelaskan bahwa datanya berasal dari progres akun yang tersinkron. Konteks penggunaan untuk kuliah dijelaskan dalam dokumentasi ini.
-
-## Batas versi ini
-
-Aplikasi memakai **Firebase Auth untuk identitas akun** dan **Cloud Firestore untuk progres akun**. Belajar tanpa masuk tetap tersedia. Catatan tamu tetap lokal, sementara progres akun disinkronkan setelah login. Status simpan membedakan progres yang sudah dikonfirmasi server dari perubahan yang masih menunggu. Guru membaca progres tersinkron dari seluruh akun siswa aplikasi pada proyek ini; belum ada pembagian kelas atau guru kedua.
-
-`localStorage` menyimpan progres tamu serta salinan/antrean akun pada origin browser yang sama; berganti port berarti berganti origin. Progres akun yang sudah tersimpan di Firestore dapat dipulihkan pada perangkat lain. Jika penyimpanan browser ditolak, gunakan ekspor sebelum menutup sesi. Ekspor JSON merupakan salinan untuk dibaca; fitur impor belum dibuat. Aplikasi bukan PWA; membuka pertama kali tanpa koneksi ke server belum didukung. Batas ukuran payload dan kebijakan perubahan bersamaan dijelaskan pada panduan Firestore.
-
-Kata sandi diproses melalui Firebase SDK, tidak disimpan oleh aplikasi di localStorage. Perubahan email/password dan penghapusan akun meminta autentikasi ulang. Penggantian email akun password memakai verifikasi alamat baru terlebih dahulu. Akun khusus Google mengelola email/password melalui Google dan mengonfirmasi penghapusan akun ChemLab melalui pop-up Google.
-
-Skor dan kunci tersedia di sisi browser. Gunakan sebagai alat belajar dan demo diagnostik, bukan ujian dengan penilaian server. Persentase progres mengukur aktivitas, bukan penguasaan konsep.
-
-## Struktur yang penting untuk kuliah
-
-| Lokasi                                   | Dipakai untuk                                                               |
-| ---------------------------------------- | --------------------------------------------------------------------------- |
-| `src/data/chemData.js`                   | Materi, tujuan, soal/kunci/pembahasan, versi soal, sumber, dan siswa fiktif |
-| `src/App.jsx`                            | Navigasi, state, dan penghubung fitur                                       |
-| `src/pages/`                             | Beranda, materi, laboratorium, kuis, progres, panel guru                    |
-| `src/components/`                        | Diagram SVG, ikon, dan dialog                                               |
-| `src/lib/chemistry.js`                   | Model pH, penilaian, dan pembentukan hasil                                  |
-| `src/lib/storage.js`                     | Draf ber-ID, validasi, penyimpanan, dan pemulihan lokal                     |
-| `src/styles.css`, `src/styles-pages.css` | Tema, tata letak, dan responsivitas                                         |
-| `tests/`                                 | Uji logika serta alur browser dan aksesibilitas otomatis                    |
-
-Font dan ikon dipaketkan lokal; aplikasi tidak bergantung pada CDN saat dijalankan. Diagram gelas kimia merupakan SVG buatan untuk demo, bukan pengukuran nyata.
-
-## Skenario demo 5–7 menit
-
-1. Di beranda, geser pH: perhatikan angka, klasifikasi, dan warna berubah bersama.
-2. Buka **Kuis diagnostik**, pilih satu jawaban, muat ulang halaman: jawaban tetap terpilih.
-3. Selesaikan lima soal dan tunjukkan pembahasan serta tindak lanjut per konsep.
-4. Mulai latihan baru: hasil diagnostik awal tetap ada di **Progres saya**.
-5. Buka materi, tandai selesai, lalu eksplorasi pH 3 dan 5 di laboratorium. Konsentrasi H₃O⁺ berubah 100 kali.
-6. Masuk dengan akun guru terverifikasi, buka **Panel guru**, filter hasil yang sudah tersinkron, tinjau jawaban/catatan siswa, dan ekspor rekap yang diperlukan. Akun biasa tidak dapat membuka data siswa lain.
-7. Ekspor progres, lalu tunjukkan reset berkonfirmasi jika diperlukan.
-
-## Pengujian
-
-```powershell
-npm.cmd test
-npm.cmd run test:e2e
-```
-
-Uji browser otomatis memakai Microsoft Edge pada Windows. Pada OS lain, pasang Chromium Playwright terlebih dahulu dengan `npx playwright install chromium`. Konfigurasi akan menjalankan server Vite sendiri bila port 5173 belum digunakan. Detail hasil serta batas pengujian terdapat di [TESTING.md](TESTING.md).
-
-Pengujian juga menjalankan Auth Emulator pada port 9099, Firestore Emulator pada port 8080, serta aplikasi uji pada port 5175. Java 21+ diperlukan pada `PATH`. Gunakan `--project=learning` untuk skenario belajar atau `--project=firebase-auth` untuk akun/Firestore; kedua server tetap dikelola konfigurasi Playwright.
-
-Pratinjau tersimpan di [desktop](docs/preview-desktop.png) dan [ponsel](docs/preview-mobile.png).
-
-## Dokumen pendamping
-
-[PRD](PRD.md) · [Alur pengguna](USER_FLOW.md) · [Desain teknis](DESAIN_TEKNIS.md) · [Kontrak data](DATABASE.md) · [Backlog & keputusan lanjutan](BACKLOG.md) · [Tim](TEAM.md) · [Log AI](AI_LOG.md) · [Aturan agent](AGENTS.md)
-
-Referensi teknis: [Vite Getting Started](https://vite.dev/guide/), [React: build an app from scratch](https://react.dev/learn/build-a-react-app-from-scratch). Referensi konsep utama: [OpenStax Chemistry 2e, 14.2](https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh); rujukan tambahan tercantum di aplikasi.
+Sumber/lisensi materi, gambar dan data: [MATERIAL_SOURCES](docs/MATERIAL_SOURCES.md), [INTERACTIVE_ACTIVITIES](docs/INTERACTIVE_ACTIVITIES.md), [MOLECULE_CATALOGUE](docs/MOLECULE_CATALOGUE.md). Kontrak tambahan: [asesmen](docs/CHAPTER_ASSESSMENT.md), [onboarding](docs/ONBOARDING.md). [Pratinjau desktop](docs/preview-desktop.png) dan [ponsel](docs/preview-mobile.png) adalah bukti tahap pengembangan; periksa source berjalan untuk perilaku terbaru.
